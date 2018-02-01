@@ -1,0 +1,45 @@
+<!-- For a detailed explanation on how this file and its structure works,
+     please take a look at the `doc/config file format.md` file. -->
+
+<!--
+<cameras>
+    <camera>
+        <requestedWidth>800</requestedWidth>
+        <requestedHeight>600</requestedHeight>
+        <id>0</id>
+    </camera>
+   <camera>
+        <requestedWidth>640</requestedWidth>
+        <requestedHeight>480</requestedHeight>
+        <id>1</id>
+        <useForSnapshotBackround>1</useForSnapshotBackround>
+    </camera>
+</cameras>    
+ -->
+
+<cameras>
+    <camera>
+        <requestedWidth>800</requestedWidth>
+        <requestedHeight>600</requestedHeight>
+        <id>0</id>
+    </camera>
+</cameras>   
+
+<OSC>
+    <LISTENING_PORT>8888</LISTENING_PORT>
+    <GUI_CONTROL>
+        <SLIDER>
+            <MIN>0.0</MIN>
+            <MAX>1.0</MAX>
+        </SLIDER>
+    </GUI_CONTROL>
+</OSC>
+
+<PROJECTION>
+<AUTO>0</AUTO>
+</PROJECTION>
+
+<TIMELINE>
+<AUTOSTART>0</AUTOSTART>
+<DURATION>100.0</DURATION>
+</TIMELINE>
