@@ -1,17 +1,8 @@
 ofxKinect
 ofxMidi
-ofxMSAInteractiveObjectLPMT
-ofxMSATimer
 ofxNetwork
 ofxOpenCv
 ofxOsc
-ofxRange
-ofxSimpleGuiTooLPMT
-ofxTextInputField
 ofxTimecode
-ofxTimeline
 ofxTween
 ofxXmlSettings
-ofxAudioDecoder
-ofxMostPixelsEverLPMT
-ofxTimelineLPMT
