@@ -63,7 +63,6 @@ Project{
             "src/kinectManager.cpp",
             "src/kinectManager.h",
             "src/main.cpp",
-            "src/markers.cpp",
             "src/ofApp.cpp",
             "src/ofApp.h",
             "src/parseMIDI.cpp",

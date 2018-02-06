@@ -39,13 +39,17 @@ ofApp::ofApp() : m_gui(this)
 //--------------------------------------------------------------
 void ofApp::exit()
 {
-    cout << "exiting..." << endl;
+    #ifdef WITH_TIMELINE
+        timeline.reset();
+    #endif
+
+    ofLogNotice() << "exiting...";
 }
 
 //--------------------------------------------------------------
 void ofApp::setup()
 {
-    ofDisableAntiAliasing();
+    //ofDisableAntiAliasing();
     ofSetVerticalSync(true);
     ofSetLogLevel(OF_LOG_NOTICE);
     ofSetWindowTitle("LPMT");

@@ -52,6 +52,14 @@ public:
     void setup();
     void update();
     void draw();
+    void keyPressed(int key);
+    void keyReleased(int key);
+    void mouseMoved(int x, int y );
+    void mouseDragged(int x, int y, int button);
+    void mousePressed(int x, int y, int button);
+    void mouseReleased(int x, int y, int button);
+    void windowResized(int w, int h);
+
     void prepare();
     void dostuff();
 
@@ -61,14 +69,27 @@ public:
     void stopProjection();
     void copyQuadSettings(int sourceQuad);
 
-
-    void keyPressed(int key);
-    void keyReleased(int key);
-    void mouseMoved(int x, int y );
-    void mouseDragged(int x, int y, int button);
-    void mousePressed(int x, int y, int button);
-    void mouseReleased(int x, int y, int button);
-    void windowResized(int w, int h);
+    void openImageFile();
+    void openVideoFile();
+    void loadSlideshow();
+    void openSharedVideoFile(int i);
+    void openSharedVideoFile(string path, int i);
+    void quadDimensionsReset(int q);
+    void quadPlacementReset(int q);
+    void quadBezierSpherize(int q);
+    void quadBezierSpherizeStrong(int q);
+    void quadBezierReset(int q);
+    void loadProject();
+    void saveProject();
+    void raiseLayer();
+    void lowerLayer();
+    void setupInitialQuads();
+    void toggleSetupMode();
+    void saveCurrentSettingsToXMLFile(std::string xmlFilePath);
+    void loadSettingsFromXMLFile(std::string xmlFilePath);
+    ofImage loadImageFromFile(); // snapshot loading
+    void activateClosestQuad(ofPoint point);
+    void parseOsc();
 
     int m_selectedCorner;
 
@@ -97,33 +118,15 @@ public:
     bool m_isSplashScreenActive;
     ofImage m_SplashScreenImage;
 
-    // use of MostPixelsEver
-//    bool bMpe;
-    //ofxMPEClient client;
-//    void mpeFrameEvent(ofxMPEEventArgs& event);
-//    void mpeMessageEvent(ofxMPEEventArgs& event);
-//    void mpeResetEvent(ofxMPEEventArgs& event);
-//    float lastFrameTime;
-
     // OSC stuff
     ofxOscReceiver	receiver;
     int				current_msg_string;
-    string		msg_strings[NUM_MSG_STRINGS];
+    string          msg_strings[NUM_MSG_STRINGS];
     float			timers[NUM_MSG_STRINGS];
-    void parseOsc();
     float oscControlMin;
     float oscControlMax;
     vector<ofxOscMessage> oscHotkeyMessages;
     vector<int> oscHotkeyKeys;
-
-    // MIDI stuff
-    #ifdef WITH_MIDI
-    void newMidiMessage(ofxMidiMessage& eventArgs);
-    ofxMidiIn midiIn;
-	ofxMidiMessage midiMessage;
-	vector<ofxMidiMessage> midiHotkeyMessages;
-	vector<int> midiHotkeyKeys;
-	#endif
 
     // Shaders
     ofShader edgeBlendShader;
@@ -155,23 +158,6 @@ public:
     bool bMidiHotkeyLearning;
     int midiHotkeyPressed;
 
-    void openImageFile();
-    void openVideoFile();
-    void loadSlideshow();
-    void openSharedVideoFile(int i);
-    void openSharedVideoFile(string path, int i);
-    void quadDimensionsReset(int q);
-    void quadPlacementReset(int q);
-    void quadBezierSpherize(int q);
-    void quadBezierSpherizeStrong(int q);
-    void quadBezierReset(int q);
-    void loadProject();
-    void saveProject();
-    void raiseLayer();
-    void lowerLayer();
-    void setupInitialQuads();
-    void toggleSetupMode();
-
     float m_totalRotationAngle;
     ofPolyline m_rotationSector;
 
@@ -189,27 +175,11 @@ public:
     vector<string> videoFiles;
     vector<string> slideshowFolders;
 
-    void saveCurrentSettingsToXMLFile(std::string xmlFilePath);
-    void loadSettingsFromXMLFile(std::string xmlFilePath);
-
     // double-click variables for quad picking
     unsigned long m_doubleclickTime;
     unsigned long long m_timeLastClicked;
 
-    void activateClosestQuad(ofPoint point);
-
     ofPoint m_lastMousePosition;
-
-
-    // snapshot loading
-    ofImage loadImageFromFile();
-
-    #ifdef WITH_KINECT
-    kinectManager kinect;
-    bool m_isKinectInitialized;
-    bool bCloseKinect;
-    bool bOpenKinect;
-    #endif
 
     // timeline
     #ifdef WITH_TIMELINE
@@ -223,11 +193,36 @@ public:
     bool useTimeline;
     #endif
 
+    #ifdef WITH_KINECT
+    kinectManager kinect;
+    bool m_isKinectInitialized;
+    bool bCloseKinect;
+    bool bOpenKinect;
+    #endif
+
     // syphon
     #ifdef WITH_SYPHON
 	ofxSyphonClient syphClient;
     #endif
 
+    // MIDI stuff
+    #ifdef WITH_MIDI
+    void newMidiMessage(ofxMidiMessage& eventArgs);
+    ofxMidiIn midiIn;
+    ofxMidiMessage midiMessage;
+    vector<ofxMidiMessage> midiHotkeyMessages;
+    vector<int> midiHotkeyKeys;
+    #endif
+
+    // MostPixelsEver stuff
+    /*
+    bool bMpe;
+    ofxMPEClient client;
+    void mpeFrameEvent(ofxMPEEventArgs& event);
+    void mpeMessageEvent(ofxMPEEventArgs& event);
+    void mpeResetEvent(ofxMPEEventArgs& event);
+    float lastFrameTime;
+    */
 
 };
 

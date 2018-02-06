@@ -39,20 +39,28 @@ void ofApp::timelineUpdate()
                             quads[j].timelineGreen = timeline.getValue("green_"+ofToString(j));
 
                         if(timeline.hasTrack("blu_"+ofToString(j)))
-                            quads[j].timelineBlu = timeline.getValue("blu_"+ofToString(j));
+                            quads[j].timelineBlue = timeline.getValue("blu_"+ofToString(j));
+                    } else {
+                        quads[j].timelineRed = 1.0f;
+                        quads[j].timelineGreen = 1.0f;
+                        quads[j].timelineBlue = 1.0f;
                     }
                     if(quads[j].bTimelineColor)
                     {
                         if(timeline.hasTrack("color_"+ofToString(j))) {
                             quads[j].timelineColor = timeline.getColor("color_"+ofToString(j));
-                            quads[j].bgColor = quads[j].timelineColor;
+                           // quads[j].bgColor = quads[j].timelineColor;
                         }
+                    } else {
+                         quads[j].timelineColor = ofColor(1.0f,1.0f,1.0f);
                     }
                     if(quads[j].bTimelineAlpha)
                     {
                         if(timeline.hasTrack("alpha_"+ofToString(j))) {
                             quads[j].timelineAlpha = timeline.getValue("alpha_"+ofToString(j));
                         }
+                    } else {
+                        quads[j].timelineAlpha = 1.0f;
                     }
                 }
             }
@@ -60,58 +68,58 @@ void ofApp::timelineUpdate()
 
 //--------------------------------------------------------------
 void ofApp::timelineTriggerReceived(ofxTLBangEventArgs& trigger){
-    //vector<string> triggerParts = ofSplitString(trigger.triggerGroupName, "_", true, true);
+
     vector<string> triggerParts = ofSplitString(trigger.track->getName(), "_", true, true);
 
     if(useTimeline)
     {
-	//cout << "Trigger from " << trigger.triggerGroupName << " says color " << trigger.triggerName << endl;
-	//cout << "Trigger from " << ofToInt(triggerParts[1]) << " says " << trigger.triggerName << endl;
+        //cout << "Trigger from " << trigger.triggerGroupName << " says color " << trigger.triggerName << endl;
+        //cout << "Trigger from " << ofToInt(triggerParts[1]) << " says " << trigger.triggerName << endl;
 
         //string tlMsg = trigger.triggerName;
-	string tlMsg = trigger.flag;
+        string tlMsg = trigger.flag;
         string tlMsgParameter = "";
 
         if(triggerParts[1] != "main")
         {
-        int tlQuad = ofToInt(triggerParts[1]);
+            int tlQuad = ofToInt(triggerParts[1]);
 
-        //check if we have a message with a parameter, parameters are given using a colon ':' as separator
-        if (ofIsStringInString(tlMsg,":"))
-        {
-            vector<string> tlMsgParts = ofSplitString(tlMsg, ":", true, true);
-            tlMsg = tlMsgParts[0];
-            tlMsgParameter = tlMsgParts[1];
-        }
+            //check if we have a message with a parameter, parameters are given using a colon ':' as separator
+            if (ofIsStringInString(tlMsg,":"))
+            {
+                vector<string> tlMsgParts = ofSplitString(tlMsg, ":", true, true);
+                tlMsg = tlMsgParts[0];
+                tlMsgParameter = tlMsgParts[1];
+            }
 
-	if (tlMsg == "on"){ quads[tlQuad].isOn=true; }
-        else if (tlMsg == "off"){ quads[tlQuad].isOn=false; }
-	else if(tlMsg == "img_on"){ quads[tlQuad].imgBg=true; }
-	else if (tlMsg == "img_off"){ quads[tlQuad].imgBg=false; }
-        else if (tlMsg == "col_on"){ quads[tlQuad].colorBg=true; }
-        else if (tlMsg == "col_off"){ quads[tlQuad].colorBg=false; }
-        else if (tlMsg == "video_on"){ quads[tlQuad].videoBg=true; }
-        else if (tlMsg == "video_off"){ quads[tlQuad].videoBg=false; }
-        else if (tlMsg == "video_stop"){ quads[tlQuad].video.stop(); }
-        else if (tlMsg == "video_play"){ quads[tlQuad].video.play(); }
-        else if (tlMsg == "video_reset"){ quads[tlQuad].video.setPosition(0.0); }
-        else if (tlMsg == "video_position" && tlMsgParameter != ""){ quads[tlQuad].video.setPosition(ofToFloat(tlMsgParameter));}
-        else if (tlMsg == "shared_video_on"){ quads[tlQuad].sharedVideoBg=true; }
-        else if (tlMsg == "shared_video_off"){ quads[tlQuad].sharedVideoBg=false; }
-        else if (tlMsg == "shared_video_num" && tlMsgParameter != ""){ quads[tlQuad].sharedVideoNum=ofToInt(tlMsgParameter); }
-        else if (tlMsg == "slide_on"){ quads[tlQuad].slideshowBg=true; }
-        else if (tlMsg == "slide_off"){ quads[tlQuad].slideshowBg=false; }
-        else if (tlMsg == "slide_new"){ quads[tlQuad].currentSlide+=1; }
-        else if (tlMsg == "slide_num" && tlMsgParameter != ""){ quads[tlQuad].currentSlide=ofToInt(tlMsgParameter); }
-        else if (tlMsg == "cam_on"){ quads[tlQuad].camBg=true; }
-        else if (tlMsg == "cam_off"){ quads[tlQuad].camBg=false; }
-        else if (tlMsg == "kinect_on"){ quads[tlQuad].kinectBg=true; }
-        else if (tlMsg == "kinect_off"){ quads[tlQuad].kinectBg=false; }
-        else if (tlMsg == "mask_on"){ quads[tlQuad].bMask=true; }
-        else if (tlMsg == "mask_off"){ quads[tlQuad].bMask=false; }
-        else if (tlMsg == "mask_invert_on"){ quads[tlQuad].maskInvert=true; }
-        else if (tlMsg == "mask_invert_off"){ quads[tlQuad].maskInvert=false; }
-        else { cout << "unknown trigger command '" << tlMsg << "' on surface " << tlQuad << endl;}
+            if (tlMsg == "on"){ quads[tlQuad].isOn=true; }
+            else if (tlMsg == "off"){ quads[tlQuad].isOn=false; }
+            else if(tlMsg == "img_on"){ quads[tlQuad].imgBg=true; }
+            else if (tlMsg == "img_off"){ quads[tlQuad].imgBg=false; }
+            else if (tlMsg == "col_on"){ quads[tlQuad].colorBg=true; }
+            else if (tlMsg == "col_off"){ quads[tlQuad].colorBg=false; }
+            else if (tlMsg == "video_on"){ quads[tlQuad].videoBg=true; }
+            else if (tlMsg == "video_off"){ quads[tlQuad].videoBg=false; }
+            else if (tlMsg == "video_stop"){ quads[tlQuad].video.stop(); }
+            else if (tlMsg == "video_play"){ quads[tlQuad].video.play(); }
+            else if (tlMsg == "video_reset"){ quads[tlQuad].video.setPosition(0.0); }
+            else if (tlMsg == "video_position" && tlMsgParameter != ""){ quads[tlQuad].video.setPosition(ofToFloat(tlMsgParameter));}
+            else if (tlMsg == "shared_video_on"){ quads[tlQuad].sharedVideoBg=true; }
+            else if (tlMsg == "shared_video_off"){ quads[tlQuad].sharedVideoBg=false; }
+            else if (tlMsg == "shared_video_num" && tlMsgParameter != ""){ quads[tlQuad].sharedVideoNum=ofToInt(tlMsgParameter); }
+            else if (tlMsg == "slide_on"){ quads[tlQuad].slideshowBg=true; }
+            else if (tlMsg == "slide_off"){ quads[tlQuad].slideshowBg=false; }
+            else if (tlMsg == "slide_new"){ quads[tlQuad].currentSlide+=1; }
+            else if (tlMsg == "slide_num" && tlMsgParameter != ""){ quads[tlQuad].currentSlide=ofToInt(tlMsgParameter); }
+            else if (tlMsg == "cam_on"){ quads[tlQuad].camBg=true; }
+            else if (tlMsg == "cam_off"){ quads[tlQuad].camBg=false; }
+            else if (tlMsg == "kinect_on"){ quads[tlQuad].kinectBg=true; }
+            else if (tlMsg == "kinect_off"){ quads[tlQuad].kinectBg=false; }
+            else if (tlMsg == "mask_on"){ quads[tlQuad].bMask=true; }
+            else if (tlMsg == "mask_off"){ quads[tlQuad].bMask=false; }
+            else if (tlMsg == "mask_invert_on"){ quads[tlQuad].maskInvert=true; }
+            else if (tlMsg == "mask_invert_off"){ quads[tlQuad].maskInvert=false; }
+            else { cout << "unknown trigger command '" << tlMsg << "' on surface " << tlQuad << endl;}
         }
         else
         {
@@ -156,9 +164,8 @@ void ofApp::timelineTriggerReceived(ofxTLBangEventArgs& trigger){
                     }
                 }
             }
-
         }
-    }
+    } // if(useTimeline)
 }
 
 //--------------------------------------------------------------

@@ -39,6 +39,10 @@ public:
     void drawBezierMarkers();
     void setupCamera();
     int getdir (string dir, vector<string> &files); // a func for reading a dir content to a vector of strings
+    ofPoint getWarpedPoint(ofPoint point);
+    void gridSurfaceSetup();
+    void gridSurfaceUpdate();
+    void drawGridMarkers();
 
     #ifdef WITH_KINECT
     void setKinect(kinectManager &kinect);
@@ -81,7 +85,7 @@ public:
 
     float timelineRed;
     float timelineGreen;
-    float timelineBlu;
+    float timelineBlue;
     float timelineAlpha;
 
     bool bTimelineColor;
@@ -204,42 +208,24 @@ public:
     string loadedSlideshow;
     string slideshowName;
 
-    ofShader * shaderBlend;
-    ofFbo   quadFbo;
-    ofFbo::Settings settings;
-
-    ofShader * maskShader;
+    // FBO's
+    ofFbo quadFbo;
     ofFbo maskFbo;
+    ofFbo targetFbo;
+    ofFbo::Settings settings;
     ofFbo::Settings maskFboSettings;
 
-    #ifdef WITH_KINECT
-    kinectManager * quadKinect;
-    ofxCvGrayscaleImage kinectThreshImage;
-    ofxCvGrayscaleImage kinectContourImage;
-    ofxCvContourFinder kinectContourFinder;
-    ofPath kinectPath;
-    #endif
-
-    #ifdef WITH_SYPHON
-    ofxSyphonClient * syphClientTex;
-    bool bSyphon;
-    float syphonPosX;
-    float syphonPosY;
-    float syphonScaleX;
-    float syphonScaleY;
-    #endif
-
-    ofFbo targetFbo;
+    // Shaders
+    ofShader * shaderBlend;
+    ofShader * maskShader;
+    ofShader * greenscreenShader;
 
     int quadDispX;
     int quadDispY;
     int quadW;
     int quadH;
 
-    ofShader * greenscreenShader;
-
     std::vector<ofPoint> m_maskPoints;
-    ofPoint getWarpedPoint(ofPoint point);
     bool bHighlightMaskPoint;
     int highlightedMaskPoint;
 
@@ -258,13 +244,24 @@ public:
     //vector<GLfloat> gridCtrlPoints;
     int gridRows;
     int gridColumns;
-    void gridSurfaceSetup();
-    void gridSurfaceUpdate();
-    void drawGridMarkers();
-
     ofMesh gridMesh;
 
+    #ifdef WITH_KINECT
+    kinectManager * quadKinect;
+    ofxCvGrayscaleImage kinectThreshImage;
+    ofxCvGrayscaleImage kinectContourImage;
+    ofxCvContourFinder kinectContourFinder;
+    ofPath kinectPath;
+    #endif
 
+    #ifdef WITH_SYPHON
+    ofxSyphonClient * syphClientTex;
+    bool bSyphon;
+    float syphonPosX;
+    float syphonPosY;
+    float syphonScaleX;
+    float syphonScaleY;
+    #endif
 
 
 };

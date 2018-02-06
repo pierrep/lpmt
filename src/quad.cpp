@@ -158,7 +158,7 @@ void quad::reset()
 
     timelineRed = 1.0;
     timelineGreen = 1.0;
-    timelineBlu = 1.0;
+    timelineBlue = 1.0;
     timelineAlpha = 1.0;
 
     bTimelineTint = false;
@@ -446,12 +446,16 @@ void quad::draw()
             // if we have two colors it draws with calculated transition color
             if (transBg)
             {
-                ofSetColor(transColor.r * 255 * timelineRed, transColor.g * 255 * timelineGreen, transColor.b * 255 * timelineBlu, transColor.a * 255 * timelineAlpha);
+                ofSetColor(transColor.r * 255 * timelineRed, transColor.g * 255 * timelineGreen, transColor.b * 255 * timelineBlue, transColor.a * 255 * timelineAlpha);
             }
             // this in case of only one color set
             else
             {
-                ofSetColor(bgColor.r * 255 * timelineRed, bgColor.g * 255 * timelineGreen, bgColor.b * 255 * timelineBlu, bgColor.a * 255 * timelineAlpha);
+                if(bTimelineColor) {
+                    ofSetColor(timelineColor.r * 255 * timelineRed, timelineColor.g * 255 * timelineGreen, timelineColor.b * 255 * timelineBlue, timelineColor.a * 255 * timelineAlpha);
+                } else {
+                    ofSetColor(bgColor.r * 255 * timelineRed, bgColor.g * 255 * timelineGreen, bgColor.b * 255 * timelineBlue, bgColor.a * 255 * timelineAlpha);
+                }
             }
             ofDrawRectangle(0, 0, ofGetWidth(), ofGetHeight());
             ofNoFill();
@@ -480,7 +484,7 @@ void quad::draw()
                     glScalef(-1,-1,1);
                 }
             }
-            ofSetColor(videoColorize.r * 255 * timelineRed, videoColorize.g * 255 * timelineGreen, videoColorize.b * 255 * timelineBlu, videoColorize.a * 255 * timelineAlpha);
+            ofSetColor(videoColorize.r * 255 * timelineRed, videoColorize.g * 255 * timelineGreen, videoColorize.b * 255 * timelineBlue, videoColorize.a * 255 * timelineAlpha);
             if (!videoLoop)
             {
                 // in no-looping mode it stops drawing video frame when video reaches the end
@@ -565,7 +569,7 @@ void quad::draw()
                     glScalef(-1,-1,1);
                 }
             }
-            ofSetColor(videoColorize.r * 255 * timelineRed, videoColorize.g * 255 * timelineGreen, videoColorize.b * 255 * timelineBlu, videoColorize.a * 255 * timelineAlpha);
+            ofSetColor(videoColorize.r * 255 * timelineRed, videoColorize.g * 255 * timelineGreen, videoColorize.b * 255 * timelineBlue, videoColorize.a * 255 * timelineAlpha);
             if (videoGreenscreen)
             {
                 greenscreenShader->begin();
@@ -615,7 +619,7 @@ void quad::draw()
                     glScalef(-1,-1,1);
                 }
             }
-            ofSetColor(camColorize.r * 255 * timelineRed, camColorize.g * 255 * timelineGreen, camColorize.b * 255 * timelineBlu, camColorize.a * 255 * timelineAlpha);
+            ofSetColor(camColorize.r * 255 * timelineRed, camColorize.g * 255 * timelineGreen, camColorize.b * 255 * timelineBlue, camColorize.a * 255 * timelineAlpha);
             if (camGreenscreen)
             {
                 greenscreenShader->begin();
@@ -655,7 +659,7 @@ void quad::draw()
                 }
                 slide = slides[currentSlide];
                 // color is set according to still img colorization combo
-                ofSetColor(imgColorize.r * 255 * timelineRed, imgColorize.g * 255 * timelineGreen, imgColorize.b * 255 * timelineBlu, imgColorize.a * 255 * timelineAlpha);
+                ofSetColor(imgColorize.r * 255 * timelineRed, imgColorize.g * 255 * timelineGreen, imgColorize.b * 255 * timelineBlue, imgColorize.a * 255 * timelineAlpha);
                 // default is drawing image with its size unchanged, so we set mult factors = 1.0
                 float multX = 1.0;
                 float multY = 1.0;
@@ -724,7 +728,7 @@ void quad::draw()
                     glScalef(-1,-1,1);
                 }
             }
-            ofSetColor(imgColorize.r * 255 * timelineRed, imgColorize.g * 255 * timelineGreen, imgColorize.b * 255 * timelineBlu, imgColorize.a * 255 * timelineAlpha);
+            ofSetColor(imgColorize.r * 255 * timelineRed, imgColorize.g * 255 * timelineGreen, imgColorize.b * 255 * timelineBlue, imgColorize.a * 255 * timelineAlpha);
             //img.draw(0,0,img.getWidth()*imgMultX, img.getHeight()*imgMultY);
             //img.draw(0,0,img.getWidth()*imgMultX/(img.getWidth()/ofGetWidth()), img.getHeight()*imgMultY/(img.getHeight()/ofGetHeight()));
             img.draw(0,0,img.getWidth()*imgMultX*screenFactorX, img.getHeight()*imgMultY*screenFactorY);
@@ -738,7 +742,7 @@ void quad::draw()
         #ifdef WITH_KINECT
         if (kinectBg && kinectImg)
         {
-            ofSetColor(kinectColorize.r * 255 * timelineRed, kinectColorize.g * 255 * timelineGreen, kinectColorize.b * 255 * timelineBlu, kinectColorize.a * 255 * timelineAlpha);
+            ofSetColor(kinectColorize.r * 255 * timelineRed, kinectColorize.g * 255 * timelineGreen, kinectColorize.b * 255 * timelineBlue, kinectColorize.a * 255 * timelineAlpha);
             //quadKinect->grayImage.draw(0,0,quadKinect->grayImage.getWidth()*kinectMultX,quadKinect->grayImage.getHeight()*kinectMultY);
             if (getKinectContours)
             {
@@ -746,7 +750,7 @@ void quad::draw()
                 glPushMatrix();
                 glScalef( kinectMultX, kinectMultY, 0.0 );
                 // ----------- draw the kinect path made of detected blobs
-                ofColor pathColor(kinectColorize.r * 255 * timelineRed, kinectColorize.g * 255 * timelineGreen, kinectColorize.b * 255 * timelineBlu, kinectColorize.a * 255 * timelineAlpha);
+                ofColor pathColor(kinectColorize.r * 255 * timelineRed, kinectColorize.g * 255 * timelineGreen, kinectColorize.b * 255 * timelineBlue, kinectColorize.a * 255 * timelineAlpha);
                 kinectPath.setFillColor(pathColor);
                 kinectPath.draw();
                 glPopMatrix();
@@ -1322,7 +1326,7 @@ void quad::applyBlendmode()
 void quad::allocateFbo(int w, int h)
 {
     settings.internalformat = GL_RGBA;
-    settings.numSamples = 0;
+    settings.numSamples = 4;
     settings.useDepth = false;
     settings.useStencil = false;
     settings.width = w;
@@ -1647,6 +1651,264 @@ void quad::gridSurfaceUpdate()
 
     //glMap2f(GL_MAP2_VERTEX_3, 0, 1, 3, (gridColumns+1), 0, 1, (gridColumns+1)*3, (gridRows+1), &gridCtrlPoints[0]);
 
+}
+
+// Markers -----------------------------------------------------
+
+// Bezier markers ----------------------------------------------
+void quad::drawBezierMarkers()
+{
+    ofSetColor(220,200,0,255);
+    ofSetLineWidth(1.5);
+    for(unsigned int i = 0; i < 4; i++)
+    {
+        for(unsigned int j = 0; j < 4; j++)
+        {
+            ofVec3f punto;
+            punto.x = bezierCtrlPoints[i][j][0];
+            punto.y = bezierCtrlPoints[i][j][1];
+            punto.z = bezierCtrlPoints[i][j][2];
+            punto = findWarpedPoint(dst, src, punto);
+
+            if(bHighlightCtrlPoint && highlightedCtrlPointRow == i && highlightedCtrlPointCol == j)
+            {
+                ofFill();
+            }
+            ofDrawCircle(punto.x, punto.y, 3.6);
+            ofNoFill();
+        }
+    }
+    ofSetLineWidth(1.2);
+    ofVec3f puntoA;
+    ofVec3f puntoB;
+    //
+    puntoA.x = bezierCtrlPoints[0][0][0];
+    puntoA.y = bezierCtrlPoints[0][0][1];
+    puntoA.z = bezierCtrlPoints[0][0][2];
+    puntoB.x = bezierCtrlPoints[0][1][0];
+    puntoB.y = bezierCtrlPoints[0][1][1];
+    puntoB.z = bezierCtrlPoints[0][1][2];
+    puntoA = findWarpedPoint(dst, src, puntoA);
+    puntoB = findWarpedPoint(dst, src, puntoB);
+    ofDrawLine(puntoA,puntoB);
+    //
+    puntoA.x = bezierCtrlPoints[0][0][0];
+    puntoA.y = bezierCtrlPoints[0][0][1];
+    puntoA.z = bezierCtrlPoints[0][0][2];
+    puntoB.x = bezierCtrlPoints[1][0][0];
+    puntoB.y = bezierCtrlPoints[1][0][1];
+    puntoB.z = bezierCtrlPoints[1][0][2];
+    puntoA = findWarpedPoint(dst, src, puntoA);
+    puntoB = findWarpedPoint(dst, src, puntoB);
+    ofDrawLine(puntoA,puntoB);
+    //
+    puntoA.x = bezierCtrlPoints[0][0][0];
+    puntoA.y = bezierCtrlPoints[0][0][1];
+    puntoA.z = bezierCtrlPoints[0][0][2];
+    puntoB.x = bezierCtrlPoints[1][1][0];
+    puntoB.y = bezierCtrlPoints[1][1][1];
+    puntoB.z = bezierCtrlPoints[1][1][2];
+    puntoA = findWarpedPoint(dst, src, puntoA);
+    puntoB = findWarpedPoint(dst, src, puntoB);
+    ofDrawLine(puntoA,puntoB);
+    //
+    puntoA.x = bezierCtrlPoints[0][3][0];
+    puntoA.y = bezierCtrlPoints[0][3][1];
+    puntoA.z = bezierCtrlPoints[0][3][2];
+    puntoB.x = bezierCtrlPoints[1][3][0];
+    puntoB.y = bezierCtrlPoints[1][3][1];
+    puntoB.z = bezierCtrlPoints[1][3][2];
+    puntoA = findWarpedPoint(dst, src, puntoA);
+    puntoB = findWarpedPoint(dst, src, puntoB);
+    ofDrawLine(puntoA,puntoB);
+    //
+    puntoA.x = bezierCtrlPoints[0][3][0];
+    puntoA.y = bezierCtrlPoints[0][3][1];
+    puntoA.z = bezierCtrlPoints[0][3][2];
+    puntoB.x = bezierCtrlPoints[0][2][0];
+    puntoB.y = bezierCtrlPoints[0][2][1];
+    puntoB.z = bezierCtrlPoints[0][2][2];
+    puntoA = findWarpedPoint(dst, src, puntoA);
+    puntoB = findWarpedPoint(dst, src, puntoB);
+    ofDrawLine(puntoA,puntoB);
+    //
+    puntoA.x = bezierCtrlPoints[0][3][0];
+    puntoA.y = bezierCtrlPoints[0][3][1];
+    puntoA.z = bezierCtrlPoints[0][3][2];
+    puntoB.x = bezierCtrlPoints[1][2][0];
+    puntoB.y = bezierCtrlPoints[1][2][1];
+    puntoB.z = bezierCtrlPoints[1][2][2];
+    puntoA = findWarpedPoint(dst, src, puntoA);
+    puntoB = findWarpedPoint(dst, src, puntoB);
+    ofDrawLine(puntoA,puntoB);
+    //
+    puntoA.x = bezierCtrlPoints[3][0][0];
+    puntoA.y = bezierCtrlPoints[3][0][1];
+    puntoA.z = bezierCtrlPoints[3][0][2];
+    puntoB.x = bezierCtrlPoints[3][1][0];
+    puntoB.y = bezierCtrlPoints[3][1][1];
+    puntoB.z = bezierCtrlPoints[3][1][2];
+    puntoA = findWarpedPoint(dst, src, puntoA);
+    puntoB = findWarpedPoint(dst, src, puntoB);
+    ofDrawLine(puntoA,puntoB);
+    //
+    puntoA.x = bezierCtrlPoints[3][0][0];
+    puntoA.y = bezierCtrlPoints[3][0][1];
+    puntoA.z = bezierCtrlPoints[3][0][2];
+    puntoB.x = bezierCtrlPoints[2][0][0];
+    puntoB.y = bezierCtrlPoints[2][0][1];
+    puntoB.z = bezierCtrlPoints[2][0][2];
+    puntoA = findWarpedPoint(dst, src, puntoA);
+    puntoB = findWarpedPoint(dst, src, puntoB);
+    ofDrawLine(puntoA,puntoB);
+    //
+    puntoA.x = bezierCtrlPoints[3][0][0];
+    puntoA.y = bezierCtrlPoints[3][0][1];
+    puntoA.z = bezierCtrlPoints[3][0][2];
+    puntoB.x = bezierCtrlPoints[2][1][0];
+    puntoB.y = bezierCtrlPoints[2][1][1];
+    puntoB.z = bezierCtrlPoints[2][1][2];
+    puntoA = findWarpedPoint(dst, src, puntoA);
+    puntoB = findWarpedPoint(dst, src, puntoB);
+    ofDrawLine(puntoA,puntoB);
+    //
+    puntoA.x = bezierCtrlPoints[3][3][0];
+    puntoA.y = bezierCtrlPoints[3][3][1];
+    puntoA.z = bezierCtrlPoints[3][3][2];
+    puntoB.x = bezierCtrlPoints[3][2][0];
+    puntoB.y = bezierCtrlPoints[3][2][1];
+    puntoB.z = bezierCtrlPoints[3][2][2];
+    puntoA = findWarpedPoint(dst, src, puntoA);
+    puntoB = findWarpedPoint(dst, src, puntoB);
+    ofDrawLine(puntoA,puntoB);
+    //
+    puntoA.x = bezierCtrlPoints[3][3][0];
+    puntoA.y = bezierCtrlPoints[3][3][1];
+    puntoA.z = bezierCtrlPoints[3][3][2];
+    puntoB.x = bezierCtrlPoints[2][3][0];
+    puntoB.y = bezierCtrlPoints[2][3][1];
+    puntoB.z = bezierCtrlPoints[2][3][2];
+    puntoA = findWarpedPoint(dst, src, puntoA);
+    puntoB = findWarpedPoint(dst, src, puntoB);
+    ofDrawLine(puntoA,puntoB);
+    //
+    puntoA.x = bezierCtrlPoints[3][3][0];
+    puntoA.y = bezierCtrlPoints[3][3][1];
+    puntoA.z = bezierCtrlPoints[3][3][2];
+    puntoB.x = bezierCtrlPoints[2][2][0];
+    puntoB.y = bezierCtrlPoints[2][2][1];
+    puntoB.z = bezierCtrlPoints[2][2][2];
+    puntoA = findWarpedPoint(dst, src, puntoA);
+    puntoB = findWarpedPoint(dst, src, puntoB);
+    ofDrawLine(puntoA,puntoB);
+    //
+    puntoA.x = bezierCtrlPoints[1][2][0];
+    puntoA.y = bezierCtrlPoints[1][2][1];
+    puntoA.z = bezierCtrlPoints[1][2][2];
+    puntoB.x = bezierCtrlPoints[2][2][0];
+    puntoB.y = bezierCtrlPoints[2][2][1];
+    puntoB.z = bezierCtrlPoints[2][2][2];
+    puntoA = findWarpedPoint(dst, src, puntoA);
+    puntoB = findWarpedPoint(dst, src, puntoB);
+    ofDrawLine(puntoA,puntoB);
+    //
+    puntoA.x = bezierCtrlPoints[1][2][0];
+    puntoA.y = bezierCtrlPoints[1][2][1];
+    puntoA.z = bezierCtrlPoints[1][2][2];
+    puntoB.x = bezierCtrlPoints[1][1][0];
+    puntoB.y = bezierCtrlPoints[1][1][1];
+    puntoB.z = bezierCtrlPoints[1][1][2];
+    puntoA = findWarpedPoint(dst, src, puntoA);
+    puntoB = findWarpedPoint(dst, src, puntoB);
+    ofDrawLine(puntoA,puntoB);
+    //
+    puntoA.x = bezierCtrlPoints[2][1][0];
+    puntoA.y = bezierCtrlPoints[2][1][1];
+    puntoA.z = bezierCtrlPoints[2][1][2];
+    puntoB.x = bezierCtrlPoints[1][1][0];
+    puntoB.y = bezierCtrlPoints[1][1][1];
+    puntoB.z = bezierCtrlPoints[1][1][2];
+    puntoA = findWarpedPoint(dst, src, puntoA);
+    puntoB = findWarpedPoint(dst, src, puntoB);
+    ofDrawLine(puntoA,puntoB);
+    //
+    puntoA.x = bezierCtrlPoints[2][1][0];
+    puntoA.y = bezierCtrlPoints[2][1][1];
+    puntoA.z = bezierCtrlPoints[2][1][2];
+    puntoB.x = bezierCtrlPoints[2][2][0];
+    puntoB.y = bezierCtrlPoints[2][2][1];
+    puntoB.z = bezierCtrlPoints[2][2][2];
+    puntoA = findWarpedPoint(dst, src, puntoA);
+    puntoB = findWarpedPoint(dst, src, puntoB);
+    ofDrawLine(puntoA,puntoB);
+
+}
+
+
+// Bezier markers ----------------------------------------------
+void quad::drawGridMarkers()
+{
+    ofSetColor(0,200,220,255);
+    ofSetLineWidth(1.5);
+
+    for(int i=0; i<=gridRows; i++)
+    {
+        for(int j=0; j<=gridColumns; j++)
+        {
+            ofVec3f punto;
+            punto.x = gridPoints[i][j][0]*ofGetWidth();
+            punto.y = gridPoints[i][j][1]*ofGetHeight();
+            punto.z = 0.0;
+            punto = findWarpedPoint(dst, src, punto);
+            if(bHighlightCtrlPoint && highlightedCtrlPointRow == i && highlightedCtrlPointCol == j)
+            {
+                ofFill();
+            }
+            ofDrawCircle(punto.x, punto.y, 3.0);
+            ofNoFill();
+        }
+    }
+}
+
+// Mask markers --------------------------------------
+void quad::drawMaskMarkers()
+{
+    if (m_maskPoints.size() > 0)
+    {
+        // draw the contour polygon the markers form
+        ofPolyline contour;
+        for(size_t i = 0; i < m_maskPoints.size(); i++)
+        {
+            const ofPoint scaledPoint = Util::scalePointToPixel(m_maskPoints[i]);
+            const ofPoint warpedPoint = findWarpedPoint(dst, src, scaledPoint);
+            contour.addVertex(warpedPoint);
+        }
+        ofSetHexColor(0x444444); // dark-grey
+        ofSetLineWidth(1.6);
+        ofEnableSmoothing();
+        contour.close();
+        contour.draw();
+        ofDisableSmoothing();
+
+        // draw the marker handles
+        for(size_t i = 0; i < m_maskPoints.size(); i++)
+        {
+            ofSetColor(100, 139, 150, 255); // blueish grey
+            ofSetLineWidth(1.0);
+
+            const ofPoint scaledPoint = Util::scalePointToPixel(m_maskPoints[i]);
+            const ofPoint warpedPoint = findWarpedPoint(dst, src, scaledPoint);
+
+            // if the mouse is over the handle fill the inner circle
+            if(bHighlightMaskPoint && highlightedMaskPoint == i)
+            {
+                ofFill();
+            }
+            ofDrawCircle(warpedPoint, 4);
+            ofNoFill();
+            ofDrawCircle(warpedPoint, 10);
+        }
+    }
 }
 
 
