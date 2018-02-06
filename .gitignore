@@ -1,0 +1,4 @@
+bin/lpmt
+bin/lpmt_debug
+build/
+lpmt.qbs.user
