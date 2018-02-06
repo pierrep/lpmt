@@ -1190,6 +1190,23 @@ void quad::draw()
             {
                 drawMaskMarkers();
             }
+        } else {
+            // TODO: make this a gui option
+            if (m_maskPoints.size() > 0)
+            {
+                ofPolyline contour;
+                for(size_t i = 0; i < m_maskPoints.size(); i++) {
+                    const ofPoint scaledPoint = Util::scalePointToPixel(m_maskPoints[i]);
+                    const ofPoint warpedPoint = findWarpedPoint(dst, src, scaledPoint);
+                    contour.addVertex(warpedPoint);
+                }
+                ofSetHexColor(0x444444); // dark-grey
+                ofSetLineWidth(1.6);
+                ofEnableSmoothing();
+                contour.close();
+                contour.draw();
+                ofDisableSmoothing();
+            }
         }
 
         if (isSetup)
@@ -1326,7 +1343,7 @@ void quad::applyBlendmode()
 void quad::allocateFbo(int w, int h)
 {
     settings.internalformat = GL_RGBA;
-    settings.numSamples = 4;
+    settings.numSamples = 0;
     settings.useDepth = false;
     settings.useStencil = false;
     settings.width = w;
