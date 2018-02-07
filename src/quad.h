@@ -149,6 +149,8 @@ public:
     bool slideshowBg;
     bool slideFit;
     bool slideKeepAspect;
+    bool imageFit;
+    bool imageKeepAspect;
     bool kinectBg;
     bool kinectImg;
     bool kinectMask;
@@ -177,6 +179,7 @@ public:
     bool bMask;
     bool maskInvert;
     int maskMode;
+    bool bDrawMaskOutline;
 
     bool bHighlightCorner;
     int highlightedCorner;

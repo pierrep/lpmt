@@ -26,7 +26,8 @@
 </cameras>   
 
 <OSC>
-    <LISTENING_PORT>8888</LISTENING_PORT>
+	<APPID>1</APPID>
+    <LISTENING_PORT>12345</LISTENING_PORT>
     <GUI_CONTROL>
         <SLIDER>
             <MIN>0.0</MIN>

@@ -60,10 +60,10 @@ void ofApp::setup()
     ofxXmlSettings xmlConfigFile;
     const bool wasConfigLoadSuccessful = xmlConfigFile.loadFile("config.xml");
     if(!wasConfigLoadSuccessful) {
-        std::cout << "WARNING: config file \"config.xml\" not found!" << std::endl << std::endl;
+        ofLogWarning() << "Config file \"config.xml\" not found!";
     }
     else {
-        std::cout << "Loaded config file: \"config.xml\"" << std::endl;
+        ofLogNotice() << "Loaded config file: \"config.xml\"";
     }
 
     #ifdef WITH_KINECT
@@ -76,74 +76,7 @@ void ofApp::setup()
     m_cameras.clear();
     if(wasConfigLoadSuccessful)
     {
-        xmlConfigFile.pushTag("cameras");
-        // check how many cameras are defined in settings
-        unsigned int numberOfCameras = 0;
-        numberOfCameras = xmlConfigFile.getNumTags("camera");
-        //m_cameras.reserve(numberOfCameras); // reserve memory, so the iterators don't get invalidated by reallocation
-
-        // cycle through defined cameras trying to initialize them and populate the cameras vector
-        for (unsigned int i = 0; i < numberOfCameras; i++)
-        {
-            // read the requested parameters for the camera
-            xmlConfigFile.pushTag("camera", i);
-            const int requestedCameraWidth = xmlConfigFile.getValue("requestedWidth", 640);
-            const int requestedCameraHeight = xmlConfigFile.getValue("requestedHeight", 480);
-            const int cameraID = xmlConfigFile.getValue("id", 0);
-            const int useForSnapshotBackground = xmlConfigFile.getValue("useForSnapshotBackround", 0);
-            xmlConfigFile.popTag();
-
-            // try initialize a video grabber
-            ofVideoGrabber camera;
-            vector<ofVideoDevice> devices = camera.listDevices();
-
-            for(unsigned int i = 0; i < devices.size();i++)
-            {
-                ofLogNotice("LPMT") << "Camera Found - camera ID: " << devices[i].id << " Name: " << devices[i].deviceName << " Hardware Name:" << devices[i].hardwareName;
-            }
-
-            bool isVideoGrabberInitialized = false;
-            int actualCameraWidth = 0;
-            int actualCameraHeight  = 0;
-
-            for(unsigned int i = 0; i < devices.size(); i++){
-
-                if(devices[i].bAvailable){
-                    if(devices[i].id  == cameraID) {
-                        camera.setDeviceID(cameraID);
-
-                        isVideoGrabberInitialized = camera.initGrabber(requestedCameraWidth, requestedCameraHeight);
-                        actualCameraWidth = static_cast<int>(camera.getWidth());
-                        actualCameraHeight = static_cast<int>(camera.getHeight());
-
-                        // inform the user that the requested camera dimensions and the actual ones might differ
-                        ofLogNotice("LPMT") << "Camera with ID " << cameraID << " asked for dimensions " << requestedCameraWidth << "x" << requestedCameraHeight << " - actual size is " << actualCameraWidth << "x" << actualCameraHeight;
-                    }
-                }
-            }
-
-            // check if the camera is available and eventually push it to cameras vector
-            if (!isVideoGrabberInitialized || actualCameraWidth == 0 || actualCameraHeight == 0)
-            {
-                ofSystemAlertDialog("Camera with ID " + ofToString(cameraID) + " was requested, but was not found or is not available.");
-                ofLogWarning("LPMT") << "Camera with ID " << cameraID << " was requested, but was not found or is not available.";
-            }
-            else
-            {
-                m_cameras.push_back(camera);
-                // following vector is used for the combo box in SimpleGuiToo gui
-                m_cameraIds.push_back(ofToString(cameraID));
-
-                // if this camera is the first one or it is marked for being used
-                // as the background snapshot camera, save a pointer to it
-                if (useForSnapshotBackground == 1 || cameraID == 0)
-                {
-                    m_snapshotBackgroundCamera = m_cameras.end() - 1;
-                    m_snapshotBackgroundTexture.allocate(camera.getWidth(), camera.getHeight(), GL_RGB);
-                }
-            }
-        }
-        xmlConfigFile.popTag();
+        setupCameras(xmlConfigFile);
     }
 
     // shared videos setup
@@ -185,6 +118,7 @@ void ofApp::setup()
     if (wasConfigLoadSuccessful)
     {
         oscReceivePort = xmlConfigFile.getValue("OSC:LISTENING_PORT", OSC_DEFAULT_PORT);
+        appId = xmlConfigFile.getValue("OSC:APPID", 0);
     }
     ofLogNotice() << "Listening for OSC messages on port: " << oscReceivePort;
     receiver.setup(oscReceivePort);
@@ -900,7 +834,7 @@ void ofApp::keyPressed(int key)
             }
         }
     } else
-    if((key == 'x' || key == 'X' || key == OF_KEY_DEL) && !bTimeline)
+    if( ( (ofGetKeyPressed(OF_KEY_CONTROL) && ofGetKeyPressed('x')) || (ofGetKeyPressed(OF_KEY_CONTROL) && ofGetKeyPressed('X')) ) && !bTimeline)
     {
         // delete quad
         quads[activeQuad].reset();
@@ -1322,15 +1256,8 @@ void ofApp::mouseDragged(int x, int y, int button)
             // move the selected corner
             quads[activeQuad].corners[m_selectedCorner] += normalizedMouseMovement;
 
-            // this is a hack, because ofGetKeyPressed doesn't seem to work on windows with the shift key
-            // on linux the define for the shift key seems to be wrong... I already notified the openFrameworks team
-#ifdef TARGET_WIN
-            if((GetKeyState( VK_SHIFT ) & 0x80) > 0)
-#else
-            #define SHIFT_KEY (112 | OF_KEY_MODIFIER)
-            if(ofGetKeyPressed(SHIFT_KEY))
-#endif
             // scale the whole quad if shift is pressed and one of the corners is moved
+            if(ofGetKeyPressed(OF_KEY_LEFT_SHIFT))
             {
                 // get the previous and the next corner
                 int previousCorner = m_selectedCorner - 1;
@@ -1347,8 +1274,7 @@ void ofApp::mouseDragged(int x, int y, int button)
                     quads[activeQuad].corners[previousCorner].x += normalizedMouseMovement.x;
                     quads[activeQuad].corners[nextCorner].y += normalizedMouseMovement.y;
                 }
-                else
-                {
+                else {
                     quads[activeQuad].corners[previousCorner].y += normalizedMouseMovement.y;
                     quads[activeQuad].corners[nextCorner].x += normalizedMouseMovement.x;
                 }
@@ -1775,6 +1701,79 @@ void ofApp::setupInitialQuads()
     quads[2].layer = 2;
     layers[3] = 3;
     quads[3].layer = 3;
+}
+
+//--------------------------------------------------------------
+void ofApp::setupCameras(ofxXmlSettings &xmlConfigFile)
+{
+    xmlConfigFile.pushTag("cameras");
+    // check how many cameras are defined in settings
+    int numberOfCameras = 0;
+    numberOfCameras = xmlConfigFile.getNumTags("camera");
+    //m_cameras.reserve(numberOfCameras); // reserve memory, so the iterators don't get invalidated by reallocation
+
+    // cycle through defined cameras trying to initialize them and populate the cameras vector
+    for (int i = 0; i < numberOfCameras; i++)
+    {
+        // read the requested parameters for the camera
+        xmlConfigFile.pushTag("camera", i);
+        const int requestedCameraWidth = xmlConfigFile.getValue("requestedWidth", 640);
+        const int requestedCameraHeight = xmlConfigFile.getValue("requestedHeight", 480);
+        const int cameraID = xmlConfigFile.getValue("id", 0);
+        const int useForSnapshotBackground = xmlConfigFile.getValue("useForSnapshotBackround", 0);
+        xmlConfigFile.popTag();
+
+        // try initialize a video grabber
+        ofVideoGrabber camera;
+        vector<ofVideoDevice> devices = camera.listDevices();
+
+        for(unsigned int i = 0; i < devices.size();i++)
+        {
+            ofLogNotice("LPMT") << "Camera Found - camera ID: " << devices[i].id << " Name: " << devices[i].deviceName << " Hardware Name:" << devices[i].hardwareName;
+        }
+
+        bool isVideoGrabberInitialized = false;
+        int actualCameraWidth = 0;
+        int actualCameraHeight  = 0;
+
+        for(unsigned int i = 0; i < devices.size(); i++){
+
+            if(devices[i].bAvailable){
+                if(devices[i].id  == cameraID) {
+                    camera.setDeviceID(cameraID);
+
+                    isVideoGrabberInitialized = camera.initGrabber(requestedCameraWidth, requestedCameraHeight);
+                    actualCameraWidth = static_cast<int>(camera.getWidth());
+                    actualCameraHeight = static_cast<int>(camera.getHeight());
+
+                    // inform the user that the requested camera dimensions and the actual ones might differ
+                    ofLogNotice("LPMT") << "Camera with ID " << cameraID << " asked for dimensions " << requestedCameraWidth << "x" << requestedCameraHeight << " - actual size is " << actualCameraWidth << "x" << actualCameraHeight;
+                }
+            }
+        }
+
+        // check if the camera is available and eventually push it to cameras vector
+        if (!isVideoGrabberInitialized || actualCameraWidth == 0 || actualCameraHeight == 0)
+        {
+            ofSystemAlertDialog("Camera with ID " + ofToString(cameraID) + " was requested, but was not found or is not available.");
+            ofLogWarning("LPMT") << "Camera with ID " << cameraID << " was requested, but was not found or is not available.";
+        }
+        else
+        {
+            m_cameras.push_back(camera);
+            // following vector is used for the combo box in SimpleGuiToo gui
+            m_cameraIds.push_back(ofToString(cameraID));
+
+            // if this camera is the first one or it is marked for being used
+            // as the background snapshot camera, save a pointer to it
+            if (useForSnapshotBackground == 1 || cameraID == 0)
+            {
+                m_snapshotBackgroundCamera = m_cameras.end() - 1;
+                m_snapshotBackgroundTexture.allocate(camera.getWidth(), camera.getHeight(), GL_RGB);
+            }
+        }
+    }
+    xmlConfigFile.popTag();
 }
 
 //--------------------------------------------------------------

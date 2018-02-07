@@ -7,6 +7,18 @@ void ofApp::parseOsc()
     ofxOscMessage m;
     receiver.getNextMessage( m );
 
+    if ( m.getAddress() == "/image" )
+    {
+        int osc_quad = m.getArgAsInt32( 0 );
+        int imageId = m.getArgAsInt32( 1 );
+
+        if(imageId == appId) {
+            ofBuffer buffer = m.getArgAsBlob(2);
+            quads[osc_quad].img.load(buffer);
+            quads[osc_quad].imgBg = true;
+        }
+    }
+
     // check for quads corner x movements
     if ( m.getAddress() == "/corners/x" )
     {

@@ -66,6 +66,9 @@ void ofApp::saveCurrentSettingsToXMLFile(std::string xmlFilePath)
             xmlSettingsFile.setValue("QUADS:QUAD_"+ofToString(i)+":CAM:MULT_Y",quads[i].camMultY);
             xmlSettingsFile.setValue("QUADS:QUAD_"+ofToString(i)+":IMG:MULT_X",quads[i].imgMultX);
             xmlSettingsFile.setValue("QUADS:QUAD_"+ofToString(i)+":IMG:MULT_Y",quads[i].imgMultY);
+            xmlSettingsFile.setValue("QUADS:QUAD_"+ofToString(i)+":IMG:FIT",quads[i].imageFit);
+            xmlSettingsFile.setValue("QUADS:QUAD_"+ofToString(i)+":IMG:KEEP_ASPECT",quads[i].imageKeepAspect);
+
             xmlSettingsFile.setValue("QUADS:QUAD_"+ofToString(i)+":VIDEO:MULT_X",quads[i].videoMultX);
             xmlSettingsFile.setValue("QUADS:QUAD_"+ofToString(i)+":VIDEO:MULT_Y",quads[i].videoMultY);
             xmlSettingsFile.setValue("QUADS:QUAD_"+ofToString(i)+":VIDEO:SPEED",quads[i].videoSpeed);
@@ -123,6 +126,7 @@ void ofApp::saveCurrentSettingsToXMLFile(std::string xmlFilePath)
             //mask stuff
             xmlSettingsFile.setValue("QUADS:QUAD_"+ofToString(i)+":MASK:ON",quads[i].bMask);
             xmlSettingsFile.setValue("QUADS:QUAD_"+ofToString(i)+":MASK:INVERT_MASK",quads[i].maskInvert);
+            xmlSettingsFile.setValue("QUADS:QUAD_"+ofToString(i)+":MASK:MASK_OUTLINE",quads[i].bDrawMaskOutline);
             xmlSettingsFile.setValue("QUADS:QUAD_"+ofToString(i)+":MASK:N_POINTS",(int)quads[i].m_maskPoints.size());
             if (quads[i].m_maskPoints.size() > 0)
             {
@@ -241,6 +245,8 @@ void ofApp::loadSettingsFromXMLFile(std::string xmlFilePath)
             {
                 quads[i].loadImageFromFile(quads[i].loadedImg, quads[i].bgImg);
             }
+            quads[i].imageFit = xmlSettingsFile.getValue("QUADS:QUAD_"+ofToString(i)+":IMG:FIT", 0);
+            quads[i].imageKeepAspect = xmlSettingsFile.getValue("QUADS:QUAD_"+ofToString(i)+":IMG:KEEP_ASPECT", 0);
             quads[i].imgHFlip = xmlSettingsFile.getValue("QUADS:QUAD_"+ofToString(i)+":IMG:FLIP:H", 0);
             quads[i].imgVFlip = xmlSettingsFile.getValue("QUADS:QUAD_"+ofToString(i)+":IMG:FLIP:V", 0);
 
@@ -324,6 +330,7 @@ void ofApp::loadSettingsFromXMLFile(std::string xmlFilePath)
             //mask stuff
             quads[i].bMask = xmlSettingsFile.getValue("QUADS:QUAD_"+ofToString(i)+":MASK:ON", 0);
             quads[i].maskInvert = xmlSettingsFile.getValue("QUADS:QUAD_"+ofToString(i)+":MASK:INVERT_MASK", 0);
+            quads[i].bDrawMaskOutline = xmlSettingsFile.getValue("QUADS:QUAD_"+ofToString(i)+":MASK:MASK_OUTLINE", 0);
             const int numberOfMaskPoints =  xmlSettingsFile.getValue("QUADS:QUAD_"+ofToString(i)+":MASK:N_POINTS", 0);
             quads[i].m_maskPoints.clear();
             if (numberOfMaskPoints > 0)

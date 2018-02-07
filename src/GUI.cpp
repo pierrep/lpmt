@@ -83,6 +83,8 @@ void GUI::setupPages()
     m_gui.addButton("load image", m_app->m_loadImageFlag);
     m_gui.addSlider("img scale X", m_dummyFloat, 0.1, 10.0);
     m_gui.addSlider("img scale Y", m_dummyFloat, 0.1, 10.0);
+    m_gui.addToggle("img to quad size", m_dummyBool);
+    m_gui.addToggle("keep aspect ratio", m_dummyBool);
     m_gui.addToggle("H mirror", m_dummyBool);
     m_gui.addToggle("V mirror", m_dummyBool);
     m_gui.addColorPicker("img color",&m_dummyFloat);
@@ -100,6 +102,7 @@ void GUI::setupPages()
     m_gui.addTitle("Mask");
     m_gui.addToggle("mask on/off", m_dummyBool);
     m_gui.addToggle("invert mask", m_dummyBool);
+    m_gui.addToggle("draw mask outline", m_dummyBool);
     m_gui.addTitle("Surface deformation");
     m_gui.addToggle("surface deform.", m_dummyBool);
     m_gui.addToggle("use bezier", m_dummyBool);
@@ -255,6 +258,10 @@ void GUI::updatePages(quad& activeQuad)
     dynamic_cast<ofxSimpleGuiToggle*>(firstPage.findControlByName("image on/off"))->value = &activeQuad.imgBg;
     dynamic_cast<ofxSimpleGuiSliderFloat*>(firstPage.findControlByName("img scale X"))->value = &activeQuad.imgMultX;
     dynamic_cast<ofxSimpleGuiSliderFloat*>(firstPage.findControlByName("img scale Y"))->value = &activeQuad.imgMultY;
+
+    dynamic_cast<ofxSimpleGuiToggle*>(firstPage.findControlByName("img to quad size"))->value = &activeQuad.imageFit;
+    dynamic_cast<ofxSimpleGuiToggle*>(firstPage.findControlByName("keep aspect ratio"))->value = &activeQuad.imageKeepAspect;
+
     dynamic_cast<ofxSimpleGuiToggle*>(firstPage.findControlByName("H mirror"))->value = &activeQuad.imgHFlip;
     dynamic_cast<ofxSimpleGuiToggle*>(firstPage.findControlByName("V mirror"))->value = &activeQuad.imgVFlip;
     dynamic_cast<ofxSimpleGuiColorPicker*>(firstPage.findControlByName("img color"))->value = &activeQuad.imgColorize.r;
@@ -268,6 +275,7 @@ void GUI::updatePages(quad& activeQuad)
     dynamic_cast<ofxSimpleGuiSliderFloat*>(firstPage.findControlByName("trans duration"))->value = &activeQuad.transDuration;
     dynamic_cast<ofxSimpleGuiToggle*>(firstPage.findControlByName("mask on/off"))->value = &activeQuad.bMask;
     dynamic_cast<ofxSimpleGuiToggle*>(firstPage.findControlByName("invert mask"))->value = &activeQuad.maskInvert;
+    dynamic_cast<ofxSimpleGuiToggle*>(firstPage.findControlByName("draw mask outline"))->value = &activeQuad.bDrawMaskOutline;
     dynamic_cast<ofxSimpleGuiToggle*>(firstPage.findControlByName("surface deform."))->value = &activeQuad.bDeform;
     dynamic_cast<ofxSimpleGuiToggle*>(firstPage.findControlByName("use bezier"))->value = &activeQuad.bBezier;
     dynamic_cast<ofxSimpleGuiToggle*>(firstPage.findControlByName("use grid"))->value = &activeQuad.bGrid;

@@ -34,6 +34,8 @@ void quad::reset()
     slideshowBg = false;
     slideFit = false;
     slideKeepAspect = true;
+    imageFit = false;
+    imageKeepAspect = false;
 
     videoHFlip = false;
     imgHFlip = false;
@@ -135,6 +137,7 @@ void quad::reset()
     m_maskPoints.clear();
     bMask = false;
     maskInvert = false;
+    bDrawMaskOutline = false;
 
     bHighlightMaskPoint = false;
     highlightedMaskPoint = -1;
@@ -670,20 +673,15 @@ void quad::draw()
                     if (slideKeepAspect)
                     {
                         // we calculate the factor for fitting the image in quad respecting img aspect ratio
-                        if (fitX >= fitY)
-                        {
+                        if (fitX >= fitY) {
                             multX = fitY;
                             multY = fitY;
-                        }
-                        else
-                        {
+                        } else {
                             multX = fitX;
                             multY = fitX;
                         }
-                    }
-                    // this is for stretching image to whole quad size
-                    else
-                    {
+                    } else {
+                        // this is for stretching image to whole quad size
                         multX = fitX;
                         multY = fitY;
                     }
@@ -729,9 +727,33 @@ void quad::draw()
                 }
             }
             ofSetColor(imgColorize.r * 255 * timelineRed, imgColorize.g * 255 * timelineGreen, imgColorize.b * 255 * timelineBlue, imgColorize.a * 255 * timelineAlpha);
-            //img.draw(0,0,img.getWidth()*imgMultX, img.getHeight()*imgMultY);
-            //img.draw(0,0,img.getWidth()*imgMultX/(img.getWidth()/ofGetWidth()), img.getHeight()*imgMultY/(img.getHeight()/ofGetHeight()));
-            img.draw(0,0,img.getWidth()*imgMultX*screenFactorX, img.getHeight()*imgMultY*screenFactorY);
+
+            if (imageFit)
+            {
+                float multX = 1.0;
+                float multY = 1.0;
+                float fitX = ofGetWidth()/img.getWidth();
+                float fitY = ofGetHeight()/img.getHeight();
+                if (imageKeepAspect)
+                {
+                    // we calculate the factor for fitting the image in quad respecting img aspect ratio
+                    if (fitX >= fitY) {
+                        multX = fitY;
+                        multY = fitY;
+                    } else {
+                        multX = fitX;
+                        multY = fitX;
+                    }
+                } else {
+                    // this is for stretching image to whole quad size
+                    multX = fitX;
+                    multY = fitY;
+                }
+                img.draw(0,0,img.getWidth()*multX, img.getHeight()*multY);
+            } else {
+                img.draw(0,0,img.getWidth()*imgMultX*screenFactorX, img.getHeight()*imgMultY*screenFactorY);
+            }
+
             if (imgHFlip || imgVFlip)
             {
                 glPopMatrix();
@@ -1190,10 +1212,12 @@ void quad::draw()
             {
                 drawMaskMarkers();
             }
-        } else {
-            // TODO: make this a gui option
+        }
+
+        if(bDrawMaskOutline) {
             if (m_maskPoints.size() > 0)
             {
+                ofPushStyle();
                 ofPolyline contour;
                 for(size_t i = 0; i < m_maskPoints.size(); i++) {
                     const ofPoint scaledPoint = Util::scalePointToPixel(m_maskPoints[i]);
@@ -1201,11 +1225,12 @@ void quad::draw()
                     contour.addVertex(warpedPoint);
                 }
                 ofSetHexColor(0x444444); // dark-grey
-                ofSetLineWidth(1.6);
+                ofSetLineWidth(3);
                 ofEnableSmoothing();
                 contour.close();
                 contour.draw();
                 ofDisableSmoothing();
+                ofPopStyle();
             }
         }
 

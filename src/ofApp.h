@@ -84,6 +84,7 @@ public:
     void raiseLayer();
     void lowerLayer();
     void setupInitialQuads();
+    void setupCameras(ofxXmlSettings &xmlConfigFile);
     void toggleSetupMode();
     void saveCurrentSettingsToXMLFile(std::string xmlFilePath);
     void loadSettingsFromXMLFile(std::string xmlFilePath);
@@ -119,10 +120,11 @@ public:
     ofImage m_SplashScreenImage;
 
     // OSC stuff
-    ofxOscReceiver	receiver;
-    int				current_msg_string;
-    string          msg_strings[NUM_MSG_STRINGS];
-    float			timers[NUM_MSG_STRINGS];
+    int appId;
+    ofxOscReceiver receiver;
+    int	current_msg_string;
+    string msg_strings[NUM_MSG_STRINGS];
+    float timers[NUM_MSG_STRINGS];
     float oscControlMin;
     float oscControlMax;
     vector<ofxOscMessage> oscHotkeyMessages;
