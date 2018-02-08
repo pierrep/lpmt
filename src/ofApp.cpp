@@ -629,8 +629,10 @@ void ofApp::draw()
         ofDisableAlphaBlending();
     }
 
-    ofSetColor(255,255,255);
-    ofDrawBitmapString(ofToString(ofGetFrameRate()),ofGetWidth()-100,ofGetHeight()-30);
+    if(bGui) {
+        ofSetColor(255,255,255);
+        ofDrawBitmapString(ofToString(ofGetFrameRate()),ofGetWidth()-100,ofGetHeight()-30);
+    }
 
 }
 
