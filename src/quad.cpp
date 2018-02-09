@@ -687,6 +687,7 @@ void quad::draw()
                     }
                 }
                 // at last we draw the image with appropriate size multiplier
+                ofSetColor(imgColorize.r * 255 * timelineRed, imgColorize.g * 255 * timelineGreen, imgColorize.b * 255 * timelineBlue, imgColorize.a * 255 * timelineAlpha);
                 slide.draw(0,0,slide.getWidth()*multX, slide.getHeight()*multY);
 
                 // if slide showing time has elapsed it switches to next slide
@@ -728,6 +729,8 @@ void quad::draw()
             }
             ofSetColor(imgColorize.r * 255 * timelineRed, imgColorize.g * 255 * timelineGreen, imgColorize.b * 255 * timelineBlue, imgColorize.a * 255 * timelineAlpha);
 
+            bool bUseHueSatLum = true;
+
             if (imageFit)
             {
                 float multX = 1.0;
@@ -750,8 +753,6 @@ void quad::draw()
                     multY = fitY;
                 }
 
-                bool bUseHueSatLum = true;
-
                 if(bUseHueSatLum) {
                     hueSatLuminanceShader->begin();
                     hueSatLuminanceShader->setUniformTexture("tex", img.getTexture(),0 );
@@ -768,8 +769,6 @@ void quad::draw()
                 }
 
             } else {
-                bool bUseHueSatLum = true;
-
                 if(bUseHueSatLum) {
                     hueSatLuminanceShader->begin();
                     hueSatLuminanceShader->setUniformTexture("tex", img.getTexture(),0 );
