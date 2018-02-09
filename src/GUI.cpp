@@ -88,6 +88,9 @@ void GUI::setupPages()
     m_gui.addToggle("H mirror", m_dummyBool);
     m_gui.addToggle("V mirror", m_dummyBool);
     m_gui.addColorPicker("img color",&m_dummyFloat);
+    m_gui.addSlider("hue", m_dummyFloat, 0.0f, 1.0f);
+    m_gui.addSlider("saturation", m_dummyFloat, 0.0f, 1.0f);
+    m_gui.addSlider("luminance", m_dummyFloat, 0.0, 1.0f);
     m_gui.addTitle("Blending modes");
     m_gui.addToggle("blending on/off", m_dummyBool);
     std::string blendModesArray[] = {"None", "Normal Alpha-Blending", "Additive (with Alpha)", "Subtractive (with Alpha)", "Multiply", "Screen"};
@@ -117,7 +120,7 @@ void GUI::setupPages()
     m_gui.addToggle("edge blend on/off", m_dummyBool);
     m_gui.addSlider("power", m_dummyFloat, 0.0, 4.0);
     m_gui.addSlider("gamma", m_dummyFloat, 0.0, 4.0);
-    m_gui.addSlider("luminance", m_dummyFloat, -4.0, 4.0);
+    m_gui.addSlider("luminosity", m_dummyFloat, -4.0, 4.0);
     m_gui.addSlider("left edge", m_dummyFloat, 0.0, 0.5);
     m_gui.addSlider("right edge", m_dummyFloat, 0.0, 0.5);
     m_gui.addSlider("top edge", m_dummyFloat, 0.0, 0.5);
@@ -258,13 +261,16 @@ void GUI::updatePages(quad& activeQuad)
     dynamic_cast<ofxSimpleGuiToggle*>(firstPage.findControlByName("image on/off"))->value = &activeQuad.imgBg;
     dynamic_cast<ofxSimpleGuiSliderFloat*>(firstPage.findControlByName("img scale X"))->value = &activeQuad.imgMultX;
     dynamic_cast<ofxSimpleGuiSliderFloat*>(firstPage.findControlByName("img scale Y"))->value = &activeQuad.imgMultY;
-
     dynamic_cast<ofxSimpleGuiToggle*>(firstPage.findControlByName("img to quad size"))->value = &activeQuad.imageFit;
     dynamic_cast<ofxSimpleGuiToggle*>(firstPage.findControlByName("keep aspect ratio"))->value = &activeQuad.imageKeepAspect;
-
     dynamic_cast<ofxSimpleGuiToggle*>(firstPage.findControlByName("H mirror"))->value = &activeQuad.imgHFlip;
     dynamic_cast<ofxSimpleGuiToggle*>(firstPage.findControlByName("V mirror"))->value = &activeQuad.imgVFlip;
     dynamic_cast<ofxSimpleGuiColorPicker*>(firstPage.findControlByName("img color"))->value = &activeQuad.imgColorize.r;
+
+    dynamic_cast<ofxSimpleGuiSliderFloat*>(firstPage.findControlByName("hue"))->value = &activeQuad.hue;
+    dynamic_cast<ofxSimpleGuiSliderFloat*>(firstPage.findControlByName("saturation"))->value = &activeQuad.saturation;
+    dynamic_cast<ofxSimpleGuiSliderFloat*>(firstPage.findControlByName("luminance"))->value = &activeQuad.luminance;
+
     dynamic_cast<ofxSimpleGuiToggle*>(firstPage.findControlByName("blending on/off"))->value = &activeQuad.bBlendModes;
     dynamic_cast<ofxSimpleGuiComboBox*>(firstPage.findControlByName("blending mode"))->m_selectedChoice = &activeQuad.blendMode;
 
@@ -285,7 +291,7 @@ void GUI::updatePages(quad& activeQuad)
     dynamic_cast<ofxSimpleGuiToggle*>(firstPage.findControlByName("edge blend on/off"))->value = &activeQuad.edgeBlendBool;
     dynamic_cast<ofxSimpleGuiSliderFloat*>(firstPage.findControlByName("power"))->value = &activeQuad.edgeBlendExponent;
     dynamic_cast<ofxSimpleGuiSliderFloat*>(firstPage.findControlByName("gamma"))->value = &activeQuad.edgeBlendGamma;
-    dynamic_cast<ofxSimpleGuiSliderFloat*>(firstPage.findControlByName("luminance"))->value = &activeQuad.edgeBlendLuminance;
+    dynamic_cast<ofxSimpleGuiSliderFloat*>(firstPage.findControlByName("luminosity"))->value = &activeQuad.edgeBlendLuminance;
     dynamic_cast<ofxSimpleGuiSliderFloat*>(firstPage.findControlByName("left edge"))->value = &activeQuad.edgeBlendAmountSin;
     dynamic_cast<ofxSimpleGuiSliderFloat*>(firstPage.findControlByName("right edge"))->value = &activeQuad.edgeBlendAmountDx;
     dynamic_cast<ofxSimpleGuiSliderFloat*>(firstPage.findControlByName("top edge"))->value = &activeQuad.edgeBlendAmountTop;

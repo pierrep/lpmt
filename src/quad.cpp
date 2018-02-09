@@ -37,6 +37,10 @@ void quad::reset()
     imageFit = false;
     imageKeepAspect = false;
 
+    hue = 0.0f;
+    saturation = 0.0f;
+    luminance = 0.0f;
+
     videoHFlip = false;
     imgHFlip = false;
     camHFlip = false;
@@ -170,7 +174,7 @@ void quad::reset()
     bTimelineSlideChange = false;
 }
 
-void quad::setup(ofPoint point1, ofPoint point2, ofPoint point3, ofPoint point4, ofShader &edgeBlendShader, ofShader &quadMaskShader, ofShader &chromaShader, vector<ofVideoGrabber> &cameras, vector<ofVideoPlayer> &sharedVideos, ofTrueTypeFont &font)
+void quad::setup(ofPoint point1, ofPoint point2, ofPoint point3, ofPoint point4, ofShader &edgeBlendShader, ofShader &quadMaskShader, ofShader &chromaShader, ofShader &hueSatLumShader, vector<ofVideoGrabber> &cameras, vector<ofVideoPlayer> &sharedVideos, ofTrueTypeFont &font)
 {
     reset();
 
@@ -180,6 +184,7 @@ void quad::setup(ofPoint point1, ofPoint point2, ofPoint point3, ofPoint point4,
     shaderBlend = &edgeBlendShader;
     maskShader = &quadMaskShader;
     greenscreenShader = &chromaShader;
+    hueSatLuminanceShader = &hueSatLumShader;
     //camera = &camGrabber;
 
     ttf = font;
@@ -595,9 +600,7 @@ void quad::draw()
             }
         }
 
-
         // camera ------------------------------------------------------------------------------
-        // camera stuff
         if (camAvailable && camBg && cams[camNumber].getWidth() > 0)
         {
             if (camHFlip || camVFlip)
@@ -746,9 +749,41 @@ void quad::draw()
                     multX = fitX;
                     multY = fitY;
                 }
-                img.draw(0,0,img.getWidth()*multX, img.getHeight()*multY);
+
+                bool bUseHueSatLum = true;
+
+                if(bUseHueSatLum) {
+                    hueSatLuminanceShader->begin();
+                    hueSatLuminanceShader->setUniformTexture("tex", img.getTexture(),0 );
+
+                    hueSatLuminanceShader->setUniform1f("hue", hue);
+                    hueSatLuminanceShader->setUniform1f("sat", saturation);
+                    hueSatLuminanceShader->setUniform1f("luminance", luminance);
+
+                    img.draw(0,0,img.getWidth()*multX, img.getHeight()*multY);
+
+                    hueSatLuminanceShader->end();
+                } else {
+                    img.draw(0,0,img.getWidth()*multX, img.getHeight()*multY);
+                }
+
             } else {
-                img.draw(0,0,img.getWidth()*imgMultX*screenFactorX, img.getHeight()*imgMultY*screenFactorY);
+                bool bUseHueSatLum = true;
+
+                if(bUseHueSatLum) {
+                    hueSatLuminanceShader->begin();
+                    hueSatLuminanceShader->setUniformTexture("tex", img.getTexture(),0 );
+
+                    hueSatLuminanceShader->setUniform1f("hue", hue);
+                    hueSatLuminanceShader->setUniform1f("sat", saturation);
+                    hueSatLuminanceShader->setUniform1f("luminance", luminance);
+
+                    img.draw(0,0,img.getWidth()*imgMultX*screenFactorX, img.getHeight()*imgMultY*screenFactorY);
+
+                    hueSatLuminanceShader->end();
+                } else {
+                    img.draw(0,0,img.getWidth()*imgMultX*screenFactorX, img.getHeight()*imgMultY*screenFactorY);
+                }
             }
 
             if (imgHFlip || imgVFlip)

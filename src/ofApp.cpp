@@ -124,10 +124,11 @@ void ofApp::setup()
     m_loadSharedVideo7Flag = false;
     m_resetCurrentQuadFlag = false;
 
-    // load shaders
+    // setup shaders
     edgeBlendShader.load("shaders/blend.vert", "shaders/blend.frag");
     quadMaskShader.load("shaders/mask.vert", "shaders/mask.frag");
     chromaShader.load("shaders/chroma.vert", "shaders/chroma.frag");
+    hueSatLumShader.load("shaders/huesatluminance.vert", "shaders/huesatluminance.frag");
 
     ttf.load("type/OpenSans-Regular.ttf", 11);
 
@@ -136,8 +137,7 @@ void ofApp::setup()
     bSnapOn = true; // snap mode for surfaces corner is on
     m_sourceQuadForCopying = -1; // number of surface to use as source in copy/paste (per default no quad is selected)
     m_isSnapshotTextureOn = false; // snapshot background texture is turned off by default
-    // default is not using MostPixelsEver
-    //bMpe = false;
+    //bMpe = false;  // default is not using MostPixelsEver
     bFullscreen	= 0; // starts in windowed mode
     bGui = 1; // gui is on at start
 
@@ -725,7 +725,7 @@ void ofApp::keyPressed(int key)
         {
             if (nOfQuads < MAX_QUADS)
             {
-                quads[nOfQuads].setup(ofPoint(0.25, 0.25), ofPoint(0.75, 0.25), ofPoint(0.75, 0.75), ofPoint(0.25, 0.75), edgeBlendShader, quadMaskShader, chromaShader, m_cameras, sharedVideos, ttf);
+                quads[nOfQuads].setup(ofPoint(0.25, 0.25), ofPoint(0.75, 0.25), ofPoint(0.75, 0.75), ofPoint(0.25, 0.75), edgeBlendShader, quadMaskShader, chromaShader, hueSatLumShader, m_cameras, sharedVideos, ttf);
                 quads[nOfQuads].quadNumber = nOfQuads;
 
                 // layers
@@ -1588,16 +1588,16 @@ void ofApp::toggleSetupMode()
 void ofApp::setupInitialQuads()
 {
     // defines the first 4 default quads
-    quads[0].setup(ofPoint(0.0, 0.0), ofPoint(0.5, 0.0), ofPoint(0.5, 0.5), ofPoint(0.0, 0.5), edgeBlendShader, quadMaskShader, chromaShader, m_cameras, sharedVideos, ttf);
+    quads[0].setup(ofPoint(0.0, 0.0), ofPoint(0.5, 0.0), ofPoint(0.5, 0.5), ofPoint(0.0, 0.5), edgeBlendShader, quadMaskShader, chromaShader, hueSatLumShader, m_cameras, sharedVideos, ttf);
     quads[0].quadNumber = 0;
 
-    quads[1].setup(ofPoint(0.5, 0.0), ofPoint(1.0, 0.0), ofPoint(1.0, 0.5), ofPoint(0.5, 0.5), edgeBlendShader, quadMaskShader, chromaShader, m_cameras, sharedVideos, ttf);
+    quads[1].setup(ofPoint(0.5, 0.0), ofPoint(1.0, 0.0), ofPoint(1.0, 0.5), ofPoint(0.5, 0.5), edgeBlendShader, quadMaskShader, chromaShader, hueSatLumShader, m_cameras, sharedVideos, ttf);
     quads[1].quadNumber = 1;
 
-    quads[2].setup(ofPoint(0.0, 0.5), ofPoint(0.5, 0.5), ofPoint(0.5, 1.0), ofPoint(0.0, 1.0), edgeBlendShader, quadMaskShader, chromaShader, m_cameras, sharedVideos, ttf);
+    quads[2].setup(ofPoint(0.0, 0.5), ofPoint(0.5, 0.5), ofPoint(0.5, 1.0), ofPoint(0.0, 1.0), edgeBlendShader, quadMaskShader, chromaShader, hueSatLumShader, m_cameras, sharedVideos, ttf);
     quads[2].quadNumber = 2;
 
-    quads[3].setup(ofPoint(0.5, 0.5), ofPoint(1.0, 0.5) ,ofPoint(1.0, 1.0), ofPoint(0.5, 1.0), edgeBlendShader, quadMaskShader, chromaShader, m_cameras, sharedVideos, ttf);
+    quads[3].setup(ofPoint(0.5, 0.5), ofPoint(1.0, 0.5) ,ofPoint(1.0, 1.0), ofPoint(0.5, 1.0), edgeBlendShader, quadMaskShader, chromaShader, hueSatLumShader, m_cameras, sharedVideos, ttf);
     quads[3].quadNumber = 3;
 
     // define last one as active quad

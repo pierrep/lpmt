@@ -68,6 +68,9 @@ void ofApp::saveCurrentSettingsToXMLFile(std::string xmlFilePath)
             xmlSettingsFile.setValue("QUADS:QUAD_"+ofToString(i)+":IMG:MULT_Y",quads[i].imgMultY);
             xmlSettingsFile.setValue("QUADS:QUAD_"+ofToString(i)+":IMG:FIT",quads[i].imageFit);
             xmlSettingsFile.setValue("QUADS:QUAD_"+ofToString(i)+":IMG:KEEP_ASPECT",quads[i].imageKeepAspect);
+            xmlSettingsFile.setValue("QUADS:QUAD_"+ofToString(i)+":IMG:HUE",quads[i].hue);
+            xmlSettingsFile.setValue("QUADS:QUAD_"+ofToString(i)+":IMG:SATURATION",quads[i].saturation);
+            xmlSettingsFile.setValue("QUADS:QUAD_"+ofToString(i)+":IMG:LUMINANCE",quads[i].luminance);
 
             xmlSettingsFile.setValue("QUADS:QUAD_"+ofToString(i)+":VIDEO:MULT_X",quads[i].videoMultX);
             xmlSettingsFile.setValue("QUADS:QUAD_"+ofToString(i)+":VIDEO:MULT_Y",quads[i].videoMultY);
@@ -213,15 +216,15 @@ void ofApp::loadSettingsFromXMLFile(std::string xmlFilePath)
 
             #ifdef WITH_KINECT
                 #ifdef WITH_SYPHON
-                quads[i].setup(ofPoint(x0, y0), ofPoint(x1, y1), ofPoint(x2, y2), ofPoint(x3, y3), edgeBlendShader, quadMaskShader, chromaShader, m_cameras, sharedVideos, kinect, syphClient, ttf);
+                quads[i].setup(ofPoint(x0, y0), ofPoint(x1, y1), ofPoint(x2, y2), ofPoint(x3, y3), edgeBlendShader, quadMaskShader, chromaShader, hueSatLumShader, m_cameras, sharedVideos, kinect, syphClient, ttf);
                 #else
-                quads[i].setup(ofPoint(x0, y0), ofPoint(x1, y1), ofPoint(x2, y2), ofPoint(x3, y3), edgeBlendShader, quadMaskShader, chromaShader, m_cameras, sharedVideos, kinect, ttf);
+                quads[i].setup(ofPoint(x0, y0), ofPoint(x1, y1), ofPoint(x2, y2), ofPoint(x3, y3), edgeBlendShader, quadMaskShader, chromaShader, hueSatLumShader m_cameras, sharedVideos, kinect, ttf);
                 #endif
             #else
                 #ifdef WITH_SYPHON
-                quads[i].setup(ofPoint(x0, y0), ofPoint(x1, y1), ofPoint(x2, y2), ofPoint(x3, y3), edgeBlendShader, quadMaskShader, chromaShader, m_cameras, sharedVideos, syphClient, ttf);
+                quads[i].setup(ofPoint(x0, y0), ofPoint(x1, y1), ofPoint(x2, y2), ofPoint(x3, y3), edgeBlendShader, quadMaskShader, chromaShader, hueSatLumShader, m_cameras, sharedVideos, syphClient, ttf);
                 #else
-                quads[i].setup(ofPoint(x0, y0), ofPoint(x1, y1), ofPoint(x2, y2), ofPoint(x3, y3), edgeBlendShader, quadMaskShader, chromaShader, m_cameras, sharedVideos, ttf);
+                quads[i].setup(ofPoint(x0, y0), ofPoint(x1, y1), ofPoint(x2, y2), ofPoint(x3, y3), edgeBlendShader, quadMaskShader, chromaShader, hueSatLumShader, m_cameras, sharedVideos, ttf);
                 #endif
             #endif
             quads[i].quadNumber = xmlSettingsFile.getValue("QUADS:QUAD_"+ofToString(i)+":NUMBER", 0);
@@ -247,6 +250,10 @@ void ofApp::loadSettingsFromXMLFile(std::string xmlFilePath)
             }
             quads[i].imageFit = xmlSettingsFile.getValue("QUADS:QUAD_"+ofToString(i)+":IMG:FIT", 0);
             quads[i].imageKeepAspect = xmlSettingsFile.getValue("QUADS:QUAD_"+ofToString(i)+":IMG:KEEP_ASPECT", 0);
+            quads[i].hue = xmlSettingsFile.getValue("QUADS:QUAD_"+ofToString(i)+":IMG:HUE",0.0);
+            quads[i].saturation = xmlSettingsFile.getValue("QUADS:QUAD_"+ofToString(i)+":IMG:SATURATION",0.0);
+            quads[i].luminance = xmlSettingsFile.getValue("QUADS:QUAD_"+ofToString(i)+":IMG:LUMINANCE",0.0);
+
             quads[i].imgHFlip = xmlSettingsFile.getValue("QUADS:QUAD_"+ofToString(i)+":IMG:FLIP:H", 0);
             quads[i].imgVFlip = xmlSettingsFile.getValue("QUADS:QUAD_"+ofToString(i)+":IMG:FLIP:V", 0);
 

@@ -137,6 +137,7 @@ public:
     ofShader edgeBlendShader;
     ofShader quadMaskShader;
     ofShader chromaShader;
+    ofShader hueSatLumShader;
 
     // gui elements
     bool showGui;

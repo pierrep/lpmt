@@ -21,7 +21,7 @@ class quad: public ofNode
 public:
     quad();
     void reset();
-    void setup(ofPoint point1, ofPoint point2, ofPoint point3, ofPoint point4, ofShader &edgeBlendShader, ofShader &quadMaskShader, ofShader &chromaShader, vector<ofVideoGrabber> &cameras, vector<ofVideoPlayer> &sharedVideos, ofTrueTypeFont &font);
+    void setup(ofPoint point1, ofPoint point2, ofPoint point3, ofPoint point4, ofShader &edgeBlendShader, ofShader &quadMaskShader, ofShader &chromaShader, ofShader &hueSatLumShader, vector<ofVideoGrabber> &cameras, vector<ofVideoPlayer> &sharedVideos, ofTrueTypeFont &font);
     void update();
     void draw();
     void applyBlendmode();
@@ -222,6 +222,11 @@ public:
     ofShader * shaderBlend;
     ofShader * maskShader;
     ofShader * greenscreenShader;
+    ofShader * hueSatLuminanceShader;
+
+    float hue;
+    float saturation;
+    float luminance;
 
     int quadDispX;
     int quadDispY;
