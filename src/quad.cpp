@@ -435,14 +435,12 @@ void quad::draw()
             gridSurfaceUpdate();
         }
 
-
         quadFbo.begin();
         ofClear(0.0,0.0,0.0,0.0);
         ofEnableAlphaBlending();
         // -- NOW LETS DRAW!!!!!!  -----
 
-        // if a solid color content or color transition is set it draws it
-        // solid colors ----------------------------------------------------------------
+        // solid colors and transitions ----------------------------------------------------------------
         if (colorBg)
         {
             ofFill();
@@ -550,7 +548,6 @@ void quad::draw()
         }
 
         // shared video ----------------------------------------------------------------------
-
         if (sharedVideoBg)
         {
             if (videoHFlip || videoVFlip)
@@ -650,7 +647,7 @@ void quad::draw()
             }
         }
 
-        // draws slideshows
+        // draws slideshows ------------------------------------------------------------------------------
         if (slideshowBg)
         {
             if (slides.size() > 0)
@@ -704,7 +701,7 @@ void quad::draw()
         }
 
 
-        //if an image content is chosen it draws it (maybe use it as mask as well?)
+        // draw an image ------------------------------------------------------------------------------
         if (imgBg)
         {
             if (imgHFlip || imgVFlip)
@@ -760,7 +757,7 @@ void quad::draw()
             }
         }
 
-        // kinect stuff
+        // kinect stuff ------------------------------------------------------------------------------
         #ifdef WITH_KINECT
         if (kinectBg && kinectImg)
         {

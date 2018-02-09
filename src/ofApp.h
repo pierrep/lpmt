@@ -44,9 +44,6 @@ class ofApp : public ofBaseApp
 
 public:
 
-    int WINDOW_W;
-    int WINDOW_H;
-
     ofApp();
     void exit();
     void setup();
@@ -62,13 +59,17 @@ public:
 
     void prepare();
     void dostuff();
-
+    void setupInitialQuads();
+    void setupCameras();
+    void setupOSC();
+    void setupMidi();
+    void setupSyphon();
+    void setupKinect();
     void mpeSetup();
     void resync();
     void startProjection();
     void stopProjection();
     void copyQuadSettings(int sourceQuad);
-
     void openImageFile();
     void openVideoFile();
     void loadSlideshow();
@@ -83,8 +84,6 @@ public:
     void saveProject();
     void raiseLayer();
     void lowerLayer();
-    void setupInitialQuads();
-    void setupCameras(ofxXmlSettings &xmlConfigFile);
     void toggleSetupMode();
     void saveCurrentSettingsToXMLFile(std::string xmlFilePath);
     void loadSettingsFromXMLFile(std::string xmlFilePath);
@@ -92,21 +91,25 @@ public:
     void activateClosestQuad(ofPoint point);
     void parseOsc();
 
-    int m_selectedCorner;
+    int WINDOW_W;
+    int WINDOW_H;
 
     ofTrueTypeFont ttf;
     GUI m_gui;
+    ofxXmlSettings xmlConfigFile;
 
     quad quads[MAX_QUADS];
     int layers[MAX_QUADS];
 
+    // Surfaces
     int activeQuad;
     int nOfQuads;
-    int m_sourceQuadForCopying;
+    int m_sourceQuadForCopying;    
+    int m_selectedCorner;
 
     bool autoStart;
-
     bool isSetup;
+    bool bWasConfigLoadSuccessful;
     bool bFullscreen;
     bool bGui;
     bool bTimeline;

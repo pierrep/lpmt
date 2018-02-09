@@ -57,26 +57,22 @@ void ofApp::setup()
     autoStart = false;
 
     // read xml config file
-    ofxXmlSettings xmlConfigFile;
-    const bool wasConfigLoadSuccessful = xmlConfigFile.loadFile("config.xml");
-    if(!wasConfigLoadSuccessful) {
+    bWasConfigLoadSuccessful = xmlConfigFile.loadFile("config.xml");
+    if(!bWasConfigLoadSuccessful) {
         ofLogWarning() << "Config file \"config.xml\" not found!";
     }
     else {
         ofLogNotice() << "Loaded config file: \"config.xml\"";
     }
 
-    #ifdef WITH_KINECT
-    m_isKinectInitialized = kinect.setup();
-    bCloseKinect = false;
-    bOpenKinect = false;
-    #endif
+    // kinect
+    setupKinect();
 
     // camera stuff
     m_cameras.clear();
-    if(wasConfigLoadSuccessful)
+    if(bWasConfigLoadSuccessful)
     {
-        setupCameras(xmlConfigFile);
+        setupCameras();
     }
 
     // shared videos setup
@@ -95,15 +91,10 @@ void ofApp::setup()
     // rotation angle for surface-rotation visual feedback
     m_totalRotationAngle = 0;
 
-    if(ofGetScreenWidth()>1024 && ofGetScreenHeight()>800 )
-    {
-        WINDOW_W = 1024;
-        WINDOW_H = 768;
-    }
-    else
-    {
-        WINDOW_W = 800;
-        WINDOW_H = 600;
+    if((ofGetScreenWidth() > 1024) && (ofGetScreenHeight() > 800)) {
+        WINDOW_W = 1024; WINDOW_H = 768;
+    } else {
+        WINDOW_W = 800; WINDOW_H = 600;
     }
 
     // initialize the splash screen
@@ -114,72 +105,10 @@ void ofApp::setup()
     gridSetup = false;
 
     // OSC setup
-    int oscReceivePort = OSC_DEFAULT_PORT;
-    if (wasConfigLoadSuccessful)
-    {
-        oscReceivePort = xmlConfigFile.getValue("OSC:LISTENING_PORT", OSC_DEFAULT_PORT);
-        appId = xmlConfigFile.getValue("OSC:APPID", 0);
-    }
-    ofLogNotice() << "Listening for OSC messages on port: " << oscReceivePort;
-    receiver.setup(oscReceivePort);
-
-    current_msg_string = 0;
-    oscControlMin = xmlConfigFile.getValue("OSC:GUI_CONTROL:SLIDER:MIN",0.0f);
-    oscControlMax = xmlConfigFile.getValue("OSC:GUI_CONTROL:SLIDER:MAX",1.0f);
-    ofLogNotice() << "osc control of gui sliders range: min=" << oscControlMin << " - max=" << oscControlMax;
-
+    setupOSC();
 
     // MIDI setup
-    #ifdef WITH_MIDI
-    // print input ports to console
-	midiIn.listPorts();
-	// open port by number
-	//midiIn.openPort(1);
-	//midiIn.openPort("IAC Pure Data In");	// by name
-	midiIn.openVirtualPort("LPMT Input");	// open a virtual port
-
-	// don't ignore sysex, timing, & active sense messages,
-	// these are ignored by default
-	midiIn.ignoreTypes(false, false, false);
-	// add ofApp as a listener
-	midiIn.addListener(this);
-	// print received messages to the console
-	midiIn.setVerbose(true);
-	//clear vectors used for midi-hotkeys coupling
-	midiHotkeyMessages.clear();
-	midiHotkeyKeys.clear();
-    #endif
-
-    oscHotkeyMessages.clear();
-    oscHotkeyKeys.clear();
-
-    bMidiHotkeyCoupling = false;
-    bMidiHotkeyLearning = false;
-    midiHotkeyPressed = -1;
-
-    // we scan the video dir for videos
-    //string videoDir = string("./data/video");
-    //string videoDir =  ofToDataPath("video",true);
-    //videoFiles = vector<string>();
-    //getdir(videoDir,videoFiles);
-    //string videos[videoFiles.size()];
-    //for (unsigned int i = 0; i < videoFiles.size(); i++)
-    //{
-    //    videos[i]= videoFiles[i];
-    //}
-
-    // we scan the slideshow dir for videos
-    //string slideshowDir = string("./data/slideshow");
-    /*
-    string slideshowDir = ofToDataPath("slideshow",true);
-    slideshowFolders = vector<string>();
-    getdir(slideshowDir,slideshowFolders);
-    string slideshows[slideshowFolders.size()];
-    for (unsigned int i = 0; i < slideshowFolders.size(); i++)
-    {
-        slideshows[i]= slideshowFolders[i];
-    }
-    */
+    setupMidi();
 
     // initialize the load flags
     m_loadImageFlag = false;
@@ -195,13 +124,6 @@ void ofApp::setup()
     m_loadSharedVideo7Flag = false;
     m_resetCurrentQuadFlag = false;
 
-    #ifdef WITH_SYPHON
-	// Syphon setup
-	syphClient.setup();
-    //syphClient.setApplicationName("Simple Server");
-    syphClient.setServerName("");
-    #endif
-
     // load shaders
     edgeBlendShader.load("shaders/blend.vert", "shaders/blend.frag");
     quadMaskShader.load("shaders/mask.vert", "shaders/mask.frag");
@@ -214,13 +136,10 @@ void ofApp::setup()
     bSnapOn = true; // snap mode for surfaces corner is on
     m_sourceQuadForCopying = -1; // number of surface to use as source in copy/paste (per default no quad is selected)
     m_isSnapshotTextureOn = false; // snapshot background texture is turned off by default
-
     // default is not using MostPixelsEver
     //bMpe = false;
-
     bFullscreen	= 0; // starts in windowed mode
     bGui = 1; // gui is on at start
-    //ofSetWindowShape(WINDOW_W, WINDOW_H);
 
     #ifdef WITH_TIMELINE
     useTimeline = false;
@@ -233,13 +152,6 @@ void ofApp::setup()
         layers[i] = -1;
     }
 
-#ifdef WITH_KINECT
-    for(int i = 0; i < MAX_QUADS; i++)
-    {
-        quads[i].setKinect(&kinect);
-    }
-#endif
-
     setupInitialQuads();
 
     // timeline stuff initialization
@@ -247,19 +159,19 @@ void ofApp::setup()
     timelineSetup(timelineDurationSeconds);
     #endif
 
-    // GUI STUFF ---------------------------------------------------
+    // GUI stuff
     m_gui.setupPages();
     m_gui.updatePages(quads[activeQuad]);
     m_gui.showPage(2);
 
-    // timeline off at start
+    // timeline stuff
     bTimeline = false;
     #ifdef WITH_TIMELINE
     timeline.setCurrentPage(ofToString(activeQuad));
     timeline.hide();
     timeline.disable();
 
-    if(wasConfigLoadSuccessful)
+    if(bWasConfigLoadSuccessful)
     {
         float timelineConfigDuration = xmlConfigFile.getValue("TIMELINE:DURATION",10);
         timelineDurationSeconds = timelinePreviousDuration = timelineConfigDuration;
@@ -271,7 +183,8 @@ void ofApp::setup()
     }
     #endif
 
-    if(wasConfigLoadSuccessful)
+    // autostart
+    if(bWasConfigLoadSuccessful)
     {
         autoStart = xmlConfigFile.getValue("PROJECTION:AUTO",0);
     }
@@ -756,6 +669,14 @@ void ofApp::keyPressed(int key)
         }
         m_gui.updatePages(quads[activeQuad]);
     } else
+    if ( (ofGetKeyPressed(OF_KEY_CONTROL) && ofGetKeyPressed('c')) && !bTimeline) //copy
+    {
+        m_sourceQuadForCopying = activeQuad;     // make currently active quad the source quad for copying
+    } else
+    if ( (ofGetKeyPressed(OF_KEY_CONTROL) && ofGetKeyPressed('v')) && !bTimeline) // paste
+    {
+        copyQuadSettings(m_sourceQuadForCopying); // paste settings from source surface to currently active surface
+    } else
     // goes to first page of gui for active quad or, in mask edit mode, delete last drawn point
     if ( (key == OF_KEY_F2) && !bTimeline)
     {
@@ -797,14 +718,6 @@ void ofApp::keyPressed(int key)
     if(key == OF_KEY_F1 && !bTimeline) // show general settings page of gui
     {
         m_gui.showPage(1);
-    } else
-    if ( (key == 3) && !bTimeline) // (3 corresponds to CTRL + C)
-    {
-        m_sourceQuadForCopying = activeQuad;     // make currently active quad the source quad for copying
-    } else
-    if ( (key == 22) && !bTimeline) // (22 corresponds to CTRL + V)
-    {
-        copyQuadSettings(m_sourceQuadForCopying); // paste settings from source surface to currently active surface
     } else
     if ( (key =='a' || key == 'A') && !bTimeline) // adds a new quad in the middle of the screen
     {
@@ -1706,7 +1619,7 @@ void ofApp::setupInitialQuads()
 }
 
 //--------------------------------------------------------------
-void ofApp::setupCameras(ofxXmlSettings &xmlConfigFile)
+void ofApp::setupCameras()
 {
     xmlConfigFile.pushTag("cameras");
     // check how many cameras are defined in settings
@@ -1776,6 +1689,82 @@ void ofApp::setupCameras(ofxXmlSettings &xmlConfigFile)
         }
     }
     xmlConfigFile.popTag();
+}
+
+//--------------------------------------------------------------
+void ofApp::setupOSC()
+{
+    int oscReceivePort = OSC_DEFAULT_PORT;
+    if (bWasConfigLoadSuccessful)
+    {
+        oscReceivePort = xmlConfigFile.getValue("OSC:LISTENING_PORT", OSC_DEFAULT_PORT);
+        appId = xmlConfigFile.getValue("OSC:APPID", 0);
+    }
+    ofLogNotice() << "Listening for OSC messages on port: " << oscReceivePort;
+    receiver.setup(oscReceivePort);
+
+    current_msg_string = 0;
+    oscControlMin = xmlConfigFile.getValue("OSC:GUI_CONTROL:SLIDER:MIN",0.0f);
+    oscControlMax = xmlConfigFile.getValue("OSC:GUI_CONTROL:SLIDER:MAX",1.0f);
+    ofLogNotice() << "osc control of gui sliders range: min=" << oscControlMin << " - max=" << oscControlMax;
+
+    oscHotkeyMessages.clear();
+    oscHotkeyKeys.clear();
+}
+
+//--------------------------------------------------------------
+void ofApp::setupMidi()
+{
+    #ifdef WITH_MIDI
+    // print input ports to console
+    midiIn.listPorts();
+    // open port by number
+    //midiIn.openPort(1);
+    //midiIn.openPort("IAC Pure Data In");	// by name
+    midiIn.openVirtualPort("LPMT Input");	// open a virtual port
+
+    // don't ignore sysex, timing, & active sense messages,
+    // these are ignored by default
+    midiIn.ignoreTypes(false, false, false);
+    // add ofApp as a listener
+    midiIn.addListener(this);
+    // print received messages to the console
+    midiIn.setVerbose(true);
+    //clear vectors used for midi-hotkeys coupling
+    midiHotkeyMessages.clear();
+    midiHotkeyKeys.clear();
+    #endif
+
+    bMidiHotkeyCoupling = false;
+    bMidiHotkeyLearning = false;
+    midiHotkeyPressed = -1;
+}
+
+//--------------------------------------------------------------
+void ofApp::setupSyphon()
+{
+    #ifdef WITH_SYPHON
+    // Syphon setup
+    syphClient.setup();
+    //syphClient.setApplicationName("Simple Server");
+    syphClient.setServerName("");
+    #endif
+}
+
+//--------------------------------------------------------------
+void ofApp::setupKinect()
+{
+    #ifdef WITH_KINECT
+    m_isKinectInitialized = kinect.setup();
+    bCloseKinect = false;
+    bOpenKinect = false;
+
+    for(int i = 0; i < MAX_QUADS; i++)
+    {
+        quads[i].setKinect(&kinect);
+    }
+
+    #endif
 }
 
 //--------------------------------------------------------------

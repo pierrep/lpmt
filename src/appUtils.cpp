@@ -221,6 +221,27 @@ void ofApp::copyQuadSettings(int sourceQuad)
 {
     if(sourceQuad >= 0)
     {
+
+        int layer = quads[activeQuad].layer;
+        int quadNumber = quads[activeQuad].quadNumber;
+
+        ofPoint corners[4];
+        for(int i=0;i < 4;i++) {
+            corners[i] = quads[activeQuad].corners[i];
+        }
+
+        quads[activeQuad] = quads[sourceQuad];
+
+        quads[activeQuad].layer = layer;
+        quads[activeQuad].quadNumber = quadNumber;
+        quads[activeQuad].isActive = true;
+
+        for(int i=0;i < 4;i++) {
+            quads[activeQuad].corners[i] = corners[i];
+        }
+
+
+        /*
         quads[activeQuad].quadDispX = quads[sourceQuad].quadDispX;
         quads[activeQuad].quadDispY = quads[sourceQuad].quadDispY;
         quads[activeQuad].quadW = quads[sourceQuad].quadW;
@@ -307,5 +328,7 @@ void ofApp::copyQuadSettings(int sourceQuad)
                 quads[activeQuad].bezierPoints[j][k][2] = quads[sourceQuad].bezierPoints[j][k][2];
             }
         }
+        */
+
     }
 }
