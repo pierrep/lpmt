@@ -178,6 +178,7 @@ void GUI::setupPages()
     m_gui.addSlider("slide duration", m_dummyFloat, 0.1, 15.0);
     m_gui.addToggle("slides to quad size", m_dummyBool);
     m_gui.addToggle("keep aspect ratio", m_dummyBool);
+    m_gui.addToggle("fade transitions", m_dummyBool);
 
     #ifdef WITH_KINECT
     if(m_app->m_isKinectInitialized)
@@ -336,6 +337,7 @@ void GUI::updatePages(quad& activeQuad)
     dynamic_cast<ofxSimpleGuiSliderFloat*>(secondPage.findControlByName("slide duration"))->value = &activeQuad.slideshowSpeed;
     dynamic_cast<ofxSimpleGuiToggle*>(secondPage.findControlByName("slides to quad size"))->value = &activeQuad.slideFit;
     dynamic_cast<ofxSimpleGuiToggle*>(secondPage.findControlByName("keep aspect ratio"))->value = &activeQuad.slideKeepAspect;
+    dynamic_cast<ofxSimpleGuiToggle*>(secondPage.findControlByName("fade transitions"))->value = &activeQuad.bSlideTransitions;\
 
     #ifdef WITH_KINECT
     if(m_app->m_isKinectInitialized)

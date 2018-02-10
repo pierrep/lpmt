@@ -57,6 +57,7 @@ void ofApp::saveCurrentSettingsToXMLFile(std::string xmlFilePath)
             xmlSettingsFile.setValue("QUADS:QUAD_"+ofToString(i)+":SLIDESHOW:SPEED",quads[i].slideshowSpeed);
             xmlSettingsFile.setValue("QUADS:QUAD_"+ofToString(i)+":SLIDESHOW:FIT",quads[i].slideFit);
             xmlSettingsFile.setValue("QUADS:QUAD_"+ofToString(i)+":SLIDESHOW:KEEP_ASPECT",quads[i].slideKeepAspect);
+            xmlSettingsFile.setValue("QUADS:QUAD_"+ofToString(i)+":SLIDESHOW:TRANSITIONS",quads[i].bSlideTransitions);
             xmlSettingsFile.setValue("QUADS:QUAD_"+ofToString(i)+":CAM:ACTIVE",quads[i].camBg);
             xmlSettingsFile.setValue("QUADS:QUAD_"+ofToString(i)+":IMG:ACTIVE",quads[i].imgBg);
             xmlSettingsFile.setValue("QUADS:QUAD_"+ofToString(i)+":VIDEO:ACTIVE",quads[i].videoBg);
@@ -216,15 +217,15 @@ void ofApp::loadSettingsFromXMLFile(std::string xmlFilePath)
 
             #ifdef WITH_KINECT
                 #ifdef WITH_SYPHON
-                quads[i].setup(ofPoint(x0, y0), ofPoint(x1, y1), ofPoint(x2, y2), ofPoint(x3, y3), edgeBlendShader, quadMaskShader, chromaShader, hueSatLumShader, m_cameras, sharedVideos, kinect, syphClient, ttf);
+                quads[i].setup(ofPoint(x0, y0), ofPoint(x1, y1), ofPoint(x2, y2), ofPoint(x3, y3), edgeBlendShader, quadMaskShader, chromaShader, hueSatLumShader, transitionShader, m_cameras, sharedVideos, kinect, syphClient, ttf);
                 #else
-                quads[i].setup(ofPoint(x0, y0), ofPoint(x1, y1), ofPoint(x2, y2), ofPoint(x3, y3), edgeBlendShader, quadMaskShader, chromaShader, hueSatLumShader m_cameras, sharedVideos, kinect, ttf);
+                quads[i].setup(ofPoint(x0, y0), ofPoint(x1, y1), ofPoint(x2, y2), ofPoint(x3, y3), edgeBlendShader, quadMaskShader, chromaShader, hueSatLumShader, transitionShader, m_cameras, sharedVideos, kinect, ttf);
                 #endif
             #else
                 #ifdef WITH_SYPHON
-                quads[i].setup(ofPoint(x0, y0), ofPoint(x1, y1), ofPoint(x2, y2), ofPoint(x3, y3), edgeBlendShader, quadMaskShader, chromaShader, hueSatLumShader, m_cameras, sharedVideos, syphClient, ttf);
+                quads[i].setup(ofPoint(x0, y0), ofPoint(x1, y1), ofPoint(x2, y2), ofPoint(x3, y3), edgeBlendShader, quadMaskShader, chromaShader, hueSatLumShader, transitionShader, m_cameras, sharedVideos, syphClient, ttf);
                 #else
-                quads[i].setup(ofPoint(x0, y0), ofPoint(x1, y1), ofPoint(x2, y2), ofPoint(x3, y3), edgeBlendShader, quadMaskShader, chromaShader, hueSatLumShader, m_cameras, sharedVideos, ttf);
+                quads[i].setup(ofPoint(x0, y0), ofPoint(x1, y1), ofPoint(x2, y2), ofPoint(x3, y3), edgeBlendShader, quadMaskShader, chromaShader, hueSatLumShader, transitionShader, m_cameras, sharedVideos, ttf);
                 #endif
             #endif
             quads[i].quadNumber = xmlSettingsFile.getValue("QUADS:QUAD_"+ofToString(i)+":NUMBER", 0);
@@ -279,7 +280,8 @@ void ofApp::loadSettingsFromXMLFile(std::string xmlFilePath)
             quads[i].slideshowBg = xmlSettingsFile.getValue("QUADS:QUAD_"+ofToString(i)+":SLIDESHOW:ACTIVE", 0);
             quads[i].slideshowSpeed = xmlSettingsFile.getValue("QUADS:QUAD_"+ofToString(i)+":SLIDESHOW:SPEED", 1.0);
             quads[i].slideFit = xmlSettingsFile.getValue("QUADS:QUAD_"+ofToString(i)+":SLIDESHOW:FIT", 0);
-            quads[i].slideKeepAspect = xmlSettingsFile.getValue("QUADS:QUAD_"+ofToString(i)+":SLIDESHOW:KEEP_ASPECT", 1);
+            quads[i].slideKeepAspect = xmlSettingsFile.getValue("QUADS:QUAD_"+ofToString(i)+":SLIDESHOW:KEEP_ASPECT", 0);
+            quads[i].bSlideTransitions = xmlSettingsFile.getValue("QUADS:QUAD_"+ofToString(i)+":SLIDESHOW:TRANSITIONS", 0);
 
             quads[i].camBg = xmlSettingsFile.getValue("QUADS:QUAD_"+ofToString(i)+":CAM:ACTIVE",0);
             quads[i].camWidth = xmlSettingsFile.getValue("QUADS:QUAD_"+ofToString(i)+":CAM:WIDTH",0);

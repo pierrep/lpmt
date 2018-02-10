@@ -129,6 +129,7 @@ void ofApp::setup()
     quadMaskShader.load("shaders/mask.vert", "shaders/mask.frag");
     chromaShader.load("shaders/chroma.vert", "shaders/chroma.frag");
     hueSatLumShader.load("shaders/huesatluminance.vert", "shaders/huesatluminance.frag");
+    transitionShader.load("shaders/transition.vert", "shaders/transition.frag");
 
     ttf.load("type/OpenSans-Regular.ttf", 11);
 
@@ -725,7 +726,7 @@ void ofApp::keyPressed(int key)
         {
             if (nOfQuads < MAX_QUADS)
             {
-                quads[nOfQuads].setup(ofPoint(0.25, 0.25), ofPoint(0.75, 0.25), ofPoint(0.75, 0.75), ofPoint(0.25, 0.75), edgeBlendShader, quadMaskShader, chromaShader, hueSatLumShader, m_cameras, sharedVideos, ttf);
+                quads[nOfQuads].setup(ofPoint(0.25, 0.25), ofPoint(0.75, 0.25), ofPoint(0.75, 0.75), ofPoint(0.25, 0.75), edgeBlendShader, quadMaskShader, chromaShader, hueSatLumShader, transitionShader, m_cameras, sharedVideos, ttf);
                 quads[nOfQuads].quadNumber = nOfQuads;
 
                 // layers
@@ -1588,16 +1589,16 @@ void ofApp::toggleSetupMode()
 void ofApp::setupInitialQuads()
 {
     // defines the first 4 default quads
-    quads[0].setup(ofPoint(0.0, 0.0), ofPoint(0.5, 0.0), ofPoint(0.5, 0.5), ofPoint(0.0, 0.5), edgeBlendShader, quadMaskShader, chromaShader, hueSatLumShader, m_cameras, sharedVideos, ttf);
+    quads[0].setup(ofPoint(0.0, 0.0), ofPoint(0.5, 0.0), ofPoint(0.5, 0.5), ofPoint(0.0, 0.5), edgeBlendShader, quadMaskShader, chromaShader, hueSatLumShader, transitionShader, m_cameras, sharedVideos, ttf);
     quads[0].quadNumber = 0;
 
-    quads[1].setup(ofPoint(0.5, 0.0), ofPoint(1.0, 0.0), ofPoint(1.0, 0.5), ofPoint(0.5, 0.5), edgeBlendShader, quadMaskShader, chromaShader, hueSatLumShader, m_cameras, sharedVideos, ttf);
+    quads[1].setup(ofPoint(0.5, 0.0), ofPoint(1.0, 0.0), ofPoint(1.0, 0.5), ofPoint(0.5, 0.5), edgeBlendShader, quadMaskShader, chromaShader, hueSatLumShader, transitionShader, m_cameras, sharedVideos, ttf);
     quads[1].quadNumber = 1;
 
-    quads[2].setup(ofPoint(0.0, 0.5), ofPoint(0.5, 0.5), ofPoint(0.5, 1.0), ofPoint(0.0, 1.0), edgeBlendShader, quadMaskShader, chromaShader, hueSatLumShader, m_cameras, sharedVideos, ttf);
+    quads[2].setup(ofPoint(0.0, 0.5), ofPoint(0.5, 0.5), ofPoint(0.5, 1.0), ofPoint(0.0, 1.0), edgeBlendShader, quadMaskShader, chromaShader, hueSatLumShader, transitionShader, m_cameras, sharedVideos, ttf);
     quads[2].quadNumber = 2;
 
-    quads[3].setup(ofPoint(0.5, 0.5), ofPoint(1.0, 0.5) ,ofPoint(1.0, 1.0), ofPoint(0.5, 1.0), edgeBlendShader, quadMaskShader, chromaShader, hueSatLumShader, m_cameras, sharedVideos, ttf);
+    quads[3].setup(ofPoint(0.5, 0.5), ofPoint(1.0, 0.5) ,ofPoint(1.0, 1.0), ofPoint(0.5, 1.0), edgeBlendShader, quadMaskShader, chromaShader, hueSatLumShader, transitionShader, m_cameras, sharedVideos, ttf);
     quads[3].quadNumber = 3;
 
     // define last one as active quad

@@ -21,7 +21,7 @@ class quad: public ofNode
 public:
     quad();
     void reset();
-    void setup(ofPoint point1, ofPoint point2, ofPoint point3, ofPoint point4, ofShader &edgeBlendShader, ofShader &quadMaskShader, ofShader &chromaShader, ofShader &hueSatLumShader, vector<ofVideoGrabber> &cameras, vector<ofVideoPlayer> &sharedVideos, ofTrueTypeFont &font);
+    void setup(ofPoint point1, ofPoint point2, ofPoint point3, ofPoint point4, ofShader &edgeBlendShader, ofShader &quadMaskShader, ofShader &chromaShader, ofShader &hueSatLumShader, ofShader &fadeShader, vector<ofVideoGrabber> &cameras, vector<ofVideoPlayer> &sharedVideos, ofTrueTypeFont &font);
     void update();
     void draw();
     void applyBlendmode();
@@ -65,6 +65,7 @@ public:
     /* img and video stuff */
     ofImage img;
     ofImage slide;
+    ofImage nextSlide;
     ofVideoPlayer video;
     ofTrueTypeFont ttf;
 
@@ -149,6 +150,7 @@ public:
     bool slideshowBg;
     bool slideFit;
     bool slideKeepAspect;
+    bool bSlideTransitions;
     bool imageFit;
     bool imageKeepAspect;
     bool kinectBg;
@@ -223,6 +225,7 @@ public:
     ofShader * maskShader;
     ofShader * greenscreenShader;
     ofShader * hueSatLuminanceShader;
+    ofShader * crossfadeShader;
 
     float hue;
     float saturation;

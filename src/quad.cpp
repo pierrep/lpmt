@@ -33,7 +33,8 @@ void quad::reset()
     sharedVideoId = sharedVideoNum -1;
     slideshowBg = false;
     slideFit = false;
-    slideKeepAspect = true;
+    slideKeepAspect = false;
+    bSlideTransitions = false;
     imageFit = false;
     imageKeepAspect = false;
 
@@ -174,7 +175,7 @@ void quad::reset()
     bTimelineSlideChange = false;
 }
 
-void quad::setup(ofPoint point1, ofPoint point2, ofPoint point3, ofPoint point4, ofShader &edgeBlendShader, ofShader &quadMaskShader, ofShader &chromaShader, ofShader &hueSatLumShader, vector<ofVideoGrabber> &cameras, vector<ofVideoPlayer> &sharedVideos, ofTrueTypeFont &font)
+void quad::setup(ofPoint point1, ofPoint point2, ofPoint point3, ofPoint point4, ofShader &edgeBlendShader, ofShader &quadMaskShader, ofShader &chromaShader, ofShader &hueSatLumShader, ofShader &fadeShader, vector<ofVideoGrabber> &cameras, vector<ofVideoPlayer> &sharedVideos, ofTrueTypeFont &font)
 {
     reset();
 
@@ -185,6 +186,7 @@ void quad::setup(ofPoint point1, ofPoint point2, ofPoint point3, ofPoint point4,
     maskShader = &quadMaskShader;
     greenscreenShader = &chromaShader;
     hueSatLuminanceShader = &hueSatLumShader;
+    crossfadeShader = &fadeShader;
     //camera = &camGrabber;
 
     ttf = font;
@@ -686,9 +688,29 @@ void quad::draw()
                         multY = fitY;
                     }
                 }
-                // at last we draw the image with appropriate size multiplier
-                ofSetColor(imgColorize.r * 255 * timelineRed, imgColorize.g * 255 * timelineGreen, imgColorize.b * 255 * timelineBlue, imgColorize.a * 255 * timelineAlpha);
-                slide.draw(0,0,slide.getWidth()*multX, slide.getHeight()*multY);
+
+                int nextSlideId = 0;
+                if(bSlideTransitions && (slides.size() > 1)) {
+
+                    if ((currentSlide+1) >= slides.size()) nextSlideId = 0;
+                    else nextSlideId = currentSlide+1;
+                    nextSlide = slides[nextSlideId];
+
+
+                    float fade = (float) slideTimer / (float) slideFramesDuration;
+                    //cout << "fade = " << fade << endl;
+                    crossfadeShader->begin();
+                    crossfadeShader->setUniformTexture("tex1", slide.getTexture(),0 );
+                    crossfadeShader->setUniformTexture("tex2", nextSlide.getTexture(),1 );
+                    crossfadeShader->setUniform1f("crossfade", fade);
+                    slide.draw(0,0,slide.getWidth()*multX, slide.getHeight()*multY);
+                    crossfadeShader->end();
+                }
+                else {
+                    // at last we draw the image with appropriate size multiplier
+                    ofSetColor(imgColorize.r * 255 * timelineRed, imgColorize.g * 255 * timelineGreen, imgColorize.b * 255 * timelineBlue, imgColorize.a * 255 * timelineAlpha);
+                    slide.draw(0,0,slide.getWidth()*multX, slide.getHeight()*multY);
+                }
 
                 // if slide showing time has elapsed it switches to next slide
                 if (slideTimer > slideFramesDuration )
