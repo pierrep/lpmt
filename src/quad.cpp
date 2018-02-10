@@ -782,7 +782,9 @@ void quad::draw()
                     hueSatLuminanceShader->setUniform1f("hue", hue);
                     hueSatLuminanceShader->setUniform1f("sat", saturation);
                     hueSatLuminanceShader->setUniform1f("luminance", luminance);
-
+                    hueSatLuminanceShader->setUniform1f("tintR", imgColorize.r);
+                    hueSatLuminanceShader->setUniform1f("tintG", imgColorize.g);
+                    hueSatLuminanceShader->setUniform1f("tintB", imgColorize.b);
                     img.draw(0,0,img.getWidth()*multX, img.getHeight()*multY);
 
                     hueSatLuminanceShader->end();
@@ -798,7 +800,9 @@ void quad::draw()
                     hueSatLuminanceShader->setUniform1f("hue", hue);
                     hueSatLuminanceShader->setUniform1f("sat", saturation);
                     hueSatLuminanceShader->setUniform1f("luminance", luminance);
-
+                    hueSatLuminanceShader->setUniform1f("tintR", imgColorize.r);
+                    hueSatLuminanceShader->setUniform1f("tintG", imgColorize.g);
+                    hueSatLuminanceShader->setUniform1f("tintB", imgColorize.b);
                     img.draw(0,0,img.getWidth()*imgMultX*screenFactorX, img.getHeight()*imgMultY*screenFactorY);
 
                     hueSatLuminanceShader->end();

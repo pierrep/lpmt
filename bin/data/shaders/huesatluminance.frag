@@ -5,7 +5,9 @@ uniform sampler2DRect tex;
 uniform float hue;
 uniform float sat;
 uniform float luminance;
-
+uniform float tintR;
+uniform float tintG;
+uniform float tintB;
 
 // Max, Min Functions.
 float maxCom(vec4 col)
@@ -125,12 +127,16 @@ vec4 hslToRgb(vec4 col)
 void main( void )
 
 {
-	vec4 col = texture2DRect(tex,gl_TexCoord[0].st);
-    vec4 hsl = rgbToHsl(col);
+	vec4 texcol = texture2DRect(tex,gl_TexCoord[0].st);
+    vec4 hsl = rgbToHsl(texcol);
     
     hsl.r = mod(hsl.r + hue, 1.0);
     hsl.g = clamp(hsl.g + sat, 0.0, 1.0);
     hsl.b = clamp(hsl.b + luminance, 0.0, 1.0);
     
-    gl_FragColor = hslToRgb(hsl);
+    vec4 col = hslToRgb(hsl);
+	col.r = col.r*tintR;
+	col.g = col.g*tintG;
+	col.b = col.b*tintB;
+    gl_FragColor = col;
 }
