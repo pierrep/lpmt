@@ -1,3 +1,5 @@
+bin/lpmtDebug.app/
+.DS_Store
 bin/lpmt
 bin/lpmt_debug
 build/

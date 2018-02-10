@@ -33,7 +33,7 @@
 #include "ofxTimeline.h"
 #include "ofxHotKeys.h"
 #ifdef TARGET_OSX
-#include "ofxRemoveCocoaMenu.h"
+//#include "ofxRemoveCocoaMenu.h"
 #endif
 
 //increments to keep auto generated names unique
@@ -541,7 +541,7 @@ void ofxTimeline::removeCocoaMenusFromGlut(string appName){
 
 	#ifdef TARGET_OSX
 	if(!menusRemoved){
-		RemoveCocoaMenusFromGlut(appName);
+	//	RemoveCocoaMenusFromGlut(appName);
 		menusRemoved = true;
 	}
 	#endif
