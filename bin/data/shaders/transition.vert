@@ -1,4 +1,6 @@
-void main() {	
-        gl_TexCoord[0] = gl_MultiTexCoord0;	
+varying vec2 texCoord;
+
+void main() {		
+        texCoord = vec2(gl_TextureMatrix[0] * gl_MultiTexCoord0);
         gl_Position = ftransform();	
 } 

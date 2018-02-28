@@ -34,7 +34,7 @@ void quad::reset()
     slideshowBg = false;
     slideFit = false;
     slideKeepAspect = false;
-    bSlideTransitions = false;
+    bFadeTransitions = false;
     imageFit = false;
     imageKeepAspect = false;
 
@@ -344,6 +344,7 @@ void quad::update()
                     {
                         if (slidesnames[i] != "." && slidesnames[i] != "..")
                         {
+                            ofImage slide;
                             slide.load(slideshowName+"/"+slidesnames[i]);
                             slides.push_back(slide);
                         }
@@ -662,7 +663,7 @@ void quad::draw()
                 {
                     currentSlide = 0;
                 }
-                slide = slides[currentSlide];
+                ofImage& slide = slides[currentSlide];
                 // color is set according to still img colorization combo
                 ofSetColor(imgColorize.r * 255 * timelineRed, imgColorize.g * 255 * timelineGreen, imgColorize.b * 255 * timelineBlue, imgColorize.a * 255 * timelineAlpha);
                 // default is drawing image with its size unchanged, so we set mult factors = 1.0
@@ -690,19 +691,19 @@ void quad::draw()
                 }
 
                 int nextSlideId = 0;
-                if(bSlideTransitions && (slides.size() > 1)) {
+                if(bFadeTransitions && (slides.size() > 1)) {
 
                     if ((currentSlide+1) >= slides.size()) nextSlideId = 0;
                     else nextSlideId = currentSlide+1;
-                    nextSlide = slides[nextSlideId];
-
+                    ofImage& nextSlide = slides[nextSlideId];
 
                     float fade = (float) slideTimer / (float) slideFramesDuration;
-                    //cout << "fade = " << fade << endl;
+
                     crossfadeShader->begin();
                     crossfadeShader->setUniformTexture("tex1", slide.getTexture(),0 );
                     crossfadeShader->setUniformTexture("tex2", nextSlide.getTexture(),1 );
                     crossfadeShader->setUniform1f("crossfade", fade);
+                    crossfadeShader->setUniform2f("ratio", ofVec2f(nextSlide.getWidth()/slide.getWidth(),nextSlide.getHeight()/slide.getHeight()));
                     slide.draw(0,0,slide.getWidth()*multX, slide.getHeight()*multY);
                     crossfadeShader->end();
                 }

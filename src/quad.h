@@ -64,7 +64,7 @@ public:
 
     /* img and video stuff */
     ofImage img;
-    ofImage slide;
+//    ofImage slide;
     ofImage nextSlide;
     ofVideoPlayer video;
     ofTrueTypeFont ttf;
@@ -150,7 +150,7 @@ public:
     bool slideshowBg;
     bool slideFit;
     bool slideKeepAspect;
-    bool bSlideTransitions;
+    bool bFadeTransitions;
     bool imageFit;
     bool imageKeepAspect;
     bool kinectBg;

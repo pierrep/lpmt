@@ -434,7 +434,7 @@ void ofApp::prepare()
 }
 
 //--------------------------------------------------------------
-void ofApp::dostuff()
+void ofApp::render()
 {
     //return;
     if (bStarted)
@@ -487,7 +487,7 @@ void ofApp::draw()
 
     //if (!bMpe)
     {
-        dostuff();
+        render();
     }
 
     if (isSetup)
@@ -548,6 +548,8 @@ void ofApp::draw()
         ofDrawBitmapString(ofToString(ofGetFrameRate()),ofGetWidth()-100,ofGetHeight()-30);
     }
 
+    ofSetWindowTitle("LPMT fps: " + ofToString(ofGetFrameRate() ));
+
 }
 
 //--------------------------------------------------------------
@@ -560,7 +562,7 @@ void ofApp::draw()
 //            resync();
 //        }
 //        prepare();
-//        dostuff();
+//        render();
 //    }
 //}
 

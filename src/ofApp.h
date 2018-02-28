@@ -58,7 +58,7 @@ public:
     void windowResized(int w, int h);
 
     void prepare();
-    void dostuff();
+    void render();
     void setupInitialQuads();
     void setupCameras();
     void setupOSC();
