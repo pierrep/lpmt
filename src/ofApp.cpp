@@ -192,7 +192,7 @@ void ofApp::setup()
 
     if(autoStart)
     {
-        loadSettingsFromXMLFile("_lpmt_settings.xml");
+        loadSettingsFromXMLFile("_lpmt_settings.xml"); //TODO <- ??
         m_gui.updatePages(quads[activeQuad]);
 
         toggleSetupMode();
@@ -548,8 +548,8 @@ void ofApp::draw()
         ofDrawBitmapString(ofToString(ofGetFrameRate()),ofGetWidth()-100,ofGetHeight()-30);
     }
 
-    ofSetWindowTitle("LPMT fps: " + ofToString(ofGetFrameRate() ));
-
+    //ofSetWindowTitle("LPMT fps: " + ofToString(ofGetFrameRate() ));
+    ofSetWindowTitle("LPMT");
 }
 
 //--------------------------------------------------------------

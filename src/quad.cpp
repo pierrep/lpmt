@@ -9,7 +9,8 @@
 
 quad::quad()
 {
-
+    // sets default variables
+    reset();
 }
 
 void quad::reset()

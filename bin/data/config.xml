@@ -19,8 +19,8 @@
 
 <cameras>
     <camera>
-        <requestedWidth>800</requestedWidth>
-        <requestedHeight>600</requestedHeight>
+        <requestedWidth>640</requestedWidth>
+        <requestedHeight>480</requestedHeight>
         <id>0</id>
     </camera>
 </cameras>   
