@@ -46,7 +46,7 @@ class ofxTLCameraFrame : public ofxTLKeyframe {
   public:
 	//an example of how to add more information into this keyframe
 	//just make some random colors
-	ofVec3f position;
+    glm::vec3 position;
 	ofQuaternion orientation;
     CameraTrackEase easeIn;
     CameraTrackEase easeOut;

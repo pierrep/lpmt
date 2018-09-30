@@ -109,7 +109,7 @@ void ofxTLColorTrack::draw(){
 		else{
 			ofSetColor(s->color.getInverted());
 		}
-        ofDrawLine(c, ofVec2f(screenX, bounds.getMaxY()));
+        ofDrawLine(glm::vec2(c.x,c.y), glm::vec2(screenX, bounds.getMaxY()));
 		ofPopStyle();
 	}
 }
@@ -152,7 +152,7 @@ void ofxTLColorTrack::drawModalContent(){
 		}
 		colorPallete.draw(colorWindow);
 
-		ofVec2f selectionPoint = colorWindow.getMin() + selectedSample->samplePoint * ofVec2f(colorWindow.width,colorWindow.height);
+        ofVec2f selectionPoint = colorWindow.getMin() + selectedSample->samplePoint * glm::vec2(colorWindow.width,colorWindow.height);
 		ofSetColor(selectedSample->color.getInverted());
         ofDrawLine(selectionPoint - ofVec2f(8,0), selectionPoint + ofVec2f(8,0));
         ofDrawLine(selectionPoint - ofVec2f(0,8), selectionPoint + ofVec2f(0,8));
@@ -241,8 +241,8 @@ ofColor ofxTLColorTrack::getColorAtMillis(unsigned long long millis){
 			ofxTLColorSample* startSample = (ofxTLColorSample*)keyframes[i-1];
 			ofxTLColorSample* endSample = (ofxTLColorSample*)keyframes[i];
 			float interpolationPosition = ofMap(millis, startSample->time, endSample->time, 0.0, 1.0);
-			return samplePaletteAtPosition(startSample->samplePoint.getInterpolated(endSample->samplePoint, interpolationPosition));
-		}
+            return samplePaletteAtPosition(glm::mix(startSample->samplePoint,endSample->samplePoint,interpolationPosition));
+        }
 	}
 	ofLogError("ofxTLColorTrack::getColorAtMillis") << "Could not find color for millis " << millis << endl;
 	return defaultColor;

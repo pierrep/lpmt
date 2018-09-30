@@ -124,7 +124,7 @@ bool ofxTLImageSequence::loadSequence(string directory){
     recomputePreview();
 	
     cout << "DONE CREATING FRAMES " << numFiles << " img " << imageWidth << "x" << imageHeight << " thumb " << thumbWidth << "x" << thumbHeight << endl;
-	
+    return true;
 }
 
 float ofxTLImageSequence::getImageWidth(){
@@ -232,8 +232,8 @@ void ofxTLImageSequence::recomputePreview(){
 		
 		p.frameIndex = startIndex+frameStep*i;
 		p.texture = new ofTexture();
-        p.texture->allocate(thumbnail->getWidth(), thumbnail->getHeight(), ofGetGlInternalFormat(thumbnail->getPixels()));
-        p.texture->loadData(thumbnail->getPixels().getData(), thumbnail->getWidth(), thumbnail->getHeight(), ofGetGlInternalFormat(thumbnail->getPixels()));
+        p.texture->allocate(thumbnail->getWidth(), thumbnail->getHeight(), ofGetGLInternalFormat(thumbnail->getPixels()));
+        p.texture->loadData(thumbnail->getPixels().getData(), thumbnail->getWidth(), thumbnail->getHeight(), ofGetGLInternalFormat(thumbnail->getPixels()));
 		p.bounds = ofRectangle(widthPerFrame*i, 0, widthPerFrame, bounds.height);
 
 //		cout << " preview texture for frame " << startIndex+framesInRange*i << endl;

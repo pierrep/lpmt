@@ -37,7 +37,7 @@
 
 class ofxTLColorSample : public ofxTLKeyframe {
   public:
-	ofVec2f samplePoint; //normalized to image space
+    glm::vec2 samplePoint; //normalized to image space
 	ofColor color; //cached sample
 };
 

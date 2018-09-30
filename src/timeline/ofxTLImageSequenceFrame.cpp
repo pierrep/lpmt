@@ -141,7 +141,8 @@ bool ofxTLImageSequenceFrame::loadFrame()
     if(!thumbLoaded){
         thumbnail->clear();
         thumbnail->setUseTexture(false);
-        thumbnail->clone(*frame);
+        //thumbnail->clone(*frame);
+        (*thumbnail) = (*frame);
         thumbWidth = desiredThumbWidth;
         float scaleFactor = 1.0*frame->getWidth() / thumbWidth;
         thumbHeight = frame->getHeight() / scaleFactor;
@@ -157,8 +158,8 @@ bool ofxTLImageSequenceFrame::loadFrame()
 		frame->setImageType(type);
 	}
 	
-	frameWidth = frame->getWidth();
-	frameHeight = frame->getHeight();
+    frameWidth = static_cast<int>(frame->getWidth());
+    frameHeight = static_cast<int>(frame->getHeight());
 	
 	frameLoaded = true;
 	return true;

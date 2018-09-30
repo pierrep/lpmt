@@ -3,7 +3,7 @@
 #include "ofConstants.h"
 
 #include "ofMain.h"
-#include "ofBaseSoundPlayer.h"
+//#include "ofBaseSoundPlayer.h"
 #include "ofEvents.h"
 #include "ofThread.h"
 
@@ -75,6 +75,7 @@ class ofOpenALSoundPlayer_TimelineAdditions : public ofBaseSoundPlayer, public o
 		ofOpenALSoundPlayer_TimelineAdditions();
 		virtual ~ofOpenALSoundPlayer_TimelineAdditions();
 
+        bool load(const std::filesystem::path& fileName, bool stream = false);
 		bool load(string fileName, bool stream = false);
 		void unload();
 		void play();

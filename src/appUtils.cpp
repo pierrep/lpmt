@@ -1,5 +1,6 @@
 #include "ofApp.h"
 
+
 //-----------------------------------------------------------
 void ofApp::openImageFile()
 {
@@ -96,17 +97,18 @@ void ofApp::openSharedVideoFile(std::string path, int i)
 //-----------------------------------------------------------
 ofImage ofApp::loadImageFromFile()
 {
+    ofImage img;
     ofFileDialogResult dialog_result = ofSystemLoadDialog("Load image file", false);
     if(dialog_result.bSuccess)
-    {
-        ofImage img;
+    {        
         string imgName = dialog_result.getName();
         string imgPath = dialog_result.getPath();
-        ofFile image(imgPath);
-        img.load(image);
+        //ofFile image(imgPath);
+        //img.load(image);
+        img.load(imgPath);
         return img;
     }
-
+    return img;
 }
 
 //--------------------------------------------------------------

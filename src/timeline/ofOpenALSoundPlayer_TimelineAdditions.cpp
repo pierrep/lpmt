@@ -348,6 +348,13 @@ void ofOpenALSoundPlayer_TimelineAdditions::readFile(string fileName, vector<sho
 }
 
 //------------------------------------------------------------
+bool ofOpenALSoundPlayer_TimelineAdditions::load(const std::filesystem::path& fileName, bool is_stream){
+
+    bool val = load(fileName.string(), is_stream);
+    return val;
+}
+
+//------------------------------------------------------------
 bool ofOpenALSoundPlayer_TimelineAdditions::load(string fileName, bool is_stream){
 
     string ext = ofToLower(ofFilePath::getFileExt(fileName));
@@ -816,7 +823,7 @@ void ofOpenALSoundPlayer_TimelineAdditions::play(){
 	if(isStreaming){
 		setPosition(0);
 		stream_end = false;
-		startThread(true);
+        startThread();
 	}
 
 }

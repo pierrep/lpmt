@@ -1,7 +1,7 @@
 #ifndef UTIL_INCLUDE
 #define UTIL_INCLUDE
 
-#include "ofTypes.h"
+#include "ofPoint.h"
 
 class Util
 {

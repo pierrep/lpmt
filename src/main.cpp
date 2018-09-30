@@ -4,8 +4,7 @@
 //========================================================================
 int main( ){
     ofGLFWWindowSettings settings;
-    settings.width = 1280;
-    settings.height = 800;
+    settings.setSize(1280,800);
     settings.numSamples = 4;
     ofCreateWindow(settings);
 

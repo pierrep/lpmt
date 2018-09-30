@@ -1485,9 +1485,9 @@ ofPoint quad::getWarpedPoint(ofPoint point)
 //---------------------------------------------------------------
 void quad::loadImageFromFile(string imgName, string imgPath)
 {
-    ofFile image(imgPath);
+   // ofFile image(imgPath);
     imgBg = true;
-    img.load(image);
+    img.load(imgPath);
     bgImg = imgPath;
     loadedImg = imgName;
 }

@@ -1,7 +1,6 @@
 #include "Util.hpp"
 #include "ofAppRunner.h"
 
-
 const float Util::EPSILON = 0.0001f;
 
 

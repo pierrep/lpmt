@@ -36,7 +36,7 @@
 
 #pragma once
 
-#include "ofTypes.h"
+#include "ofColor.h"
 #include "ofPoint.h"
 
 class ofxSimpleGuiConfig {

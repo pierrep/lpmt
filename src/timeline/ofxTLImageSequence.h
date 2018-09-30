@@ -40,6 +40,7 @@ static GLint glTypeForImageType(int imageType){
 	if(imageType == OF_IMAGE_GRAYSCALE) return GL_LUMINANCE;
 	if(imageType == OF_IMAGE_COLOR) return GL_RGB;
 	if(imageType == OF_IMAGE_COLOR_ALPHA) return GL_RGBA;
+    return OF_IMAGE_UNDEFINED;
 }
 
 typedef struct

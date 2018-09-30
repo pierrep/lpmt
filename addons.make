@@ -3,6 +3,7 @@ ofxMidi
 ofxNetwork
 ofxOpenCv
 ofxOsc
+ofxPoco
 ofxTimecode
 ofxTween
 ofxXmlSettings

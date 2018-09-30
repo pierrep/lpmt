@@ -9,7 +9,7 @@ Project{
     property string of_root: "../../.."
 
     ofApp {
-        name: { return FileInfo.baseName(path) }
+        name: { return FileInfo.baseName(sourceDirectory) }
 
         files: [
             "src/GUI.cpp",
@@ -70,11 +70,18 @@ Project{
             "src/quad.cpp",
             "src/quad.h",
             "src/timeline.cpp",
+            "src/timeline/kiss/_kiss_fft_guts.h",
+            "src/timeline/kiss/kiss_fft.c",
+            "src/timeline/kiss/kiss_fft.h",
+            "src/timeline/kiss/kiss_fftr.c",
+            "src/timeline/kiss/kiss_fftr.h",
+            "src/timeline/libsndfile/libsndfile.a",
+            "src/timeline/libsndfile/sndfile.h",
+            "src/timeline/libsndfile/sndfile.hh",
             "src/timeline/ofOpenALSoundPlayer_TimelineAdditions.cpp",
             "src/timeline/ofOpenALSoundPlayer_TimelineAdditions.h",
             "src/timeline/ofxHotKeys.h",
             "src/timeline/ofxHotKeys_impl_linux.cpp",
-            "src/timeline/ofxHotKeys_impl_win.cpp",
             "src/timeline/ofxTLAudioTrack.cpp",
             "src/timeline/ofxTLAudioTrack.h",
             "src/timeline/ofxTLBangs.cpp",
@@ -135,6 +142,7 @@ Project{
             'ofxNetwork',
             'ofxOpenCv',
             'ofxOsc',
+            'ofxPoco',	
             'ofxTimecode',
             'ofxTween',
             'ofxXmlSettings',
@@ -150,6 +158,9 @@ Project{
         of.linkerFlags: []      // flags passed to the linker
         of.defines: []          // defines are passed as -D to the compiler
                                 // and can be checked with #ifdef or #if in the code
+        of.frameworks: []       // osx only, additional frameworks to link with the project
+        of.staticLibraries: []  // static libraries
+        of.dynamicLibraries: [] // dynamic libraries
 
         // other flags can be set through the cpp module: http://doc.qt.io/qbs/cpp-module.html
         // eg: this will enable ccache when compiling
@@ -170,6 +181,15 @@ Project{
             name: "openFrameworks"
         }
     }
+
+    property bool makeOF: true  // use makfiles to compile the OF library
+                                // will compile OF only once for all your projects
+                                // otherwise compiled per project with qbs
+    
+
+    property bool precompileOfMain: false  // precompile ofMain.h
+                                           // faster to recompile when including ofMain.h 
+                                           // but might use a lot of space per project
 
     references: [FileInfo.joinPaths(of_root, "/libs/openFrameworksCompiled/project/qtcreator/openFrameworks.qbs")]
 }

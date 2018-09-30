@@ -235,7 +235,7 @@ void ofxSimpleGuiToo::setPage(int i) {
 
 void ofxSimpleGuiToo::setPage(string name) {
 //	ofxSimpleGuiPage *page;
-	for(int i=1; i < pages.size(); i++) {
+    for(unsigned long i=1; i < pages.size(); i++) {
 		if(name.compare(pages[i]->name) == 0) {
 			setPage(i);
 			break;
@@ -250,7 +250,10 @@ ofxSimpleGuiPage& ofxSimpleGuiToo::page(int i) {
 
 ofxSimpleGuiPage& ofxSimpleGuiToo::page(string name) {
 	if(!config) setup();
-	for(int i=1; i<pages.size(); i++) if(name.compare(pages[i]->name) == 0) return *pages[i];
+    for(unsigned long i=1; i < pages.size(); i++) {
+        if(name.compare(pages[i]->name) == 0) return *pages[i];
+    }
+    return *pages[0]; //Fixme: what should I return here?
 }
 
 
@@ -292,14 +295,14 @@ ofxSimpleGuiPage &ofxSimpleGuiToo::addPage(string name) {
 }
 
 ofxSimpleGuiControl &ofxSimpleGuiToo::control(string name) {
-	for(int i = 0; i < pages.size(); i++) {
-		for(int j = 0; j < pages[i]->getControls().size(); j++) {
+    for(unsigned long i = 0; i < pages.size(); i++) {
+        for(unsigned long j = 0; j < pages[i]->getControls().size(); j++) {
 			if(name==pages[i]->getControls()[j]->name) {
 				return *pages[i]->getControls()[j];
 			}
 		}
 	}
-//	return NULL;
+    return *pages[0]->getControls()[0]; // return NULL
 }
 
 
