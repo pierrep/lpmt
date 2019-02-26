@@ -1,7 +1,8 @@
 # lpmt
-Rewrite of the Little Projection Mapping Tool (hv-a.com/lpmt/)
+Rewrite of the Little Projection Mapping Tool (http://projection-mapping.org/tools/lpmt/)
 
 This is a fork of LPMT meant to clean up the original codebase and keep the application alive.
+The application is built using OpenFrameworks and therefore can be built for Linux/Mac/Windows
 
 ## New Features:
 * Improved slideshow functionality (including fades between slides)
@@ -10,6 +11,8 @@ This is a fork of LPMT meant to clean up the original codebase and keep the appl
 * Fixed quad copying using CTRL-C and CTRL-V
 * Added an option to draw outlines around masks in order to smooth the edges
 * Added the ability for a surface to receive small images via OSC
+
+Bug fixes or reports are welcome!
 
 
 
