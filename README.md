@@ -4,6 +4,8 @@ Rewrite of the Little Projection Mapping Tool (http://projection-mapping.org/too
 This is a fork of LPMT meant to clean up the original codebase and keep the application alive.
 The application is built using OpenFrameworks and therefore can be built for Linux/Mac/Windows
 
+The current build uses openFrameworks 0.10.1
+
 ## New Features:
 * Improved slideshow functionality (including fades between slides)
 * Added option to auto fit image to quads
