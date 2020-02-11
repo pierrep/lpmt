@@ -6,6 +6,8 @@ The application is built using OpenFrameworks and therefore can be built for Lin
 
 The current build uses openFrameworks 0.10.1
 
+The original LPMT code can be found here: https://github.com/hvfrancesco/lpmt
+
 ## New Features:
 * Improved slideshow functionality (including fades between slides)
 * Added option to auto fit image to quads
