@@ -52,18 +52,11 @@ void ofApp::openSharedVideoFile(int i)
         sharedVideos[i].load(path);
         if(sharedVideos[i].isLoaded())
         {
-            std::cout << "Loaded shared video #" << i + 1 << ": \"" << path << "\"" << std::endl;
+            ofLogNotice() << "Loaded shared video #" << i + 1 << ": \"" << path << "\"";
             sharedVideosFiles[i] = path;
             sharedVideos[i].setLoopState(OF_LOOP_NORMAL);
             sharedVideos[i].play();
             sharedVideos[i].setVolume(0);
-            for(int j=0; j < MAX_QUADS; j++)
-            {
-                if (quads[j].initialized)
-                {
-                    quads[j].vids[i] = sharedVideos[i];
-                }
-            }
         }
     }
 }
@@ -83,13 +76,6 @@ void ofApp::openSharedVideoFile(std::string path, int i)
             sharedVideos[i].setLoopState(OF_LOOP_NORMAL);
             sharedVideos[i].play();
             sharedVideos[i].setVolume(0);
-            for(int j=0; j < MAX_QUADS; j++)
-            {
-                if (quads[j].initialized)
-                {
-                    quads[j].vids[i] = sharedVideos[i];
-                }
-            }
         }
 }
 
@@ -103,8 +89,6 @@ ofImage ofApp::loadImageFromFile()
     {        
         string imgName = dialog_result.getName();
         string imgPath = dialog_result.getPath();
-        //ofFile image(imgPath);
-        //img.load(image);
         img.load(imgPath);
         return img;
     }

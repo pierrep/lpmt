@@ -16,7 +16,7 @@ quad::quad()
 void quad::reset()
 {
     // sets default variables
-    initialized = true;
+    initialized = false;
     isActive = false;
     isOn = false;
     isMaskSetup = false;
@@ -176,7 +176,7 @@ void quad::reset()
     bTimelineSlideChange = false;
 }
 
-void quad::setup(ofPoint point1, ofPoint point2, ofPoint point3, ofPoint point4, ofShader &edgeBlendShader, ofShader &quadMaskShader, ofShader &chromaShader, ofShader &hueSatLumShader, ofShader &fadeShader, vector<ofVideoGrabber> &cameras, vector<ofVideoPlayer> &sharedVideos, ofTrueTypeFont &font)
+void quad::setup(ofPoint point1, ofPoint point2, ofPoint point3, ofPoint point4, ofShader &edgeBlendShader, ofShader &quadMaskShader, ofShader &chromaShader, ofShader &hueSatLumShader, ofShader &fadeShader, vector<ofVideoGrabber> &cameras, ofTrueTypeFont &font)
 {
     reset();
 
@@ -188,10 +188,8 @@ void quad::setup(ofPoint point1, ofPoint point2, ofPoint point3, ofPoint point4,
     greenscreenShader = &chromaShader;
     hueSatLuminanceShader = &hueSatLumShader;
     crossfadeShader = &fadeShader;
-    //camera = &camGrabber;
 
     ttf = font;
-    vids = sharedVideos;
     cams = cameras;
     if(cams.size() > 0)
     {
@@ -230,15 +228,13 @@ void quad::setup(ofPoint point1, ofPoint point2, ofPoint point3, ofPoint point4,
     circularCrop[1] = 0.5;
     circularCrop[2] = 0.0;
 
-    //videos = videoFiles;
-    //slideshows = slideshowFolders;
-
     allocateFbo(ofGetWidth(), ofGetHeight());
 
     //calculates screen ratio factor for window and fullscreen
     screenFactorX = (ofGetWidth()/(float)ofGetScreenWidth());
     screenFactorY = (ofGetHeight()/(float)ofGetScreenHeight());
 
+    initialized = true;
 }
 
 
@@ -336,7 +332,7 @@ void quad::update()
                     // we scan the img dir for images
                     string slidesDir = slideshowName;
                     // make two arrays, one for imgs names and one for images
-                    slidesnames = vector<string>();
+                    vector<string> slidesnames = vector<string>();
                     slides = vector<ofImage>();
                     // read all content of show folder
                     getdir(slidesDir,slidesnames);
@@ -430,7 +426,7 @@ void quad::update()
 
 
 // DRAW -----------------------------------------------------------------
-void quad::draw()
+void quad::draw(vector<ofVideoPlayer> &sharedVideos)
 {
     if (isOn)
     {
@@ -564,17 +560,17 @@ void quad::draw()
                 glPushMatrix();
                 if(videoHFlip && !videoVFlip)
                 {
-                    ofTranslate(vids[sharedVideoId].getWidth()*videoMultX,0);
+                    ofTranslate(sharedVideos[sharedVideoId].getWidth()*videoMultX,0);
                     glScalef(-1,1,1);
                 }
                 else if(videoVFlip && !videoHFlip)
                 {
-                    ofTranslate(0,vids[sharedVideoId].getHeight()*videoMultY);
+                    ofTranslate(0,sharedVideos[sharedVideoId].getHeight()*videoMultY);
                     glScalef(1,-1,1);
                 }
                 else
                 {
-                    ofTranslate(vids[sharedVideoId].getWidth()*videoMultX,vids[sharedVideoId].getHeight()*videoMultY);
+                    ofTranslate(sharedVideos[sharedVideoId].getWidth()*videoMultX,sharedVideos[sharedVideoId].getHeight()*videoMultY);
                     glScalef(-1,-1,1);
                 }
             }
@@ -582,7 +578,7 @@ void quad::draw()
             if (videoGreenscreen)
             {
                 greenscreenShader->begin();
-                greenscreenShader->setUniformTexture("tex", vids[sharedVideoId].getTexture(),0 );
+                greenscreenShader->setUniformTexture("tex", sharedVideos[sharedVideoId].getTexture(),0 );
                 greenscreenShader->setUniform1f("greenscreenR", colorGreenscreen.r);
                 greenscreenShader->setUniform1f("greenscreenG", colorGreenscreen.g);
                 greenscreenShader->setUniform1f("greenscreenB", colorGreenscreen.b);
@@ -591,12 +587,13 @@ void quad::draw()
                 greenscreenShader->setUniform1f("tintG", videoColorize.g);
                 greenscreenShader->setUniform1f("tintB", videoColorize.b);
                 greenscreenShader->setUniform1f("greenscreenT", (float)thresholdGreenscreen/255.0);
-                vids[sharedVideoId].draw(0,0,vids[sharedVideoId].getWidth()*videoMultX, vids[sharedVideoId].getHeight()*videoMultY);
+                sharedVideos[sharedVideoId].draw(0,0,sharedVideos[sharedVideoId].getWidth()*videoMultX, sharedVideos[sharedVideoId].getHeight()*videoMultY);
                 greenscreenShader->end();
             }
             else
             {
-                vids[sharedVideoId].draw(0,0,vids[sharedVideoId].getWidth()*videoMultX, vids[sharedVideoId].getHeight()*videoMultY);
+                if(sharedVideos[sharedVideoId].isPlaying() == false) sharedVideos[sharedVideoId].play();
+                sharedVideos[sharedVideoId].draw(0,0,sharedVideos[sharedVideoId].getWidth()*videoMultX, sharedVideos[sharedVideoId].getHeight()*videoMultY);
             }
             if (videoHFlip || videoVFlip)
             {

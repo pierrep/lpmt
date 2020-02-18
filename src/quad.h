@@ -21,9 +21,9 @@ class quad: public ofNode
 public:
     quad();
     void reset();
-    void setup(ofPoint point1, ofPoint point2, ofPoint point3, ofPoint point4, ofShader &edgeBlendShader, ofShader &quadMaskShader, ofShader &chromaShader, ofShader &hueSatLumShader, ofShader &fadeShader, vector<ofVideoGrabber> &cameras, vector<ofVideoPlayer> &sharedVideos, ofTrueTypeFont &font);
+    void setup(ofPoint point1, ofPoint point2, ofPoint point3, ofPoint point4, ofShader &edgeBlendShader, ofShader &quadMaskShader, ofShader &chromaShader, ofShader &hueSatLumShader, ofShader &fadeShader, vector<ofVideoGrabber> &cameras,  ofTrueTypeFont &font);
     void update();
-    void draw();
+    void draw(vector<ofVideoPlayer> &sharedVideos);
     void applyBlendmode();
     void gaussian_elimination(float *input, int n);
     void findHomography(ofPoint src[4], ofPoint dst[4], float homography[16]);
@@ -200,11 +200,10 @@ public:
     int slideTimer;
 
     vector<string> videos;
-    //vector<string> slideshows;
-    vector<string> slidesnames;
     vector<ofImage> slides;
     vector<ofVideoGrabber> cams;
-    vector<ofVideoPlayer> vids;
+    //vector<ofVideoPlayer> vids;
+    //vector<ofVideoPlayer> *sharedVideos;
 
     string bgImg;
     string bgVideo;

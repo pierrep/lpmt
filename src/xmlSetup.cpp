@@ -217,15 +217,15 @@ void ofApp::loadSettingsFromXMLFile(std::string xmlFilePath)
 
             #ifdef WITH_KINECT
                 #ifdef WITH_SYPHON
-                quads[i].setup(ofPoint(x0, y0), ofPoint(x1, y1), ofPoint(x2, y2), ofPoint(x3, y3), edgeBlendShader, quadMaskShader, chromaShader, hueSatLumShader, transitionShader, m_cameras, sharedVideos, kinect, syphClient, ttf);
+                quads[i].setup(ofPoint(x0, y0), ofPoint(x1, y1), ofPoint(x2, y2), ofPoint(x3, y3), edgeBlendShader, quadMaskShader, chromaShader, hueSatLumShader, transitionShader, m_cameras, kinect, syphClient, ttf);
                 #else
-                quads[i].setup(ofPoint(x0, y0), ofPoint(x1, y1), ofPoint(x2, y2), ofPoint(x3, y3), edgeBlendShader, quadMaskShader, chromaShader, hueSatLumShader, transitionShader, m_cameras, sharedVideos, kinect, ttf);
+                quads[i].setup(ofPoint(x0, y0), ofPoint(x1, y1), ofPoint(x2, y2), ofPoint(x3, y3), edgeBlendShader, quadMaskShader, chromaShader, hueSatLumShader, transitionShader, m_cameras, kinect, ttf);
                 #endif
             #else
                 #ifdef WITH_SYPHON
-                quads[i].setup(ofPoint(x0, y0), ofPoint(x1, y1), ofPoint(x2, y2), ofPoint(x3, y3), edgeBlendShader, quadMaskShader, chromaShader, hueSatLumShader, transitionShader, m_cameras, sharedVideos, syphClient, ttf);
+                quads[i].setup(ofPoint(x0, y0), ofPoint(x1, y1), ofPoint(x2, y2), ofPoint(x3, y3), edgeBlendShader, quadMaskShader, chromaShader, hueSatLumShader, transitionShader, m_cameras, syphClient, ttf);
                 #else
-                quads[i].setup(ofPoint(x0, y0), ofPoint(x1, y1), ofPoint(x2, y2), ofPoint(x3, y3), edgeBlendShader, quadMaskShader, chromaShader, hueSatLumShader, transitionShader, m_cameras, sharedVideos, ttf);
+                quads[i].setup(ofPoint(x0, y0), ofPoint(x1, y1), ofPoint(x2, y2), ofPoint(x3, y3), edgeBlendShader, quadMaskShader, chromaShader, hueSatLumShader, transitionShader, m_cameras, ttf);
                 #endif
             #endif
             quads[i].quadNumber = xmlSettingsFile.getValue("QUADS:QUAD_"+ofToString(i)+":NUMBER", 0);
