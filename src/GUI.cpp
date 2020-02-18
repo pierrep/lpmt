@@ -147,7 +147,9 @@ void GUI::setupPages()
     m_gui.addSlider("video speed", m_dummyFloat, -2.0, 4.0);
     m_gui.addToggle("video loop", m_dummyBool);
     m_gui.addToggle("video greenscreen", m_dummyBool);
+    m_gui.addTitle("Shared Videos");
     m_gui.addToggle("shared video on/off", m_dummyBool);
+    m_gui.addToggle("shared video tiling", m_dummyBool);
     m_gui.addSlider("shared video", m_dummyInt, 1, 8);
 
     if (m_app->m_cameras.size() > 0)
@@ -315,6 +317,7 @@ void GUI::updatePages(quad& activeQuad)
     dynamic_cast<ofxSimpleGuiToggle*>(secondPage.findControlByName("video loop"))->value = &activeQuad.videoLoop;
     dynamic_cast<ofxSimpleGuiToggle*>(secondPage.findControlByName("video greenscreen"))->value = &activeQuad.videoGreenscreen;
     dynamic_cast<ofxSimpleGuiToggle*>(secondPage.findControlByName("shared video on/off"))->value = &activeQuad.sharedVideoBg;
+    dynamic_cast<ofxSimpleGuiToggle*>(secondPage.findControlByName("shared video tiling"))->value = &activeQuad.sharedVideoTiling;
     dynamic_cast<ofxSimpleGuiSliderInt*>(secondPage.findControlByName("shared video"))->value = &activeQuad.sharedVideoNum;
 
     if (m_app->m_cameras.size() > 0)

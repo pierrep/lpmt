@@ -56,7 +56,7 @@ void ofApp::openSharedVideoFile(int i)
             sharedVideosFiles[i] = path;
             sharedVideos[i].setLoopState(OF_LOOP_NORMAL);
             sharedVideos[i].play();
-            sharedVideos[i].setVolume(0);
+           // sharedVideos[i].setVolume(0);
         }
     }
 }
@@ -75,7 +75,7 @@ void ofApp::openSharedVideoFile(std::string path, int i)
             sharedVideosFiles[i] = path;
             sharedVideos[i].setLoopState(OF_LOOP_NORMAL);
             sharedVideos[i].play();
-            sharedVideos[i].setVolume(0);
+            //sharedVideos[i].setVolume(0);
         }
 }
 

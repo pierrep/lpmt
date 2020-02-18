@@ -726,7 +726,33 @@ void ofApp::keyPressed(int key)
     {
         if (isSetup)
         {
-            if (nOfQuads < MAX_QUADS)
+            bool hasSpareQuad = false;
+            int index = 0;
+            for(int i = 0; i < nOfQuads; i++)
+            {
+                if (quads[i].initialized == false)
+                {
+                    hasSpareQuad = true;
+                    index = i;
+                    break;
+                }
+            }
+            if(hasSpareQuad) {
+                quads[index].setup(ofPoint(0.25, 0.25), ofPoint(0.75, 0.25), ofPoint(0.75, 0.75), ofPoint(0.25, 0.75), edgeBlendShader, quadMaskShader, chromaShader, hueSatLumShader, transitionShader, m_cameras, ttf);
+                quads[index].quadNumber = index;
+
+                // layers
+                layers[index] = index;
+                quads[index].layer = index;
+
+                quads[activeQuad].isActive = false;
+                quads[index].isActive = true;
+                activeQuad = index;
+                m_gui.updatePages(quads[activeQuad]);
+
+                glDisable(GL_DEPTH_TEST);
+            }
+            else if (nOfQuads < MAX_QUADS)
             {
                 quads[nOfQuads].setup(ofPoint(0.25, 0.25), ofPoint(0.75, 0.25), ofPoint(0.75, 0.75), ofPoint(0.25, 0.75), edgeBlendShader, quadMaskShader, chromaShader, hueSatLumShader, transitionShader, m_cameras, ttf);
                 quads[nOfQuads].quadNumber = nOfQuads;

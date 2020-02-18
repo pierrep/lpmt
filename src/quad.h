@@ -64,7 +64,6 @@ public:
 
     /* img and video stuff */
     ofImage img;
-//    ofImage slide;
     ofImage nextSlide;
     ofVideoPlayer video;
     ofTrueTypeFont ttf;
@@ -144,9 +143,14 @@ public:
     bool videoSound;
     bool videoLoop;
     bool videoGreenscreen;
+
+    //Shared videos
     bool sharedVideoBg;
+    bool sharedVideoTiling;
     int sharedVideoNum;
     int sharedVideoId;
+
+
     bool slideshowBg;
     bool slideFit;
     bool slideKeepAspect;
@@ -202,8 +206,6 @@ public:
     vector<string> videos;
     vector<ofImage> slides;
     vector<ofVideoGrabber> cams;
-    //vector<ofVideoPlayer> vids;
-    //vector<ofVideoPlayer> *sharedVideos;
 
     string bgImg;
     string bgVideo;

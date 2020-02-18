@@ -30,6 +30,7 @@ void quad::reset()
     videoLoop = true;
     videoGreenscreen = false;
     sharedVideoBg = false;
+    sharedVideoTiling = false;
     sharedVideoNum = 1;
     sharedVideoId = sharedVideoNum -1;
     slideshowBg = false;
@@ -592,7 +593,37 @@ void quad::draw(vector<ofVideoPlayer> &sharedVideos)
             }
             else
             {
-                sharedVideos[sharedVideoId].draw(0,0,sharedVideos[sharedVideoId].getWidth()*videoMultX, sharedVideos[sharedVideoId].getHeight()*videoMultY);
+                float x1 = ofGetWidth();
+                float y1 = ofGetHeight();
+                float x2 = 0.0f;
+                float y2 = 0.0f;
+                for(int i = 0; i < 4;i++) {
+                    if(corners[i].x < x1) {
+                       x1 = corners[i].x;
+                    }
+                }
+                for(int i = 0; i< 4;i++) {
+                    if(corners[i].y < y1) {
+                       y1 = corners[i].y;
+                    }
+                }
+                for(int i = 0; i < 4;i++) {
+                    if(corners[i].x > x2) {
+                       x2 = corners[i].x;
+                    }
+                }
+                for(int i = 0; i< 4;i++) {
+                    if(corners[i].y > y2) {
+                       y2 = corners[i].y;
+                    }
+                }
+                if(sharedVideoTiling) {
+                    float w = sharedVideos[sharedVideoId].getWidth();
+                    float h = sharedVideos[sharedVideoId].getHeight();
+                    sharedVideos[sharedVideoId].getTexture().drawSubsection(0,0,ofGetWidth(), ofGetHeight(),x1*w,y1*h,(x2 - x1)*w, (y2 - y1)*h);
+                } else {
+                    sharedVideos[sharedVideoId].draw(0,0,sharedVideos[sharedVideoId].getWidth()*videoMultX, sharedVideos[sharedVideoId].getHeight()*videoMultY);
+                }
             }
             if (videoHFlip || videoVFlip)
             {
@@ -723,7 +754,6 @@ void quad::draw(vector<ofVideoPlayer> &sharedVideos)
                 slideTimer += 1;
             }
         }
-
 
         // draw an image ------------------------------------------------------------------------------
         if (imgBg)
@@ -1137,7 +1167,7 @@ void quad::draw(vector<ofVideoPlayer> &sharedVideos)
 
                     if(!bDeform)
                     {
-                        quadFbo.draw(0+quadDispX,0+quadDispY,quadW,quadH);
+                        quadFbo.draw(quadDispX,quadDispY,quadW,quadH);
                     }
                     else
                     {
