@@ -42,6 +42,9 @@ ofxSimpleGuiToo gui;
 ofxSimpleGuiToo::ofxSimpleGuiToo() {
 	config = NULL;
 	doDefaultKeys = false;
+    for(size_t i = 0; i < activePageFlags.size(); i++) {
+        activePageFlags[i] = false;
+    }
 }
 
 void ofxSimpleGuiToo::setup() {
@@ -380,12 +383,12 @@ void ofxSimpleGuiToo::update(ofEventArgs &e) {
 	}
 
     // if one of the tab buttons in the header bar was clicked, change to the corresponding page
-	for(size_t i = 0; i < activePageFlags.size(); i++) {
+    for(size_t i = 0; i < activePageFlags.size(); i++) {
         if(activePageFlags[i] == true) {
             setPage(i + 1); // + 1 because the first page is the header page
             activePageFlags[i] = false;
         }
-	}
+    }
 
 	headerPage->update(e);
 	pages[currentPageIndex]->height = ofGetHeight();

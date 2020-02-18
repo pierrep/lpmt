@@ -592,7 +592,6 @@ void quad::draw(vector<ofVideoPlayer> &sharedVideos)
             }
             else
             {
-                if(sharedVideos[sharedVideoId].isPlaying() == false) sharedVideos[sharedVideoId].play();
                 sharedVideos[sharedVideoId].draw(0,0,sharedVideos[sharedVideoId].getWidth()*videoMultX, sharedVideos[sharedVideoId].getHeight()*videoMultY);
             }
             if (videoHFlip || videoVFlip)
@@ -1432,6 +1431,10 @@ void quad::allocateFbo(int w, int h)
     quadFbo.allocate(settings);
     maskFbo.allocate(settings);
     targetFbo.allocate(settings);
+
+    if(!quadFbo.isAllocated()) {
+        ofLogError() << "Unable to alocate quad FBO!";
+    }
 }
 
 //---------------------------------------------------------------
