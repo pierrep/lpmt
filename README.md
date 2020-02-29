@@ -15,6 +15,7 @@ The original LPMT code can be found here: https://github.com/hvfrancesco/lpmt
 * Fixed quad copying using CTRL-C and CTRL-V
 * Added an option to draw outlines around masks in order to smooth the edges
 * Added the ability for a surface to receive small images via OSC
+* Added the ability to map different parts of a shared video to different quads
 
 Bug fixes or reports are welcome!
 
