@@ -1527,7 +1527,6 @@ void quad::loadImageFromFile(string imgName, string imgPath)
 //---------------------------------------------------------------
 void quad::loadVideoFromFile(string videoName, string videoPath)
 {
-    //ofFile movie(videoPath);
     videoBg = true;
     bgVideo = videoPath;
     loadedVideo = videoName;
@@ -1540,7 +1539,6 @@ void quad::loadVideoFromFile(string videoName, string videoPath)
     videoHeight = video.getHeight();
 
     video.play();
-    loadedVideo = videoName;
 }
 
 //---------------------------------------------------------------

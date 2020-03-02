@@ -569,7 +569,7 @@ void ofApp::keyPressed(ofKeyEventArgs& args)
         midiHotkeyPressed = args.key;
     } else {
 
-    if(ofGetKeyPressed(OF_KEY_CONTROL) && ofGetKeyPressed('q')){
+    if(args.hasModifier(OF_KEY_CONTROL) && (args.keycode == 'Q')){
         ofExit(1);
     } else
     if (args.key == '+' && !bTimeline && !bGui)
@@ -655,11 +655,11 @@ void ofApp::keyPressed(ofKeyEventArgs& args)
         }
         m_gui.updatePages(quads[activeQuad]);
     } else
-    if ( (ofGetKeyPressed(OF_KEY_CONTROL) && ofGetKeyPressed('c')) && !bTimeline) //copy
+    if ( (args.hasModifier(OF_KEY_CONTROL) && (args.keycode == 'C')) && !bTimeline) //copy
     {
         m_sourceQuadForCopying = activeQuad;     // make currently active quad the source quad for copying
     } else
-    if ( (ofGetKeyPressed(OF_KEY_CONTROL) && ofGetKeyPressed('v')) && !bTimeline) // paste
+    if ((args.hasModifier(OF_KEY_CONTROL) && (args.keycode == 'V')) && !bTimeline) // paste
     {
         copyQuadSettings(m_sourceQuadForCopying); // paste settings from source surface to currently active surface
     } else
@@ -761,7 +761,7 @@ void ofApp::keyPressed(ofKeyEventArgs& args)
             }
         }
     } else
-    if( ( (ofGetKeyPressed(OF_KEY_CONTROL) && ofGetKeyPressed('x')) || (ofGetKeyPressed(OF_KEY_CONTROL) && ofGetKeyPressed('X')) ) && !bTimeline)
+    if( (args.hasModifier(OF_KEY_CONTROL) && (args.keycode == 'X')) && !bTimeline)
     {
         // delete quad
         quads[activeQuad].reset();

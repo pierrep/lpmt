@@ -4,12 +4,13 @@
 //-----------------------------------------------------------
 void ofApp::openImageFile()
 {
+	ofLogNotice() << "Open Image file dialogue";
     ofFileDialogResult dialog_result = ofSystemLoadDialog("Load image file");
 
     if(dialog_result.bSuccess)
     {
         quads[activeQuad].loadImageFromFile(dialog_result.getName(), dialog_result.getPath());
-        std::cout << "Loaded image: \"" << dialog_result.getPath() << "\"" << std::endl;
+		ofLogNotice() << "Loaded image: \"" << dialog_result.getPath() << "\"";
     }
 }
 
@@ -21,7 +22,11 @@ void ofApp::openVideoFile()
     if(dialog_result.bSuccess)
     {
         quads[activeQuad].loadVideoFromFile(dialog_result.getName(), dialog_result.getPath());
-        std::cout << "Loaded video: \"" << dialog_result.getPath() << "\"" << std::endl;
+		ofLogNotice() << "Loaded video: \"" << dialog_result.getPath() << "\"";
+		if (quads[activeQuad].video.isLoaded()) {
+			ofLogNotice() << "Video loaded, playing...";
+		}
+		
     }
 }
 

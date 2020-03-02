@@ -41,5 +41,10 @@ bin/lpmt_debug.pdb
 obj/
 bin/fmodex.dll
 bin/fmodexL.dll
+bin/lpmt.exe
+bin/lpmt.exp
+bin/lpmt.iobj
+bin/lpmt.ipdb
+bin/lpmt.lib
 
 
