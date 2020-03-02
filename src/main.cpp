@@ -7,6 +7,7 @@ int main( ){
     settings.setSize(1280,800);
     settings.numSamples = 4;
     ofCreateWindow(settings);
+	//ofSetLogLevel(OF_LOG_VERBOSE);
 
     //ofSetupOpenGL(1280,800, OF_WINDOW);			// <-------- setup the GL context
 

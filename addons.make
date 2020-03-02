@@ -4,6 +4,4 @@ ofxNetwork
 ofxOpenCv
 ofxOsc
 ofxPoco
-ofxTimecode
-ofxTween
 ofxXmlSettings

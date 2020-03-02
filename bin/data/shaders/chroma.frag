@@ -1,4 +1,5 @@
 //#extension GL_ARB_texture_rectangle : enable
+#version 120
 
 uniform sampler2DRect tex;
 uniform float greenscreenR;

@@ -432,7 +432,6 @@ void ofxTLLFO::restoreKeyframe(ofxTLKeyframe* key, ofxXmlSettings& xmlStore){
 
 void ofxTLLFO::storeKeyframe(ofxTLKeyframe* key, ofxXmlSettings& xmlStore){
 	ofxTLLFOKey* lfoKey = (ofxTLLFOKey*)key;
-	ofxTLLFOType type;
 	xmlStore.addValue("type", int(lfoKey->type));
 	xmlStore.addValue("phaseShift",lfoKey->phaseShift);
 	xmlStore.addValue("amplitude",lfoKey->amplitude);

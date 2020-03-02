@@ -330,14 +330,12 @@ void quad::update()
                 if (slideshowName != "." && slideshowName != "..")
                 {
                     // we scan the img dir for images
-					ofDirectory slidesDir(slideshowName);
-					
+					ofDirectory slidesDir(slideshowName);					
 					slidesDir.allowExt("png");
 					slidesDir.allowExt("tiff");
 					slidesDir.allowExt("jpg");
 					slidesDir.allowExt("bmp");
 					slidesDir.allowExt("pdf");
-
 					slidesDir.listDir();
 					slides.clear();
 
@@ -350,19 +348,6 @@ void quad::update()
 						}
 					}
 
-                    // read all content of show folder
-                    //getdir(slidesDir,slidesnames);
-
-                    //// for each name found loads the image and populates the imgs array (excluding "." an "..")
-                    //for (unsigned int i = 0; i < slidesnames.size(); i++)
-                    //{
-                    //    if (slidesnames[i] != "." && slidesnames[i] != "..")
-                    //    {
-                    //        ofImage slide;
-                    //        slide.load(slideshowName+"/"+slidesnames[i]);
-                    //        slides.push_back(slide);
-                    //    }
-                    //}
                     loadedSlideshow = slideshowName;
                     currentSlide = 0;
                     slideTimer = 0;
