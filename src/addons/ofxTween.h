@@ -2,7 +2,7 @@
 #define TWEEN_INCLUDED
 
 #include <Poco/Delegate.h>
-#include "ofxEasing.h"
+#include "Easings/ofxEasing.h"
 #include "ofMain.h"
 
 class ofxTween{
@@ -81,15 +81,15 @@ class ofxTween{
 
 };
 
-#include "ofxEasingBounce.h"
-#include "ofxEasingCubic.h"
-#include "ofxEasingElastic.h"
-#include "ofxEasingLinear.h"
-#include "ofxEasingQuart.h"
-#include "ofxEasingBack.h"
-#include "ofxEasingCirc.h"
-#include "ofxEasingExpo.h"
-#include "ofxEasingQuad.h"
-#include "ofxEasingQuint.h"
-#include "ofxEasingSine.h"
+#include "Easings/ofxEasingBounce.h"
+#include "Easings/ofxEasingCubic.h"
+#include "Easings/ofxEasingElastic.h"
+#include "Easings/ofxEasingLinear.h"
+#include "Easings/ofxEasingQuart.h"
+#include "Easings/ofxEasingBack.h"
+#include "Easings/ofxEasingCirc.h"
+#include "Easings/ofxEasingExpo.h"
+#include "Easings/ofxEasingQuad.h"
+#include "Easings/ofxEasingQuint.h"
+#include "Easings/ofxEasingSine.h"
 #endif
