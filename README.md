@@ -26,11 +26,11 @@ You'll need to add the following addons to your Addons folder:
 - https://github.com/danomatika/ofxMidi.git
 
 ### Linux
-Type ```Make``` or using the provided QtCreator project.
+Type ```Make``` or use the provided QtCreator project.
 
 
 ### Windows
-Currently built using VS2017
+Currently built using VS2017 - use the provided project
 
 In order to support audio tracks (not yet supported but may be in the future) you'll need to install:
 
