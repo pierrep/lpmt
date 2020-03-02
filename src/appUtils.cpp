@@ -22,11 +22,7 @@ void ofApp::openVideoFile()
     if(dialog_result.bSuccess)
     {
         quads[activeQuad].loadVideoFromFile(dialog_result.getName(), dialog_result.getPath());
-		ofLogNotice() << "Loaded video: \"" << dialog_result.getPath() << "\"";
-		if (quads[activeQuad].video.isLoaded()) {
-			ofLogNotice() << "Video loaded, playing...";
-		}
-		
+		ofLogNotice() << "Loaded video: \"" << dialog_result.getPath() << "\"";		
     }
 }
 

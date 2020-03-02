@@ -534,7 +534,7 @@ void quad::draw(vector<ofVideoPlayer> &sharedVideos)
                         greenscreenShader->setUniform1f("tintG", videoColorize.g);
                         greenscreenShader->setUniform1f("tintB", videoColorize.b);
                         greenscreenShader->setUniform1f("greenscreenT", (float)thresholdGreenscreen/255.0);
-                        if(video.isPlaying())
+                        if(video.isLoaded())
                         {
                             video.draw(0,0,videoWidth*videoMultX, videoHeight*videoMultY);
                         }
@@ -542,7 +542,7 @@ void quad::draw(vector<ofVideoPlayer> &sharedVideos)
                 }
                 else
                 {
-                    if(video.isPlaying())
+                    if(video.isLoaded())
                     {
                         video.draw(0,0,videoWidth*videoMultX, videoHeight*videoMultY);
                     }
