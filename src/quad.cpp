@@ -2,7 +2,6 @@
 #include "Util.hpp"
 
 #include <sys/types.h>
-#include <dirent.h>
 #include <errno.h>
 #include <vector>
 #include <string>
@@ -331,22 +330,39 @@ void quad::update()
                 if (slideshowName != "." && slideshowName != "..")
                 {
                     // we scan the img dir for images
-                    string slidesDir = slideshowName;
-                    // make two arrays, one for imgs names and one for images
-                    vector<string> slidesnames = vector<string>();
-                    slides = vector<ofImage>();
+					ofDirectory slidesDir(slideshowName);
+					
+					slidesDir.allowExt("png");
+					slidesDir.allowExt("tiff");
+					slidesDir.allowExt("jpg");
+					slidesDir.allowExt("bmp");
+					slidesDir.allowExt("pdf");
+
+					slidesDir.listDir();
+					slides.clear();
+
+					for (int i = 0; i < slidesDir.size(); i++) {
+						ofLogNotice(slidesDir.getPath(i));
+						ofImage slide;
+						bool bValid = slide.load(slidesDir.getPath(i));
+						if (bValid) {
+							slides.push_back(slide);
+						}
+					}
+
                     // read all content of show folder
-                    getdir(slidesDir,slidesnames);
-                    // for each name found loads the image and populates the imgs array (excluding "." an "..")
-                    for (unsigned int i = 0; i < slidesnames.size(); i++)
-                    {
-                        if (slidesnames[i] != "." && slidesnames[i] != "..")
-                        {
-                            ofImage slide;
-                            slide.load(slideshowName+"/"+slidesnames[i]);
-                            slides.push_back(slide);
-                        }
-                    }
+                    //getdir(slidesDir,slidesnames);
+
+                    //// for each name found loads the image and populates the imgs array (excluding "." an "..")
+                    //for (unsigned int i = 0; i < slidesnames.size(); i++)
+                    //{
+                    //    if (slidesnames[i] != "." && slidesnames[i] != "..")
+                    //    {
+                    //        ofImage slide;
+                    //        slide.load(slideshowName+"/"+slidesnames[i]);
+                    //        slides.push_back(slide);
+                    //    }
+                    //}
                     loadedSlideshow = slideshowName;
                     currentSlide = 0;
                     slideTimer = 0;
@@ -1540,26 +1556,6 @@ void quad::loadVideoFromFile(string videoName, string videoPath)
 
     video.play();
     loadedVideo = videoName;
-}
-
-//---------------------------------------------------------------
-// a func for reading a dir content to a vector of strings
-int quad::getdir (string dir, vector<string> &files)
-{
-    DIR *dp;
-    struct dirent *dirp;
-    if((dp  = opendir(dir.c_str())) == NULL)
-    {
-        cout << "Error(" << errno << ") opening " << dir << endl;
-        return errno;
-    }
-
-    while ((dirp = readdir(dp)) != NULL)
-    {
-        files.push_back(string(dirp->d_name));
-    }
-    closedir(dp);
-    return 0;
 }
 
 //---------------------------------------------------------------

@@ -150,7 +150,7 @@ void ofxTLCurves::mouseDragged(ofMouseEventArgs& args, long millis){
 }
 
 void ofxTLCurves::mouseReleased(ofMouseEventArgs& args, long millis){
-	if(drawingEasingWindow && (args.button == 0 && !ofGetModifierControlPressed()) ){
+	if(drawingEasingWindow && (args.button == 0 && !ofGetModifierControlPressed(args)) ){
 		drawingEasingWindow = false;
 		timeline->dismissedModalContent();
 		ofVec2f screenpoint(args.x,args.y);

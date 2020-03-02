@@ -12,9 +12,12 @@
 #if defined (TARGET_OF_IPHONE) || defined (TARGET_OSX)
 #include <OpenAL/al.h>
 #include <OpenAL/alc.h>
-#else
+#elseif defined (TARGET_LINUX)
 #include <AL/al.h>
 #include <AL/alc.h>
+#else
+#include <al.h>
+#include <alc.h>
 #endif
 
 #include "kiss_fft.h"

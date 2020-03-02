@@ -30,49 +30,99 @@
  *
  */
 
-#ifndef OFX_MODIFIER_KEYS
-#define OFX_MODIFIER_KEYS
+#pragma once
 
 #include "ofMain.h"
 
+//----------------------------------------
+static bool ofGetModifierAltPressed(ofKeyEventArgs& args) {
+	if (args.hasModifier(OF_KEY_LEFT_ALT) || args.hasModifier(OF_KEY_RIGHT_ALT))
+		return true;
 
-enum ofxModifierKey {
-	OF_MODIFIER_KEY_SHIFT = 1,
-	OF_MODIFIER_KEY_CTRL = 2,
- 	OF_MODIFIER_KEY_ALT  = 4,
-	OF_MODIFIER_KEY_SPECIAL = 8
-};
+	return false;
+}
 
-//platform specific
-bool ofGetModifierPressed(ofxModifierKey key);
+//----------------------------------------
+static bool ofGetModifierAltPressed(ofMouseEventArgs& args) {
+	if (args.hasModifier(OF_KEY_LEFT_ALT) || args.hasModifier(OF_KEY_RIGHT_ALT))
+		return true;
+
+	return false;
+}
+
+//----------------------------------------
+static bool ofGetModifierShiftPressed(ofKeyEventArgs& args) {
+	if (args.hasModifier(OF_KEY_LEFT_SHIFT) || args.hasModifier(OF_KEY_RIGHT_SHIFT))
+		return true;
+
+	return false;
+}
+
+//----------------------------------------
+static bool ofGetModifierShiftPressed(ofMouseEventArgs& args) {
+	if (args.hasModifier(OF_KEY_LEFT_SHIFT) || args.hasModifier(OF_KEY_RIGHT_SHIFT))
+		return true;
+	
+	return false;
+}
+
+//----------------------------------------
+static bool ofGetModifierControlPressed(ofKeyEventArgs& args) {
+	if (args.hasModifier(OF_KEY_CONTROL))
+		return true;
+
+	return false;
+}
+
+//----------------------------------------
+static bool ofGetModifierControlPressed(ofMouseEventArgs& args) {
+	if (args.hasModifier(OF_KEY_CONTROL))
+		return true;
+
+	return false;
+}
+
+//----------------------------------------
+static bool ofGetModifierSpecialPressed(ofKeyEventArgs& args) {
+	if (args.hasModifier(OF_KEY_COMMAND))
+		return true;
+
+	return false;
+}
+
+//----------------------------------------
+static bool ofGetModifierSpecialPressed(ofMouseEventArgs& args) {
+	if (args.hasModifier(OF_KEY_COMMAND))
+		return true;
+
+	return false;
+}
 
 //convention for elements to be selected
-//COMMAND or SHIFT for OSX, just CTRL on windows
-bool ofGetModifierSelection();
-
-
-//COMMAND on OS X, CTRL on Windows
-//----------------------------------------
-bool ofGetModifierShortcutKeyPressed();
-
-//----------------------------------------
-static bool ofGetModifierAltPressed(){
-	return ofGetModifierPressed(OF_MODIFIER_KEY_ALT);
+#ifdef OF_TARGET_OSX
+static bool ofGetModifierSelection(ofMouseEventArgs& args) {
+	return ofGetModifierShiftPressed(args) || ofGetModifierSpecialPressed(args);
 }
-
-//----------------------------------------
-static bool ofGetModifierShiftPressed(){
-	return ofGetModifierPressed(OF_MODIFIER_KEY_SHIFT);
+#else
+static bool ofGetModifierSelection(ofMouseEventArgs& args) {
+	return ofGetModifierShiftPressed(args);
 }
-
-//----------------------------------------
-static bool ofGetModifierControlPressed(){
-	return ofGetModifierPressed(OF_MODIFIER_KEY_CTRL);
-}
-
-//----------------------------------------
-static bool ofGetModifierSpecialPressed(){
-	return ofGetModifierPressed(OF_MODIFIER_KEY_SPECIAL);
-}
-
 #endif
+
+
+#ifdef OF_TARGET_OSX
+static bool ofGetModifierShortcutKeyPressed(ofKeyEventArgs& args) {
+#ifdef MAC_USE_CONTROL
+	//		cout << "using command" << endl;
+	return ofGetModifierControlPressed(args);
+#else
+	//		cout << "using control" << endl;
+	return ofGetModifierSpecialPressed(args);
+#endif
+}
+#else
+static bool ofGetModifierShortcutKeyPressed(ofKeyEventArgs& args) {
+	return ofGetModifierControlPressed(args);
+}
+#endif
+

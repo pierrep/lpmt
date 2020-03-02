@@ -29,3 +29,14 @@ bin/data/3_green.xml
 bin/data/3_red.xml
 bin/data/3_trigger.xml
 
+.vs/
+bin/FreeImage.dll
+bin/fmodex64.dll
+bin/fmodexL64.dll
+bin/libsndfile-1.dll
+bin/lpmt_debug.exe
+bin/lpmt_debug.exp
+bin/lpmt_debug.lib
+bin/lpmt_debug.pdb
+obj/
+

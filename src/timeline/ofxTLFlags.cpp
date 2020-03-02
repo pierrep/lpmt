@@ -98,10 +98,10 @@ bool ofxTLFlags::mousePressed(ofMouseEventArgs& args, long millis){
     //mulitple fields at once
     if(clickedTextField != NULL){
         timeline->presentedModalContent(this);
-        if(!ofGetModifierSelection()){
+        if(!ofGetModifierSelection(args)){
             timeline->unselectAll();
         }
-		if(ofGetModifierSelection() && clickedTextField->textField.getIsEditing()){
+		if(ofGetModifierSelection(args) && clickedTextField->textField.getIsEditing()){
 			clickedTextField->textField.endEditing();
 		}
 		else{
@@ -141,7 +141,7 @@ void ofxTLFlags::mouseDragged(ofMouseEventArgs& args, long millis){
 void ofxTLFlags::mouseReleased(ofMouseEventArgs& args, long millis){
 	if(enteringText){
 		//if we clicked outside of the rect, definitely deslect everything
-		if(clickedTextField == NULL && !ofGetModifierSelection()){
+		if(clickedTextField == NULL && !ofGetModifierSelection(args)){
 			for(int i = 0; i < selectedKeyframes.size(); i++){
 				((ofxTLFlag*)selectedKeyframes[i])->textField.endEditing();
 			}

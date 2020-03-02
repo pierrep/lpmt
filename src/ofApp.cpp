@@ -4,31 +4,9 @@
 #include <iostream>
 
 #include <sys/types.h>
-#include <dirent.h>
 #include <errno.h>
 #include <vector>
 #include <string>
-
-int getdir (string dir, vector<string> &files)
-{
-    DIR *dp;
-    struct dirent *dirp;
-    if((dp  = opendir(dir.c_str())) == NULL)
-    {
-        cout << "Error(" << errno << ") opening " << dir << endl;
-        return errno;
-    }
-
-    while ((dirp = readdir(dp)) != NULL)
-    {
-        if (string(dirp->d_name) != "." && string(dirp->d_name) != "..")
-        {
-            files.push_back(string(dirp->d_name));
-        }
-    }
-    closedir(dp);
-    return 0;
-}
 
 //--------------------------------------------------------------
 ofApp::ofApp() : m_gui(this)
@@ -111,6 +89,8 @@ void ofApp::setup()
     setupMidi();
 
     // initialize the load flags
+	m_saveProjectFlag = false;
+	m_loadProjectFlag = false;
     m_loadImageFlag = false;
     m_loadVideoFlag = false;
     m_loadSlideshowFlag = false;
@@ -123,6 +103,9 @@ void ofApp::setup()
     m_loadSharedVideo6Flag = false;
     m_loadSharedVideo7Flag = false;
     m_resetCurrentQuadFlag = false;
+	m_bezierSpherizeQuadFlag = false;
+	m_bezierSpherizeQuadStrongFlag = false;
+	m_bezierResetQuadFlag = false;
 
     // setup shaders
     edgeBlendShader.load("shaders/blend.vert", "shaders/blend.frag");
@@ -579,33 +562,33 @@ void ofApp::draw()
 //}
 
 //--------------------------------------------------------------
-void ofApp::keyPressed(int key)
+void ofApp::keyPressed(ofKeyEventArgs& args)
 {
     if(bMidiHotkeyCoupling){
         bMidiHotkeyLearning = true;
-        midiHotkeyPressed = key;
+        midiHotkeyPressed = args.key;
     } else {
 
     if(ofGetKeyPressed(OF_KEY_CONTROL) && ofGetKeyPressed('q')){
         ofExit(1);
     } else
-    if ( key == '+' && !bTimeline && !bGui)
+    if (args.key == '+' && !bTimeline && !bGui)
     {
         raiseLayer(); // moves active layer one position up
     } else
-    if ( key == '-' && !bTimeline && !bGui)
+    if (args.key == '-' && !bTimeline && !bGui)
     {
         lowerLayer(); // moves active layer one position down
     } else
-    if ( (key == 's' || key == 'S') && !bTimeline)
+    if ( (args.key == 's' || args.key == 'S') && !bTimeline)
     {
         saveProject(); // saves quads settings to an .xml project file in data directory
     } else
-    if ((key == 'l') && !bTimeline)
+    if ((args.key == 'l') && !bTimeline)
     {
         loadProject(); // let the user choose an .xml project file with all the quads settings and loads it
     } else
-    if (key == 'w' && !bTimeline)
+    if (args.key == 'w' && !bTimeline)
     {
         if (m_cameras.size() > 0) // if cameras are connected, take a snapshot of the specified camera and uses it as window background
         {
@@ -624,7 +607,7 @@ void ofApp::keyPressed(int key)
             ofLogError() << "Can't take a snapshot background picture. No camera connected.";
         }
     } else
-    if (key == 'W' && !bTimeline)
+    if (args.key == 'W' && !bTimeline)
     {
         m_isSnapshotTextureOn = !m_isSnapshotTextureOn; // loads an image file and uses it as window background
         if (m_isSnapshotTextureOn)
@@ -634,7 +617,7 @@ void ofApp::keyPressed(int key)
             m_snapshotBackgroundTexture.loadData(image.getPixels().getData(), image.getWidth(), image.getHeight(), GL_RGB);
         }
     } else
-    if ( (key =='q' || key == 'Q') && !bTimeline)
+    if ( (args.key =='q' || args.key == 'Q') && !bTimeline)
     {
         if (isSetup)
         {
@@ -644,7 +627,7 @@ void ofApp::keyPressed(int key)
             quads[activeQuad].corners[3] = ofPoint(0.0, 1.0);
         }
     } else
-    if ( key =='>' && !bTimeline)
+    if (args.key =='>' && !bTimeline)
     {
         if (isSetup)
         {
@@ -658,7 +641,7 @@ void ofApp::keyPressed(int key)
         }
         m_gui.updatePages(quads[activeQuad]);
     } else
-    if ( key =='<' && !bTimeline)
+    if (args.key =='<' && !bTimeline)
     {
         if (isSetup)
         {
@@ -681,7 +664,7 @@ void ofApp::keyPressed(int key)
         copyQuadSettings(m_sourceQuadForCopying); // paste settings from source surface to currently active surface
     } else
     // goes to first page of gui for active quad or, in mask edit mode, delete last drawn point
-    if ( (key == OF_KEY_F2) && !bTimeline)
+    if ( (args.key == OF_KEY_F2) && !bTimeline)
     {
         if(maskSetup && quads[activeQuad].m_maskPoints.size() > 0)
         {
@@ -692,7 +675,7 @@ void ofApp::keyPressed(int key)
             m_gui.showPage(2);
         }
     } else
-    if ( (key == 'd' || key == 'D') && !bTimeline)
+    if ( (args.key == 'd' || args.key == 'D') && !bTimeline)
     {
         if(maskSetup && quads[activeQuad].m_maskPoints.size() > 0)
         {
@@ -703,26 +686,26 @@ void ofApp::keyPressed(int key)
 
         }
     } else
-    if ( (key == OF_KEY_F3) && !bTimeline) // goes to second page of gui for active quad
+    if ( (args.key == OF_KEY_F3) && !bTimeline) // goes to second page of gui for active quad
     {
         m_gui.showPage(3);
     } else
-    if ( (key == 'c' || key == 'C') && !bTimeline)  // goes to third page of gui for active quad or, in edit mask mode, clears mask
+    if ( (args.key == 'c' || args.key == 'C') && !bTimeline)  // goes to third page of gui for active quad or, in edit mask mode, clears mask
     {
         if(maskSetup)
         {
             quads[activeQuad].m_maskPoints.clear();
         }
     } else
-    if (key == OF_KEY_F4)
+    if (args.key == OF_KEY_F4)
     {
         m_gui.showPage(4);
     } else
-    if(key == OF_KEY_F1 && !bTimeline) // show general settings page of gui
+    if(args.key == OF_KEY_F1 && !bTimeline) // show general settings page of gui
     {
         m_gui.showPage(1);
     } else
-    if ( (key =='a' || key == 'A') && !bTimeline) // adds a new quad in the middle of the screen
+    if ( (args.key =='a' || args.key == 'A') && !bTimeline) // adds a new quad in the middle of the screen
     {
         if (isSetup)
         {
@@ -800,11 +783,11 @@ void ofApp::keyPressed(int key)
 //        quads[activeQuad].corners[3] = ofPoint(0.0, 1.0);
 
     } else
-    if ( key ==' ' && !bTimeline) // toggles setup mode
+    if (args.key ==' ' && !bTimeline) // toggles setup mode
     {
         toggleSetupMode();
     } else
-    if((key == 'f' || key == 'F') && !bTimeline) // toggles fullscreen mode
+    if((args.key == 'f' || args.key == 'F') && !bTimeline) // toggles fullscreen mode
     {
         bFullscreen = !bFullscreen;
         if(!bFullscreen)
@@ -820,7 +803,7 @@ void ofApp::keyPressed(int key)
             ofSetFullscreen(true);
         }
     } else
-    if((key == 'g' || key == 'G') && !bTimeline) // toggles gui
+    if((args.key == 'g' || args.key == 'G') && !bTimeline) // toggles gui
     {
         if (maskSetup) {
             maskSetup = false;
@@ -835,7 +818,7 @@ void ofApp::keyPressed(int key)
         m_gui.toggleDraw();
         bGui = !bGui;
     } else
-    if((key == 'm' || key == 'M') && !bTimeline)     // toggles mask editing
+    if((args.key == 'm' || args.key == 'M') && !bTimeline)     // toggles mask editing
     {
         if (!bGui){
         maskSetup = !maskSetup;
@@ -848,7 +831,7 @@ void ofApp::keyPressed(int key)
             }
         }
     } else
-    if((key == 'b'|| key == 'B') && !bTimeline) // toggles bezier deformation editing
+    if((args.key == 'b'|| args.key == 'B') && !bTimeline) // toggles bezier deformation editing
     {
         if (!bGui){
         gridSetup = !gridSetup;
@@ -861,36 +844,36 @@ void ofApp::keyPressed(int key)
             }
         }
     } else
-    if(key == '[' && !bTimeline)
+    if(args.key == '[' && !bTimeline)
     {
         m_gui.prevPage();
     } else
-    if(key == ']' && !bTimeline)
+    if(args.key == ']' && !bTimeline)
     {
         m_gui.nextPage();
     } else
-    if((key == 'r' || key == 'R') && !bTimeline) // resyncs videos to start point in every quad
+    if((args.key == 'r' || args.key == 'R') && !bTimeline) // resyncs videos to start point in every quad
     {
         resync();
     } else
-    if((key == 'p' || key == 'P') && !bTimeline)   // starts and stops rendering
+    if((args.key == 'p' || args.key == 'P') && !bTimeline)   // starts and stops rendering
     {
         startProjection();
     } else
-    if((key == 'o' || key == 'O') && !bTimeline)
+    if((args.key == 'o' || args.key == 'O') && !bTimeline)
     {
         stopProjection();
     } else
-    if((key == 'n' || key == 'N') && !bTimeline)
+    if((args.key == 'n' || args.key == 'N') && !bTimeline)
     {
      //   mpeSetup();
     } else
-    if((key == 'h' || key == 'H' || key == OF_KEY_F1) && !bTimeline) // displays help in system dialog
+    if((args.key == 'h' || args.key == 'H' || args.key == OF_KEY_F1) && !bTimeline) // displays help in system dialog
     {
         ofBuffer buf = ofBufferFromFile("help_keys.txt");
         ofSystemAlertDialog(buf);
     } else
-    if(key == OF_KEY_F11 && bTimeline) // show-hide stage when timeline is shown
+    if(args.key == OF_KEY_F11 && bTimeline) // show-hide stage when timeline is shown
     {
         if(bStarted)
         {
@@ -927,7 +910,7 @@ void ofApp::keyPressed(int key)
     } else
     // toggle timeline
     #ifdef WITH_TIMELINE
-    if(key == OF_KEY_F10)
+    if(args.key == OF_KEY_F10)
     {
         bTimeline = !bTimeline;
         timeline.toggleShow();
@@ -954,17 +937,17 @@ void ofApp::keyPressed(int key)
             }
         }
     } else
-    if(key == OF_KEY_F12)          // toggle timeline playing
+    if(args.key == OF_KEY_F12)          // toggle timeline playing
     {
         timeline.togglePlay();
     } else
-    if(key == OF_KEY_F9 && bTimeline)    // toggle timeline BPM grid drawing
+    if(args.key == OF_KEY_F9 && bTimeline)    // toggle timeline BPM grid drawing
     {
         timeline.toggleShowBPMGrid();
     } else
     #endif
 
-    if(key == '*' && !bTimeline)
+    if(args.key == '*' && !bTimeline)
     {
         if (m_cameras.size() > 0) {
 
@@ -978,7 +961,7 @@ void ofApp::keyPressed(int key)
             }
         }
     } else
-    if(key == '#' && !bTimeline) // rotation of surface around its center
+    if(args.key == '#' && !bTimeline) // rotation of surface around its center
     {
         ofMatrix4x4 rotation;
         ofMatrix4x4 centerToOrigin;
@@ -993,7 +976,7 @@ void ofApp::keyPressed(int key)
             quads[activeQuad].corners[i] = quads[activeQuad].corners[i] * resultingMatrix;
         }
     } else
-    if(key == '$' && !bTimeline)
+    if(args.key == '$' && !bTimeline)
     {
         ofMatrix4x4 rotation;
         ofMatrix4x4 centerToOrigin;
@@ -1011,7 +994,7 @@ void ofApp::keyPressed(int key)
 
     } //end keys
 
-    if ( key == OF_KEY_F5)
+    if (args.key == OF_KEY_F5)
     {
         bMidiHotkeyCoupling = !bMidiHotkeyCoupling;
         bMidiHotkeyLearning = false;

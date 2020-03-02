@@ -77,25 +77,25 @@ void ofApp::parseOsc()
 
 
     // resync
-    else if ( m.getAddress() == "/projection/resync" )
+    if ( m.getAddress() == "/projection/resync" )
     {
         resync();
     }
 
     // stop
-    else if ( m.getAddress() == "/projection/stop" )
+    if ( m.getAddress() == "/projection/stop" )
     {
         stopProjection();
     }
 
     // start
-    else if ( m.getAddress() == "/projection/start" )
+    if ( m.getAddress() == "/projection/start" )
     {
         startProjection();
     }
 
     // save
-    else if ( m.getAddress() == "/projection/save" )
+    if ( m.getAddress() == "/projection/save" )
     {
         ofFileDialogResult dialog_result = ofSystemSaveDialog("lpmt_settings.xml", "Save settings file (.xml)");
 
@@ -323,7 +323,7 @@ void ofApp::parseOsc()
 //------------------------------------------------------
 
     // change active quad
-    else if ( m.getAddress() == "/active/set" )
+    if ( m.getAddress() == "/active/set" )
     {
         // argument is int32
         int osc_activequad = m.getArgAsInt32( 0 );
@@ -352,7 +352,7 @@ void ofApp::parseOsc()
     }
 
     // use timeline color
-    else if ( m.getAddress() == "/active/timeline/color" )
+    if ( m.getAddress() == "/active/timeline/color" )
     {
         // argument is int32
         int osc_quad_bTimelineColor = m.getArgAsInt32( 0 );
@@ -397,7 +397,7 @@ void ofApp::parseOsc()
     }
 
     // img stuff on active quad
-    else if ( m.getAddress() == "/active/img" )
+    if ( m.getAddress() == "/active/img" )
     {
         quads[activeQuad].imgBg = !quads[activeQuad].imgBg;
     }
@@ -511,7 +511,7 @@ void ofApp::parseOsc()
 
 
     // blendModes on/off
-    else if ( m.getAddress() == "/active/blendmodes/show" )
+    if ( m.getAddress() == "/active/blendmodes/show" )
     {
         // argument is int32
         int osc_quad_bBlendModes = m.getArgAsInt32( 0 );
@@ -537,7 +537,7 @@ void ofApp::parseOsc()
     }
 
     // solid color stuff
-    else if ( m.getAddress() == "/active/solid" )
+    if ( m.getAddress() == "/active/solid" )
     {
         quads[activeQuad].colorBg = !quads[activeQuad].colorBg;
     }
@@ -668,7 +668,7 @@ void ofApp::parseOsc()
 
 
     // mask stuff on active quad
-    else if ( m.getAddress() == "/active/mask" )
+    if ( m.getAddress() == "/active/mask" )
     {
         quads[activeQuad].bMask = !quads[activeQuad].bMask;
     }
@@ -706,7 +706,7 @@ void ofApp::parseOsc()
     // deform stuff
 
     // deform on/off
-    else if ( m.getAddress() == "/active/deform/show" )
+    if ( m.getAddress() == "/active/deform/show" )
     {
         // argument is int32
         int osc_quad_bDeform = m.getArgAsInt32( 0 );
@@ -792,7 +792,7 @@ void ofApp::parseOsc()
 
     // edge-blend stuff
     // edge-blend on/off
-    else if ( m.getAddress() == "/active/edgeblend/show" )
+    if ( m.getAddress() == "/active/edgeblend/show" )
     {
         // argument is int32
         int osc_quad_edgeBlendBool = m.getArgAsInt32( 0 );
@@ -870,7 +870,7 @@ void ofApp::parseOsc()
 
     // content displacement
     // displacement X
-    else if ( m.getAddress() == "/active/placement/x" )
+    if ( m.getAddress() == "/active/placement/x" )
     {
         // argument is int32
         int osc_quad_quadDispX = m.getArgAsInt32( 0 );
@@ -930,7 +930,7 @@ void ofApp::parseOsc()
     }
 
     // video stuff on active quad
-    else if ( m.getAddress() == "/active/video" )
+    if ( m.getAddress() == "/active/video" )
     {
         quads[activeQuad].videoBg = !quads[activeQuad].videoBg;
     }
@@ -1090,8 +1090,7 @@ void ofApp::parseOsc()
     }
 
     // camera stuff
-
-    else if ( m.getAddress() == "/active/cam" )
+    if ( m.getAddress() == "/active/cam" )
     {
         quads[activeQuad].camBg = !quads[activeQuad].camBg;
     }
@@ -1333,7 +1332,7 @@ void ofApp::parseOsc()
 
 
     // kinect stuff
-    else if ( m.getAddress() == "/active/kinect" )
+    if ( m.getAddress() == "/active/kinect" )
     {
         quads[activeQuad].kinectBg = !quads[activeQuad].kinectBg;
     }
@@ -1586,7 +1585,7 @@ void ofApp::parseOsc()
     }
 #endif
 
-    else if ( m.getAddress() == "/active/crop/rectangular/top" )
+    if ( m.getAddress() == "/active/crop/rectangular/top" )
     {
         // arguments are f
         float crop_top = m.getArgAsFloat(0);
@@ -1702,7 +1701,9 @@ void ofApp::parseOsc()
                     {
                         if(m.getArgAsInt32(0) == oscControl.getArgAsInt32(0))
                         {
-                            keyPressed(oscHotkeyKeys[i]);
+							ofKeyEventArgs e;
+							e.key = oscHotkeyKeys[i];
+                            keyPressed(e);
                             keyFound = true;
                             }
                         }
@@ -1710,7 +1711,9 @@ void ofApp::parseOsc()
                     {
                         if(m.getArgAsFloat(0) == oscControl.getArgAsFloat(0))
                         {
-                            keyPressed(oscHotkeyKeys[i]);
+							ofKeyEventArgs e;
+							e.key = oscHotkeyKeys[i];
+							keyPressed(e);
                             keyFound = true;
                             }
                         }
@@ -1718,13 +1721,17 @@ void ofApp::parseOsc()
                     {
                         if(m.getArgAsString(0) == oscControl.getArgAsString(0))
                         {
-                            keyPressed(oscHotkeyKeys[i]);
+							ofKeyEventArgs e;
+							e.key = oscHotkeyKeys[i];
+							keyPressed(e);
                             keyFound = true;
                             }
                         }
                     else if(m.getNumArgs()==0)
                     {
-                        keyPressed(oscHotkeyKeys[i]);
+						ofKeyEventArgs e;
+						e.key = oscHotkeyKeys[i];
+						keyPressed(e);
                         keyFound = true;
                         }
                     }

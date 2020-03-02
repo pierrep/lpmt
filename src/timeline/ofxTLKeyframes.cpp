@@ -354,7 +354,7 @@ string ofxTLKeyframes::getXMLStringForKeyframes(vector<ofxTLKeyframe*>& keys){
 bool ofxTLKeyframes::mousePressed(ofMouseEventArgs& args, long millis){
 	
 	ofVec2f screenpoint = ofVec2f(args.x, args.y);
-	keysAreStretchable = ofGetModifierShiftPressed() && ofGetModifierControlPressed();
+	keysAreStretchable = ofGetModifierShiftPressed(args) && ofGetModifierControlPressed(args);
     keysDidDrag = false;
 	if(keysAreStretchable && timeline->getTotalSelectedItems() > 1){
 		unsigned long long minSelected = timeline->getEarliestSelectedTime();
@@ -374,11 +374,11 @@ bool ofxTLKeyframes::mousePressed(ofMouseEventArgs& args, long millis){
 		return true;
 	}
 	
-    keysAreDraggable = !ofGetModifierShiftPressed();
+    keysAreDraggable = !ofGetModifierShiftPressed(args);
 	selectedKeyframe =  keyframeAtScreenpoint(screenpoint);
     //if we clicked OFF of a keyframe OR...
     //if we clicked on a keyframe outside of the current selection and we aren't holding down shift, clear all
-    if(!ofGetModifierSelection() && (isActive() || selectedKeyframe != NULL) ){
+    if(!ofGetModifierSelection(args) && (isActive() || selectedKeyframe != NULL) ){
         bool didJustDeselect = false;
 	    if( selectedKeyframe == NULL || !isKeyframeSelected(selectedKeyframe)){
             //settings this to true causes the first click off of the timeline to deselct rather than create a new keyframe
@@ -388,7 +388,7 @@ bool ofxTLKeyframes::mousePressed(ofMouseEventArgs& args, long millis){
 
         //if we didn't just deselect everything and clicked in an empty space add a new keyframe there
         if(selectedKeyframe == NULL && !didJustDeselect){
-			createNewOnMouseup = args.button == 0 && !ofGetModifierControlPressed();
+			createNewOnMouseup = args.button == 0 && !ofGetModifierControlPressed(args);
         }
     }
 
@@ -400,7 +400,7 @@ bool ofxTLKeyframes::mousePressed(ofMouseEventArgs& args, long millis){
 //			selectKeyframe(selectedKeyframe);
         }
         //unselect it if it's selected and we clicked the key with shift pressed
-        else if(ofGetModifierSelection()){
+        else if(ofGetModifierSelection(args)){
         	deselectKeyframe(selectedKeyframe);
 			selectedKeyframe = NULL;
         }
@@ -411,7 +411,7 @@ bool ofxTLKeyframes::mousePressed(ofMouseEventArgs& args, long millis){
         updateDragOffsets(screenpoint, millis);
 		if(selectedKeyframe != NULL){
 
-			if(args.button == 0 && !ofGetModifierSelection() && !ofGetModifierControlPressed()){
+			if(args.button == 0 && !ofGetModifierSelection(args) && !ofGetModifierControlPressed(args)){
 
 	            timeline->setDragTimeOffset(selectedKeyframe->grabTimeOffset);
 				//move the playhead
@@ -419,7 +419,7 @@ bool ofxTLKeyframes::mousePressed(ofMouseEventArgs& args, long millis){
 					timeline->setCurrentTimeMillis(selectedKeyframe->time);
 				}
 			}
-			if(args.button == 2 || ofGetModifierControlPressed()){
+			if(args.button == 2 || ofGetModifierControlPressed(args)){
 				selectedKeySecondaryClick(args);
 			}
 		}

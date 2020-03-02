@@ -244,10 +244,10 @@ bool ofxTLSwitches::mousePressed(ofMouseEventArgs& args, long millis){
     //mulitple fields at once
     if(clickedTextField != NULL){
         timeline->presentedModalContent(this);
-        if(!ofGetModifierSelection()){
+        if(!ofGetModifierSelection(args)){
             timeline->unselectAll();
         }
-		if(ofGetModifierSelection() && clickedTextField->textField.getIsEditing()){
+		if(ofGetModifierSelection(args) && clickedTextField->textField.getIsEditing()){
 			clickedTextField->textField.endEditing();
 		}
 		else{
@@ -284,7 +284,7 @@ bool ofxTLSwitches::mousePressed(ofMouseEventArgs& args, long millis){
 		return false;
 	}
 	
-	keysAreDraggable = !ofGetModifierSelection();
+	keysAreDraggable = !ofGetModifierSelection(args);
 	
     //check to see if we are close to any edges, if so select them
     bool startSelected = false;
@@ -296,11 +296,11 @@ bool ofxTLSwitches::mousePressed(ofMouseEventArgs& args, long millis){
             ofxTLSwitch* switchKey = (ofxTLSwitch*)keyframes[i];
             //unselect everything else if we just clicked this edge without shift held down
             startSelected = abs(switchKey->display.x - args.x) < 10.0;
-            if (startSelected && !switchKey->startSelected && !ofGetModifierSelection()) {
+            if (startSelected && !switchKey->startSelected && !ofGetModifierSelection(args)) {
                 timeline->unselectAll();
             }
             //Deselect the key if we clicked it already selected with shift held down
-            if(ofGetModifierSelection() && ((startSelected && switchKey->startSelected) || isKeyframeSelected(switchKey))){
+            if(ofGetModifierSelection(args) && ((startSelected && switchKey->startSelected) || isKeyframeSelected(switchKey))){
                 switchKey->startSelected = false;    
             }
             else {
@@ -309,11 +309,11 @@ bool ofxTLSwitches::mousePressed(ofMouseEventArgs& args, long millis){
             float endEdge = switchKey->display.x+switchKey->display.width;
             endSelected = abs(endEdge - args.x) < 10.0;
             //don't let them both be selected in one click!
-            if(!startSelected && endSelected && !switchKey->endSelected && !ofGetModifierSelection()){
+            if(!startSelected && endSelected && !switchKey->endSelected && !ofGetModifierSelection(args)){
                 timeline->unselectAll();
             }
             //Deselect the key if we clicked it already selected with shift held down
-            if(ofGetModifierSelection() && ((endSelected && switchKey->endSelected) || isKeyframeSelected(switchKey))){
+            if(ofGetModifierSelection(args) && ((endSelected && switchKey->endSelected) || isKeyframeSelected(switchKey))){
                 switchKey->endSelected = false;    
             }
             else{
@@ -497,7 +497,7 @@ void ofxTLSwitches::mouseReleased(ofMouseEventArgs& args, long millis){
     //take off the typing mode. Hitting enter will also do this
     if(enteringText){
 		//if we clicked outside of the rect, definitely deslect everything
-		if(clickedTextField == NULL && !ofGetModifierSelection()){
+		if(clickedTextField == NULL && !ofGetModifierSelection(args)){
 			for(int i = 0; i < selectedKeyframes.size(); i++){
 				((ofxTLSwitch*)selectedKeyframes[i])->textField.endEditing();
 			}

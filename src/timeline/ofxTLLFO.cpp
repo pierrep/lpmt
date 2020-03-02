@@ -384,7 +384,7 @@ void ofxTLLFO::mouseReleased(ofMouseEventArgs& args, long millis){
 				draggedValue = false;
 			}
 		}
-		if(args.button == 0 && !ofGetModifierControlPressed() && !lfoRect.inside(args.x, args.y) && mouseDownRect == NULL){
+		if(args.button == 0 && !ofGetModifierControlPressed(args) && !lfoRect.inside(args.x, args.y) && mouseDownRect == NULL){
 			timeline->dismissedModalContent();
 			drawingLFORect = false;
 		}

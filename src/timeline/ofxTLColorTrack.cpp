@@ -311,7 +311,7 @@ void ofxTLColorTrack::mouseDragged(ofMouseEventArgs& args, long millis){
 void ofxTLColorTrack::mouseReleased(ofMouseEventArgs& args, long millis){
 	if(drawingColorWindow){
 		//if(args.button == 0 && !colorWindow.inside(args.x, args.y) ){
-		if(args.button == 0 && !clickedInColorRect && !ofGetModifierControlPressed()){
+		if(args.button == 0 && !clickedInColorRect && !ofGetModifierControlPressed(args)){
 			ofxTLColorSample* selectedSample = (ofxTLColorSample*)selectedKeyframe;
 			if(selectedSample->color != colorAtClickTime){
 				timeline->flagTrackModified(this);

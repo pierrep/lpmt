@@ -190,7 +190,7 @@ void ofxTLPage::mousePressed(ofMouseEventArgs& args, long millis){
 		
         refreshSnapPoints();
 
-		if(!footerIsDragging && (headerHasFocus || timeline->getTotalSelectedItems() == 0 || ofGetModifierShiftPressed()) ){
+		if(!footerIsDragging && (headerHasFocus || timeline->getTotalSelectedItems() == 0 || ofGetModifierShiftPressed(args)) ){
             draggingSelectionRectangle = true;
             selectionRectangleAnchor = ofVec2f(args.x,args.y);
             selectionRectangle = ofRectangle(args.x,args.y,0,0);
@@ -310,7 +310,7 @@ void ofxTLPage::mouseReleased(ofMouseEventArgs& args, long millis){
 	}
 
 	if(draggingSelectionRectangle && selectionRectangle.getArea() != 0){
-		if(!ofGetModifierSelection() ){
+		if(!ofGetModifierSelection(args) ){
 			timeline->unselectAll();
 		}
 

@@ -1248,7 +1248,7 @@ void ofxTimeline::mouseReleased(ofMouseEventArgs& args){
 
 void ofxTimeline::keyPressed(ofKeyEventArgs& args){
 	
-    //cout << "key event " << args.key << " z? " << int('z') << " ctrl? " << ofGetModifierControlPressed() << " " << ofGetModifierShiftPressed() << " short cut? " << ofGetModifierShortcutKeyPressed() << endl;
+    //cout << "key event " << args.key << " z? " << int('z') << " ctrl? " << ofGetModifierControlPressed(args) << " " << ofGetModifierShiftPressed(args) << " short cut? " << ofGetModifierShortcutKeyPressed(args) << endl;
 
 	if(modalTrack != NULL){
 		collectStateBuffers();
@@ -1263,8 +1263,8 @@ void ofxTimeline::keyPressed(ofKeyEventArgs& args){
 
 	if(!timelineHasFocus) return;
 	
-	if(undoEnabled && ofGetModifierShortcutKeyPressed() && (args.key == 'z' || args.key == 'z'-96)){
-		if(ofGetModifierShiftPressed()){
+	if(undoEnabled && ofGetModifierShortcutKeyPressed(args) && (args.key == 'z' || args.key == 'z'-96)){
+		if(ofGetModifierShiftPressed(args)){
 			redo();
 		}
 		else{
@@ -1277,7 +1277,7 @@ void ofxTimeline::keyPressed(ofKeyEventArgs& args){
     collectStateBuffers();
     
     
-	if(ofGetModifierShortcutKeyPressed()){
+	if(ofGetModifierShortcutKeyPressed(args)){
 		if(args.key == 'c' || args.key == 'c'-96){ //copy
 			vector<string> copyattempt;
 			currentPage->copyRequest(copyattempt);
@@ -1298,7 +1298,7 @@ void ofxTimeline::keyPressed(ofKeyEventArgs& args){
 			}				
 		}
 		else if(args.key == 'a' || args.key == 'a'-96){ //select all
-			if(!ofGetModifierShiftPressed()){
+			if(!ofGetModifierShiftPressed(args)){
 				unselectAll();
 			}
 			currentPage->selectAll();						
@@ -1307,9 +1307,9 @@ void ofxTimeline::keyPressed(ofKeyEventArgs& args){
 			save();
 		}
 	}
-	else if(ofGetModifierAltPressed()){
+	else if(ofGetModifierAltPressed(args)){
 		if(args.key == 'c' || args.key == 'c'-96 || args.key == 'C' || args.key == 'C'-96){
-			if(ofGetModifierShiftPressed()){
+			if(ofGetModifierShiftPressed(args)){
 				currentPage->evenlyDistributeTrackHeights();
 			}
 			else{
@@ -1326,7 +1326,7 @@ void ofxTimeline::keyPressed(ofKeyEventArgs& args){
 	}
 	else{
 		if(args.key >= OF_KEY_LEFT && args.key <= OF_KEY_DOWN){
-			ofVec2f nudgeAmount = ofGetModifierShiftPressed() ? getBigNudgePercent() : getNudgePercent();
+			ofVec2f nudgeAmount = ofGetModifierShiftPressed(args) ? getBigNudgePercent() : getNudgePercent();
 
 			if(getTotalSelectedItems() == 0){
 				if(args.key == OF_KEY_LEFT){
