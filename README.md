@@ -4,7 +4,7 @@ Rewrite of the Little Projection Mapping Tool (http://projection-mapping.org/too
 This is a fork of LPMT meant to clean up the original codebase and keep the application alive.
 The application is built using OpenFrameworks and therefore can be built for Linux/Mac/Windows
 
-The current build uses openFrameworks 0.10.1
+The current build uses openFrameworks 0.11.0
 
 The original LPMT code can be found here: https://github.com/hvfrancesco/lpmt
 
@@ -19,5 +19,24 @@ The original LPMT code can be found here: https://github.com/hvfrancesco/lpmt
 
 Bug fixes or reports are welcome!
 
+## Installation instructions
 
+You'll need to add the following addons to your Addons folder:
+
+- https://github.com/danomatika/ofxMidi.git
+
+### Linux
+Type ```Make``` or using the provided QtCreator project.
+
+
+### Windows
+Currently built using VS2017
+
+In order to support audio tracks (not yet supported but may be in the future) you'll need to install:
+
+ - OpenAL SDK http://openal.org/downloads/
+ - Libsndfile SDK (http://www.mega-nerd.com/libsndfile/)
+ 
+ The included project points to their default location.
+ 
 
