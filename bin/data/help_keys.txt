@@ -30,7 +30,8 @@ KEY COMMANDS:
 
 'n' - connects to a MostPixelsEver sync server
 
-'F10' - toggles timeline interface
-'F9' - toggles timeline BPM reference grid
-'F11' - toggles stage visibility under timeline
-'F12' - play/stop timeline
+'F10'    - toggles timeline interface
+'F9'     - toggles timeline BPM reference grid
+'F11'    - toggles stage visibility under timeline
+'F12'    - play/stop timeline
+'CTRL-q' - Quits the application

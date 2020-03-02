@@ -41,7 +41,7 @@ ofxSimpleGuiConfig defaultSimpleGuiConfig;
 
 ofxSimpleGuiConfig::ofxSimpleGuiConfig() {
 
-	sliderHeight		= 4; // 10 must be even number, otherwise labels will be badly rendered, don't know why
+	sliderHeight		= 10; // 10 must be even number, otherwise labels will be badly rendered, don't know why
 	colorSliderHeight	= 16;
 	sliderTextHeight	= 36;
 	titleHeight			= sliderHeight + sliderTextHeight;
