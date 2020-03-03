@@ -1682,7 +1682,6 @@ void ofApp::setupCameras()
         // check if the camera is available and eventually push it to cameras vector
         if (!isVideoGrabberInitialized || actualCameraWidth == 0 || actualCameraHeight == 0)
         {
-            ofSystemAlertDialog("Camera with ID " + ofToString(cameraID) + " was requested, but was not found or is not available.");
             ofLogWarning("LPMT") << "Camera with ID " << cameraID << " was requested, but was not found or is not available.";
         }
         else

@@ -759,25 +759,6 @@ void quad::draw(vector<ofVideoPlayer> &sharedVideos)
         // draw an image ------------------------------------------------------------------------------
         if (imgBg)
         {
-            if (imgHFlip || imgVFlip)
-            {
-                glPushMatrix();
-                if(imgHFlip && !imgVFlip)
-                {
-                    ofTranslate(img.getWidth()*imgMultX*screenFactorX,0);
-                    glScalef(-1,1,1);
-                }
-                else if(imgVFlip && !imgHFlip)
-                {
-                    ofTranslate(0,img.getHeight()*imgMultY*screenFactorY);
-                    glScalef(1,-1,1);
-                }
-                else
-                {
-                    ofTranslate(img.getWidth()*imgMultX*screenFactorX,img.getHeight()*imgMultY*screenFactorY);
-                    glScalef(-1,-1,1);
-                }
-            }
             ofSetColor(imgColorize.r * 255 * timelineRed, imgColorize.g * 255 * timelineGreen, imgColorize.b * 255 * timelineBlue, imgColorize.a * 255 * timelineAlpha);
 
             bool bUseHueSatLum = true;
@@ -804,6 +785,26 @@ void quad::draw(vector<ofVideoPlayer> &sharedVideos)
                     multY = fitY;
                 }
 
+                if (imgHFlip || imgVFlip)
+                {
+                    glPushMatrix();
+                    if(imgHFlip && !imgVFlip)
+                    {
+                        ofTranslate(img.getWidth()*multX,0);
+                        glScalef(-1,1,1);
+                    }
+                    else if(imgVFlip && !imgHFlip)
+                    {
+                        ofTranslate(0,img.getHeight()*multY);
+                        glScalef(1,-1,1);
+                    }
+                    else
+                    {
+                        ofTranslate(img.getWidth()*multX,img.getHeight()*multY);
+                        glScalef(-1,-1,1);
+                    }
+                }
+
                 if(bUseHueSatLum) {
                     hueSatLuminanceShader->begin();
                     hueSatLuminanceShader->setUniformTexture("tex", img.getTexture(),0 );
@@ -822,6 +823,26 @@ void quad::draw(vector<ofVideoPlayer> &sharedVideos)
                 }
 
             } else {
+                if (imgHFlip || imgVFlip)
+                {
+                    glPushMatrix();
+                    if(imgHFlip && !imgVFlip)
+                    {
+                        ofTranslate(img.getWidth()*imgMultX*screenFactorX,0);
+                        glScalef(-1,1,1);
+                    }
+                    else if(imgVFlip && !imgHFlip)
+                    {
+                        ofTranslate(0,img.getHeight()*imgMultY*screenFactorY);
+                        glScalef(1,-1,1);
+                    }
+                    else
+                    {
+                        ofTranslate(img.getWidth()*imgMultX*screenFactorX,img.getHeight()*imgMultY*screenFactorY);
+                        glScalef(-1,-1,1);
+                    }
+                }
+
                 if(bUseHueSatLum) {
                     hueSatLuminanceShader->begin();
                     hueSatLuminanceShader->setUniformTexture("tex", img.getTexture(),0 );
