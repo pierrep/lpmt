@@ -987,21 +987,6 @@ void ofApp::parseOsc()
         }
     }
 
-    // video greenscreen
-    else if ( m.getAddress() == "/active/video/greenscreen" )
-    {
-        // argument is int32
-        int osc_quad_videoGreenscreen = m.getArgAsInt32( 0 );
-        if(osc_quad_videoGreenscreen == 0)
-        {
-            quads[activeQuad].videoGreenscreen = false;
-        }
-        else if(osc_quad_videoGreenscreen == 1)
-        {
-            quads[activeQuad].videoGreenscreen = true;
-        }
-    }
-
     // camera stuff
     if ( m.getAddress() == "/active/cam" )
     {
@@ -1023,22 +1008,20 @@ void ofApp::parseOsc()
         }
     }
 
-    // cam greenscreen
-    else if ( m.getAddress() == "/active/cam/greenscreen" )
+    // greenscreen stuff
+    else if ( m.getAddress() == "/active/greenscreen" )
     {
         // argument is int32
-        int osc_quad_camGreenscreen = m.getArgAsInt32( 0 );
-        if(osc_quad_camGreenscreen == 0)
+        int osc_quad_useGreenscreen = m.getArgAsInt32( 0 );
+        if(osc_quad_useGreenscreen == 0)
         {
-            quads[activeQuad].camGreenscreen = false;
+            quads[activeQuad].useGreenscreen = false;
         }
-        else if(osc_quad_camGreenscreen == 1)
+        else if(osc_quad_useGreenscreen == 1)
         {
-            quads[activeQuad].camGreenscreen = true;
+            quads[activeQuad].useGreenscreen = true;
         }
     }
-
-    // greenscreen stuff
 
     // greenscreen threshold
     else if ( m.getAddress() == "/active/greenscreen/threshold" )
@@ -1118,34 +1101,6 @@ void ofApp::parseOsc()
         if(osc_quad_bgSlideshow <= slideshowFolders.size())
         {
             quads[activeQuad].bgSlideshow = osc_quad_bgSlideshow;
-        }
-    }
-
-    else if ( m.getAddress() == "/active/slideshow/fit" )
-    {
-        // argument is int32
-        int osc_quad_slideFit = m.getArgAsInt32( 0 );
-        if(osc_quad_slideFit == 0)
-        {
-            quads[activeQuad].slideFit = false;
-        }
-        else if(osc_quad_slideFit == 1)
-        {
-            quads[activeQuad].slideFit = true;
-        }
-    }
-
-    else if ( m.getAddress() == "/active/slideshow/keep_aspect" )
-    {
-        // argument is int32
-        int osc_quad_slideKeepAspect = m.getArgAsInt32( 0 );
-        if(osc_quad_slideKeepAspect == 0)
-        {
-            quads[activeQuad].slideKeepAspect = false;
-        }
-        else if(osc_quad_slideKeepAspect == 1)
-        {
-            quads[activeQuad].slideKeepAspect = true;
         }
     }
 

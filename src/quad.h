@@ -130,12 +130,11 @@ public:
     bool transBg;
     bool transUp;
     bool camBg;
-    bool camGreenscreen;
     bool imgBg;
     bool videoBg;
     bool videoSound;
     bool videoLoop;
-    bool videoGreenscreen;
+    bool useGreenscreen;
 
     //Shared videos
     bool sharedVideoBg;
@@ -145,8 +144,6 @@ public:
 
 
     bool slideshowBg;
-    bool slideFit;
-    bool slideKeepAspect;
     bool bFadeTransitions;
     bool imageFit;
     bool imageKeepAspect;

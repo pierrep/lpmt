@@ -112,8 +112,7 @@ void GUI::setupPages()
         if(m_app->m_cameras.size() > 1)
         {
             m_gui.addComboBox("select camera", m_dummyInt, m_app->m_cameras.size(), &(m_app->m_cameraIds[0]));
-        }
-        m_gui.addToggle("camera greenscreen", m_dummyBool);
+        }        
     }
 
     m_gui.addTitle("Video");
@@ -129,20 +128,21 @@ void GUI::setupPages()
     m_gui.addToggle("shared video tiling", m_dummyBool);
     m_gui.addSlider("shared video", m_dummyInt, 1, 8);
 
-    m_gui.addTitle("Mask").setNewColumn(true);
+    m_gui.addTitle("Slideshow").setNewColumn(true);
+    m_gui.addToggle("slideshow on/off", m_dummyBool);
+    m_gui.addButton("load slideshow", m_app->m_loadSlideshowFlag);
+    m_gui.addSlider("slide duration", m_dummyFloat, 0.1, 15.0);
+    m_gui.addToggle("fade transitions", m_dummyBool);
+
+    m_gui.addTitle("Greenscreen").setNewColumn(false);
+    m_gui.addToggle("greenscreen on/off", m_dummyBool);
+    m_gui.addSlider("g-screen threshold", m_dummyFloat, 0.0, 255.0);
+    m_gui.addColorPicker("greenscreen col", &m_dummyFloat);
+
+    m_gui.addTitle("Mask");
     m_gui.addToggle("mask on/off", m_dummyBool);
     m_gui.addToggle("invert mask", m_dummyBool);
     m_gui.addToggle("draw mask outline", m_dummyBool);
-
-    m_gui.addTitle("Surface deformation");
-    m_gui.addToggle("surface deform.", m_dummyBool);
-    m_gui.addToggle("use bezier", m_dummyBool);
-    m_gui.addToggle("use grid", m_dummyBool);
-    m_gui.addSlider("grid rows", m_dummyInt, 2, 15);
-    m_gui.addSlider("grid columns", m_dummyInt, 2, 20);
-    m_gui.addButton("spherize light", m_app->m_bezierSpherizeQuadFlag);
-    m_gui.addButton("spherize strong", m_app->m_bezierSpherizeQuadStrongFlag);
-    m_gui.addButton("reset bezier warp", m_app->m_bezierResetQuadFlag);
 
 
     // Page Two
@@ -156,6 +156,7 @@ void GUI::setupPages()
     m_gui.addSlider("right edge", m_dummyFloat, 0.0, 0.5);
     m_gui.addSlider("top edge", m_dummyFloat, 0.0, 0.5);
     m_gui.addSlider("bottom edge", m_dummyFloat, 0.0, 0.5);
+
     m_gui.addTitle("Content placement");
     m_gui.addSlider("X displacement", m_dummyInt, -1600, 1600);
     m_gui.addSlider("Y displacement", m_dummyInt, -1600, 1600);
@@ -163,16 +164,16 @@ void GUI::setupPages()
     m_gui.addSlider("Height", m_dummyInt, 0, 2400);
     m_gui.addButton("Reset", m_app->m_resetCurrentQuadFlag);
 
-    m_gui.addTitle("Greenscreen").setNewColumn(true);
-    m_gui.addSlider("g-screen threshold", m_dummyFloat, 0.0, 255.0);
-    m_gui.addColorPicker("greenscreen col", &m_dummyFloat);
-    m_gui.addTitle("Slideshow").setNewColumn(false);
-    m_gui.addToggle("slideshow on/off", m_dummyBool);
-    m_gui.addButton("load slideshow", m_app->m_loadSlideshowFlag);
-    m_gui.addSlider("slide duration", m_dummyFloat, 0.1, 15.0);
-    m_gui.addToggle("slides to quad size", m_dummyBool);
-    m_gui.addToggle("keep aspect ratio", m_dummyBool);
-    m_gui.addToggle("fade transitions", m_dummyBool);
+    m_gui.addTitle("Surface deformation").setNewColumn(true);
+    m_gui.addToggle("surface deform.", m_dummyBool);
+    m_gui.addToggle("use bezier", m_dummyBool);
+    m_gui.addToggle("use grid", m_dummyBool);
+    m_gui.addSlider("grid rows", m_dummyInt, 2, 15);
+    m_gui.addSlider("grid columns", m_dummyInt, 2, 20);
+    m_gui.addButton("spherize light", m_app->m_bezierSpherizeQuadFlag);
+    m_gui.addButton("spherize strong", m_app->m_bezierSpherizeQuadStrongFlag);
+    m_gui.addButton("reset bezier warp", m_app->m_bezierResetQuadFlag);
+
 
     #ifdef WITH_KINECT
     if(m_app->m_isKinectInitialized)
@@ -282,27 +283,28 @@ void GUI::updatePages(quad& activeQuad)
         {
             dynamic_cast<ofxSimpleGuiComboBox*>(firstPage.findControlByName("select camera"))->m_selectedChoice = &activeQuad.camNumber;
         }
-        dynamic_cast<ofxSimpleGuiToggle*>(firstPage.findControlByName("camera greenscreen"))->value = &activeQuad.camGreenscreen;
     }
 
     dynamic_cast<ofxSimpleGuiToggle*>(firstPage.findControlByName("video on/off"))->value = &activeQuad.videoBg;
     dynamic_cast<ofxSimpleGuiSliderFloat*>(firstPage.findControlByName("video volume"))->value = &activeQuad.videoVolume;
     dynamic_cast<ofxSimpleGuiSliderFloat*>(firstPage.findControlByName("video speed"))->value = &activeQuad.videoSpeed;
-    dynamic_cast<ofxSimpleGuiToggle*>(firstPage.findControlByName("video loop"))->value = &activeQuad.videoLoop;
-    dynamic_cast<ofxSimpleGuiToggle*>(firstPage.findControlByName("video greenscreen"))->value = &activeQuad.videoGreenscreen;
+    dynamic_cast<ofxSimpleGuiToggle*>(firstPage.findControlByName("video loop"))->value = &activeQuad.videoLoop;   
     dynamic_cast<ofxSimpleGuiToggle*>(firstPage.findControlByName("shared video on/off"))->value = &activeQuad.sharedVideoBg;
     dynamic_cast<ofxSimpleGuiToggle*>(firstPage.findControlByName("shared video tiling"))->value = &activeQuad.sharedVideoTiling;
     dynamic_cast<ofxSimpleGuiSliderInt*>(firstPage.findControlByName("shared video"))->value = &activeQuad.sharedVideoNum;
+
+    dynamic_cast<ofxSimpleGuiToggle*>(firstPage.findControlByName("slideshow on/off"))->value = &activeQuad.slideshowBg;
+    dynamic_cast<ofxSimpleGuiSliderFloat*>(firstPage.findControlByName("slide duration"))->value = &activeQuad.slideshowSpeed;
+    dynamic_cast<ofxSimpleGuiToggle*>(firstPage.findControlByName("fade transitions"))->value = &activeQuad.bFadeTransitions;
+
+    dynamic_cast<ofxSimpleGuiToggle*>(firstPage.findControlByName("greenscreen on/off"))->value = &activeQuad.useGreenscreen;
+    dynamic_cast<ofxSimpleGuiSliderFloat*>(firstPage.findControlByName("g-screen threshold"))->value = &activeQuad.thresholdGreenscreen;
+    dynamic_cast<ofxSimpleGuiColorPicker*>(firstPage.findControlByName("greenscreen col"))->value = &activeQuad.colorGreenscreen.r;
 
 
     dynamic_cast<ofxSimpleGuiToggle*>(firstPage.findControlByName("mask on/off"))->value = &activeQuad.bMask;
     dynamic_cast<ofxSimpleGuiToggle*>(firstPage.findControlByName("invert mask"))->value = &activeQuad.maskInvert;
     dynamic_cast<ofxSimpleGuiToggle*>(firstPage.findControlByName("draw mask outline"))->value = &activeQuad.bDrawMaskOutline;
-    dynamic_cast<ofxSimpleGuiToggle*>(firstPage.findControlByName("surface deform."))->value = &activeQuad.bDeform;
-    dynamic_cast<ofxSimpleGuiToggle*>(firstPage.findControlByName("use bezier"))->value = &activeQuad.bBezier;
-    dynamic_cast<ofxSimpleGuiToggle*>(firstPage.findControlByName("use grid"))->value = &activeQuad.bGrid;
-    dynamic_cast<ofxSimpleGuiSliderInt*>(firstPage.findControlByName("grid rows"))->value = &activeQuad.gridRows;
-    dynamic_cast<ofxSimpleGuiSliderInt*>(firstPage.findControlByName("grid columns"))->value = &activeQuad.gridColumns;
 
 
 
@@ -316,18 +318,17 @@ void GUI::updatePages(quad& activeQuad)
     dynamic_cast<ofxSimpleGuiSliderFloat*>(secondPage.findControlByName("right edge"))->value = &activeQuad.edgeBlendAmountDx;
     dynamic_cast<ofxSimpleGuiSliderFloat*>(secondPage.findControlByName("top edge"))->value = &activeQuad.edgeBlendAmountTop;
     dynamic_cast<ofxSimpleGuiSliderFloat*>(secondPage.findControlByName("bottom edge"))->value = &activeQuad.edgeBlendAmountBottom;
+
     dynamic_cast<ofxSimpleGuiSliderInt*>(secondPage.findControlByName("X displacement"))->value = &activeQuad.quadDispX;
     dynamic_cast<ofxSimpleGuiSliderInt*>(secondPage.findControlByName("Y displacement"))->value = &activeQuad.quadDispY;
     dynamic_cast<ofxSimpleGuiSliderInt*>(secondPage.findControlByName("Width"))->value = &activeQuad.quadW;
     dynamic_cast<ofxSimpleGuiSliderInt*>(secondPage.findControlByName("Height"))->value = &activeQuad.quadH;
 
-    dynamic_cast<ofxSimpleGuiSliderFloat*>(secondPage.findControlByName("g-screen threshold"))->value = &activeQuad.thresholdGreenscreen;
-    dynamic_cast<ofxSimpleGuiColorPicker*>(secondPage.findControlByName("greenscreen col"))->value = &activeQuad.colorGreenscreen.r;
-    dynamic_cast<ofxSimpleGuiToggle*>(secondPage.findControlByName("slideshow on/off"))->value = &activeQuad.slideshowBg;
-    dynamic_cast<ofxSimpleGuiSliderFloat*>(secondPage.findControlByName("slide duration"))->value = &activeQuad.slideshowSpeed;
-    dynamic_cast<ofxSimpleGuiToggle*>(secondPage.findControlByName("slides to quad size"))->value = &activeQuad.slideFit;
-    dynamic_cast<ofxSimpleGuiToggle*>(secondPage.findControlByName("keep aspect ratio"))->value = &activeQuad.slideKeepAspect;
-    dynamic_cast<ofxSimpleGuiToggle*>(secondPage.findControlByName("fade transitions"))->value = &activeQuad.bFadeTransitions;\
+    dynamic_cast<ofxSimpleGuiToggle*>(secondPage.findControlByName("surface deform."))->value = &activeQuad.bDeform;
+    dynamic_cast<ofxSimpleGuiToggle*>(secondPage.findControlByName("use bezier"))->value = &activeQuad.bBezier;
+    dynamic_cast<ofxSimpleGuiToggle*>(secondPage.findControlByName("use grid"))->value = &activeQuad.bGrid;
+    dynamic_cast<ofxSimpleGuiSliderInt*>(secondPage.findControlByName("grid rows"))->value = &activeQuad.gridRows;
+    dynamic_cast<ofxSimpleGuiSliderInt*>(secondPage.findControlByName("grid columns"))->value = &activeQuad.gridColumns;
 
     #ifdef WITH_KINECT
     if(m_app->m_isKinectInitialized)

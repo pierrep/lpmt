@@ -24,21 +24,18 @@ void quad::reset()
     transBg = false;
     transUp = true;
     camBg = false;
-    camGreenscreen = false;
     imgBg = false;
     videoBg = false;
     videoLoop = true;
-    videoGreenscreen = false;
     sharedVideoBg = false;
     sharedVideoTiling = false;
     sharedVideoNum = 1;
     sharedVideoId = sharedVideoNum - 1;
     slideshowBg = false;
-    slideFit = false;
-    slideKeepAspect = false;
     bFadeTransitions = false;
     imageFit = false;
     imageKeepAspect = false;
+    useGreenscreen = false;
 
     hue = 0.0f;
     saturation = 0.0f;
@@ -77,7 +74,7 @@ void quad::reset()
 
     // greenscreen setup
     colorGreenscreen = ofFloatColor(0, 0, 0, 0);
-    thresholdGreenscreen = 10;
+    thresholdGreenscreen = 0;
 
     kinectBg = false;
     kinectImg = false;
@@ -165,6 +162,11 @@ void quad::reset()
     bTimelineColor = false;
     bTimelineAlpha = false;
     bTimelineSlideChange = false;
+
+    if(video.isLoaded()) {
+        video.stop();
+        video.close();
+    }
 }
 
 //---------------------------------------------------------------
@@ -269,6 +271,9 @@ void quad::update()
         // video --------------------------------------------------------------------
         // loads video
         if (videoBg) {
+            if(video.isPaused()) {
+                video.setPaused(false);
+            }
             video.setVolume(videoVolume);
             // check for looping config parameter of video and sets loopstate - OF_LOOP_NORMAL = cycles / OF_LOOP_NONE = stops at the end
             if (videoLoop) {
@@ -285,6 +290,10 @@ void quad::update()
             if (previousSpeed != videoSpeed) {
                 video.setSpeed(videoSpeed);
                 previousSpeed = videoSpeed;
+            }
+        } else {
+            if(video.isLoaded()) {
+                video.setPaused(true);
             }
         }
 
@@ -948,27 +957,27 @@ void quad::drawSurface(vector<ofVideoPlayer>& sharedVideos)
         float srcHeight = 0;
         ofTexture imageTex;
         ofTexture imageTex2;
-        ofVec2f ratio = ofVec2f(1,1);
+        ofVec2f ratio = ofVec2f(1, 1);
         float fade = 0.0f;
 
-        if (imgBg) {
+        if (imgBg && (img.getWidth() > 0)) {
             srcWidth = img.getWidth();
             srcHeight = img.getHeight();
             imageTex = imageTex2 = img.getTexture();
-        } else if (camBg) {
+        } else if (camAvailable && camBg && cams[camNumber].getWidth() > 0) {
             srcWidth = cams[camNumber].getWidth();
             srcHeight = cams[camNumber].getHeight();
             imageTex = imageTex2 = cams[camNumber].getTexture();
-        } else if (videoBg) {
+        } else if (videoBg && video.isLoaded()) {
             srcWidth = video.getWidth();
             srcHeight = video.getHeight();
             imageTex = imageTex2 = video.getTexture();
 
-        } else if (sharedVideoBg) {
+        } else if (sharedVideoBg && sharedVideos[sharedVideoId].isLoaded()) {
             srcWidth = sharedVideos[sharedVideoId].getWidth();
             srcHeight = sharedVideos[sharedVideoId].getHeight();
             imageTex = imageTex2 = sharedVideos[sharedVideoId].getTexture();
-        } else if (slideshowBg) {
+        } else if (slideshowBg && (slides.size() > 0)) {
             // if we reached the end of slides vector, it loops back to first slide
             if (currentSlideId >= slides.size()) {
                 currentSlideId = 0;
@@ -1148,13 +1157,13 @@ bool quad::isValidContent(vector<ofVideoPlayer>& sharedVideos)
 //--------------------------------------------------------------
 void quad::drawContent(float w, float h, vector<ofVideoPlayer>& sharedVideos)
 {
-    if (imgBg) {
+    if (imgBg && img.getWidth() > 0) {
         img.draw(0, 0, w, h);
-    } else if (camBg) {
+    } else if (camAvailable && camBg && cams[camNumber].getWidth() > 0) {
         cams[camNumber].getTexture().draw(0, 0, w, h);
-    } else if (videoBg) {
+    } else if (videoBg && video.isLoaded()) {
         video.draw(0, 0, w, h);
-    } else if (sharedVideoBg) {
+    } else if (sharedVideoBg && sharedVideos[sharedVideoId].isLoaded()) {
         float x1 = ofGetWidth();
         float y1 = ofGetHeight();
         float x2 = 0.0f;
@@ -1186,7 +1195,7 @@ void quad::drawContent(float w, float h, vector<ofVideoPlayer>& sharedVideos)
         } else {
             sharedVideos[sharedVideoId].draw(0, 0, w, h);
         }
-    } else if (slideshowBg) {
+    } else if (slideshowBg && (slides.size() > 0)) {
 
         slides[currentSlideId].draw(0, 0, w, h);
 
@@ -1301,27 +1310,29 @@ ofPoint quad::getWarpedPoint(ofPoint point)
 //---------------------------------------------------------------
 void quad::loadImageFromFile(string imgName, string imgPath)
 {
-    // ofFile image(imgPath);
     imgBg = true;
-    img.load(imgPath);
-    bgImg = imgPath;
-    loadedImg = imgName;
+    bool bLoaded = img.load(imgPath);
+    if (bLoaded) {
+        bgImg = imgPath;
+        loadedImg = imgName;
+    }
 }
 
 //---------------------------------------------------------------
 void quad::loadVideoFromFile(string videoName, string videoPath)
 {
     videoBg = true;
-    bgVideo = videoPath;
-    loadedVideo = videoName;
     if (video.isLoaded()) {
         video.closeMovie();
     }
     video.load(videoPath);
-    videoWidth = video.getWidth();
-    videoHeight = video.getHeight();
-
-    video.play();
+    if (video.isLoaded()) {
+        bgVideo = videoPath;
+        loadedVideo = videoName;
+        videoWidth = video.getWidth();
+        videoHeight = video.getHeight();
+        video.play();
+    }
 }
 
 //---------------------------------------------------------------

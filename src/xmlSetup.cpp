@@ -55,8 +55,6 @@ void ofApp::saveCurrentSettingsToXMLFile(std::string xmlFilePath)
             xmlSettingsFile.setValue("QUADS:QUAD_"+ofToString(i)+":COLOR:TRANS:DURATION",quads[i].transDuration);
             xmlSettingsFile.setValue("QUADS:QUAD_"+ofToString(i)+":SLIDESHOW:ACTIVE",quads[i].slideshowBg);
             xmlSettingsFile.setValue("QUADS:QUAD_"+ofToString(i)+":SLIDESHOW:SPEED",quads[i].slideshowSpeed);
-            xmlSettingsFile.setValue("QUADS:QUAD_"+ofToString(i)+":SLIDESHOW:FIT",quads[i].slideFit);
-            xmlSettingsFile.setValue("QUADS:QUAD_"+ofToString(i)+":SLIDESHOW:KEEP_ASPECT",quads[i].slideKeepAspect);
             xmlSettingsFile.setValue("QUADS:QUAD_"+ofToString(i)+":SLIDESHOW:TRANSITIONS",quads[i].bFadeTransitions);
             xmlSettingsFile.setValue("QUADS:QUAD_"+ofToString(i)+":CAM:ACTIVE",quads[i].camBg);
             xmlSettingsFile.setValue("QUADS:QUAD_"+ofToString(i)+":IMG:ACTIVE",quads[i].imgBg);
@@ -97,6 +95,13 @@ void ofApp::saveCurrentSettingsToXMLFile(std::string xmlFilePath)
 
             xmlSettingsFile.setValue("QUADS:QUAD_"+ofToString(i)+":BLENDING:ON",quads[i].bBlendModes);
             xmlSettingsFile.setValue("QUADS:QUAD_"+ofToString(i)+":BLENDING:MODE",quads[i].blendMode);
+
+            xmlSettingsFile.setValue("QUADS:QUAD_"+ofToString(i)+":GREENSCREEN:ON",quads[i].useGreenscreen);
+            xmlSettingsFile.setValue("QUADS:QUAD_"+ofToString(i)+":GREENSCREEN:THRESHOLD",quads[i].thresholdGreenscreen);
+            xmlSettingsFile.setValue("QUADS:QUAD_"+ofToString(i)+":GREENSCREEN:COLOR:R",quads[i].colorGreenscreen.r);
+            xmlSettingsFile.setValue("QUADS:QUAD_"+ofToString(i)+":GREENSCREEN:COLOR:G",quads[i].colorGreenscreen.g);
+            xmlSettingsFile.setValue("QUADS:QUAD_"+ofToString(i)+":GREENSCREEN:COLOR:B",quads[i].colorGreenscreen.b);
+            xmlSettingsFile.setValue("QUADS:QUAD_"+ofToString(i)+":GREENSCREEN:COLOR:A",quads[i].colorGreenscreen.a);
 
             xmlSettingsFile.setValue("QUADS:QUAD_"+ofToString(i)+":EDGE_BLENDING:ON",quads[i].edgeBlendBool);
             xmlSettingsFile.setValue("QUADS:QUAD_"+ofToString(i)+":EDGE_BLENDING:EXPONENT",quads[i].edgeBlendExponent);
@@ -257,8 +262,6 @@ void ofApp::loadSettingsFromXMLFile(std::string xmlFilePath)
             quads[i].transDuration = xmlSettingsFile.getValue("QUADS:QUAD_"+ofToString(i)+":COLOR:TRANS:DURATION", 1.0);
             quads[i].slideshowBg = xmlSettingsFile.getValue("QUADS:QUAD_"+ofToString(i)+":SLIDESHOW:ACTIVE", 0);
             quads[i].slideshowSpeed = xmlSettingsFile.getValue("QUADS:QUAD_"+ofToString(i)+":SLIDESHOW:SPEED", 1.0);
-            quads[i].slideFit = xmlSettingsFile.getValue("QUADS:QUAD_"+ofToString(i)+":SLIDESHOW:FIT", 0);
-            quads[i].slideKeepAspect = xmlSettingsFile.getValue("QUADS:QUAD_"+ofToString(i)+":SLIDESHOW:KEEP_ASPECT", 0);
             quads[i].bFadeTransitions = xmlSettingsFile.getValue("QUADS:QUAD_"+ofToString(i)+":SLIDESHOW:TRANSITIONS", 0);
 
             quads[i].camBg = xmlSettingsFile.getValue("QUADS:QUAD_"+ofToString(i)+":CAM:ACTIVE",0);
@@ -286,6 +289,13 @@ void ofApp::loadSettingsFromXMLFile(std::string xmlFilePath)
 
             quads[i].bBlendModes = xmlSettingsFile.getValue("QUADS:QUAD_"+ofToString(i)+":BLENDING:ON", 0);
             quads[i].blendMode= xmlSettingsFile.getValue("QUADS:QUAD_"+ofToString(i)+":BLENDING:MODE", 0);
+
+            quads[i].useGreenscreen = xmlSettingsFile.getValue("QUADS:QUAD_"+ofToString(i)+":GREENSCREEN:ON",0);
+            quads[i].thresholdGreenscreen = xmlSettingsFile.getValue("QUADS:QUAD_"+ofToString(i)+":GREENSCREEN:THRESHOLD",0);
+            quads[i].colorGreenscreen.r = xmlSettingsFile.getValue("QUADS:QUAD_"+ofToString(i)+":GREENSCREEN:COLOR:R",1.0f);
+            quads[i].colorGreenscreen.g = xmlSettingsFile.getValue("QUADS:QUAD_"+ofToString(i)+":GREENSCREEN:COLOR:G",1.0f);
+            quads[i].colorGreenscreen.b = xmlSettingsFile.getValue("QUADS:QUAD_"+ofToString(i)+":GREENSCREEN:COLOR:B",1.0f);
+            quads[i].colorGreenscreen.a = xmlSettingsFile.getValue("QUADS:QUAD_"+ofToString(i)+":GREENSCREEN:COLOR:A",1.0f);
 
             quads[i].edgeBlendBool = xmlSettingsFile.getValue("QUADS:QUAD_"+ofToString(i)+":EDGE_BLENDING:ON", 0);
             quads[i].edgeBlendExponent = xmlSettingsFile.getValue("QUADS:QUAD_"+ofToString(i)+":EDGE_BLENDING:EXPONENT", 1.0);
