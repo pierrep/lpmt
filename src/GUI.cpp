@@ -120,8 +120,7 @@ void GUI::setupPages()
     m_gui.addButton("load video", m_app->m_loadVideoFlag);
     m_gui.addSlider("video volume", m_dummyFloat, 0.0, 1.0);
     m_gui.addSlider("video speed", m_dummyFloat, -2.0, 4.0);
-    m_gui.addToggle("video loop", m_dummyBool);
-    m_gui.addToggle("video greenscreen", m_dummyBool);
+    m_gui.addToggle("video loop", m_dummyBool);    
 
     m_gui.addTitle("Shared Videos");
     m_gui.addToggle("shared video on/off", m_dummyBool);
