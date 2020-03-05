@@ -136,9 +136,9 @@ public:
     // Shaders
     ofShader edgeBlendShader;
     ofShader quadMaskShader;
-    ofShader chromaShader;
-    ofShader hueSatLumShader;
-    ofShader transitionShader;
+    //ofShader chromaShader;
+    ofShader surfaceShader;
+    ofShader crossfadeShader;
 
     // gui elements
     bool showGui;

@@ -118,7 +118,7 @@ void ofApp::resync()
             // resets slideshow to first slide
             if (quads[i].slideshowBg)
             {
-                quads[i].currentSlide = 0;
+                quads[i].currentSlideId = 0;
                 quads[i].slideTimer = 0;
             }
             // reset trans colors

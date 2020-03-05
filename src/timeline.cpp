@@ -109,8 +109,8 @@ void ofApp::timelineTriggerReceived(ofxTLBangEventArgs& trigger){
             else if (tlMsg == "shared_video_num" && tlMsgParameter != ""){ quads[tlQuad].sharedVideoNum=ofToInt(tlMsgParameter); }
             else if (tlMsg == "slide_on"){ quads[tlQuad].slideshowBg=true; }
             else if (tlMsg == "slide_off"){ quads[tlQuad].slideshowBg=false; }
-            else if (tlMsg == "slide_new"){ quads[tlQuad].currentSlide+=1; }
-            else if (tlMsg == "slide_num" && tlMsgParameter != ""){ quads[tlQuad].currentSlide=ofToInt(tlMsgParameter); }
+            else if (tlMsg == "slide_new"){ quads[tlQuad].currentSlideId+=1; }
+            else if (tlMsg == "slide_num" && tlMsgParameter != ""){ quads[tlQuad].currentSlideId=ofToInt(tlMsgParameter); }
             else if (tlMsg == "cam_on"){ quads[tlQuad].camBg=true; }
             else if (tlMsg == "cam_off"){ quads[tlQuad].camBg=false; }
             else if (tlMsg == "kinect_on"){ quads[tlQuad].kinectBg=true; }

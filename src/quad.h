@@ -21,9 +21,10 @@ class quad: public ofNode
 public:
     quad();
     void reset();
-    void setup(ofPoint point1, ofPoint point2, ofPoint point3, ofPoint point4, ofShader &edgeBlendShader, ofShader &quadMaskShader, ofShader &chromaShader, ofShader &hueSatLumShader, ofShader &fadeShader, vector<ofVideoGrabber> &cameras,  ofTrueTypeFont &font);
+    void setup(ofPoint point1, ofPoint point2, ofPoint point3, ofPoint point4, ofShader &edgeBlendShader, ofShader &quadMaskShader,ofShader &surfaceShader, ofShader &fadeShader, vector<ofVideoGrabber> &cameras,  ofTrueTypeFont &font);
     void update();
     void draw(vector<ofVideoPlayer> &sharedVideos);
+    void drawSurface(vector<ofVideoPlayer> &sharedVideos);
     void applyBlendmode();
     void gaussian_elimination(float *input, int n);
     void findHomography(ofPoint src[4], ofPoint dst[4], float homography[16]);
@@ -37,12 +38,13 @@ public:
     void bezierSurfaceSetup();
     void bezierSurfaceUpdate();
     void drawBezierMarkers();
-    void setupCamera();
     int getdir (string dir, vector<string> &files); // a func for reading a dir content to a vector of strings
     ofPoint getWarpedPoint(ofPoint point);
     void gridSurfaceSetup();
     void gridSurfaceUpdate();
     void drawGridMarkers();
+    bool isValidContent(vector<ofVideoPlayer>& sharedVideos);
+    void drawContent(float w, float h, vector<ofVideoPlayer> &sharedVideos);
 
     #ifdef WITH_KINECT
     void setKinect(kinectManager &kinect);
@@ -64,7 +66,6 @@ public:
 
     /* img and video stuff */
     ofImage img;
-    ofImage nextSlide;
     ofVideoPlayer video;
     ofTrueTypeFont ttf;
 
@@ -77,8 +78,6 @@ public:
     ofFloatColor endColor;
     ofFloatColor transColor;
     ofFloatColor imgColorize;
-    ofFloatColor videoColorize;
-    ofFloatColor camColorize;
     ofFloatColor colorGreenscreen;
     ofFloatColor kinectColorize;
     ofFloatColor timelineColor;
@@ -97,8 +96,6 @@ public:
 
     /* camera stuff */
     bool camAvailable;
-    int camWidth;
-    int camHeight;
     int camNumber;
     int prevCamNumber;
 
@@ -106,14 +103,10 @@ public:
 
     float screenFactorX;
     float screenFactorY;
-    float camMultX;
-    float camMultY;
     float imgMultX;
     float imgMultY;
     float kinectMultX;
     float kinectMultY;
-    float videoMultX;
-    float videoMultY;
     float videoSpeed;
     float previousSpeed;
     float slideshowSpeed;
@@ -171,12 +164,9 @@ public:
     bool getKinectGrayImage;
     bool kinectContourCurved;
 
-    bool videoHFlip;
     bool imgHFlip;
-    bool camHFlip;
-    bool videoVFlip;
     bool imgVFlip;
-    bool camVFlip;
+
     bool edgeBlendBool;
 
     bool bBlendModes;
@@ -196,7 +186,7 @@ public:
     float videoVolume;
     float thresholdGreenscreen;
     int bgSlideshow;
-    unsigned int currentSlide;
+    unsigned int currentSlideId;
     int transStep;
     int transCounter;
     int fps;
@@ -222,10 +212,9 @@ public:
     ofFbo::Settings maskFboSettings;
 
     // Shaders
-    ofShader * shaderBlend;
+    ofShader * edgeBlendShader;
     ofShader * maskShader;
-    ofShader * greenscreenShader;
-    ofShader * hueSatLuminanceShader;
+    ofShader * surfaceShader;
     ofShader * crossfadeShader;
 
     float hue;

@@ -61,10 +61,6 @@ void ofApp::saveCurrentSettingsToXMLFile(std::string xmlFilePath)
             xmlSettingsFile.setValue("QUADS:QUAD_"+ofToString(i)+":CAM:ACTIVE",quads[i].camBg);
             xmlSettingsFile.setValue("QUADS:QUAD_"+ofToString(i)+":IMG:ACTIVE",quads[i].imgBg);
             xmlSettingsFile.setValue("QUADS:QUAD_"+ofToString(i)+":VIDEO:ACTIVE",quads[i].videoBg);
-            xmlSettingsFile.setValue("QUADS:QUAD_"+ofToString(i)+":CAM:WIDTH",quads[i].camWidth);
-            xmlSettingsFile.setValue("QUADS:QUAD_"+ofToString(i)+":CAM:HEIGHT",quads[i].camHeight);
-            xmlSettingsFile.setValue("QUADS:QUAD_"+ofToString(i)+":CAM:MULT_X",quads[i].camMultX);
-            xmlSettingsFile.setValue("QUADS:QUAD_"+ofToString(i)+":CAM:MULT_Y",quads[i].camMultY);
             xmlSettingsFile.setValue("QUADS:QUAD_"+ofToString(i)+":IMG:MULT_X",quads[i].imgMultX);
             xmlSettingsFile.setValue("QUADS:QUAD_"+ofToString(i)+":IMG:MULT_Y",quads[i].imgMultY);
             xmlSettingsFile.setValue("QUADS:QUAD_"+ofToString(i)+":IMG:FIT",quads[i].imageFit);
@@ -73,8 +69,6 @@ void ofApp::saveCurrentSettingsToXMLFile(std::string xmlFilePath)
             xmlSettingsFile.setValue("QUADS:QUAD_"+ofToString(i)+":IMG:SATURATION",quads[i].saturation);
             xmlSettingsFile.setValue("QUADS:QUAD_"+ofToString(i)+":IMG:LUMINANCE",quads[i].luminance);
 
-            xmlSettingsFile.setValue("QUADS:QUAD_"+ofToString(i)+":VIDEO:MULT_X",quads[i].videoMultX);
-            xmlSettingsFile.setValue("QUADS:QUAD_"+ofToString(i)+":VIDEO:MULT_Y",quads[i].videoMultY);
             xmlSettingsFile.setValue("QUADS:QUAD_"+ofToString(i)+":VIDEO:SPEED",quads[i].videoSpeed);
             xmlSettingsFile.setValue("QUADS:QUAD_" + ofToString(i) + ":VIDEO:VOLUME", quads[i].videoVolume);
             ofClamp(quads[i].videoVolume, 0.f, 1.f); // this is to avoid warnings and for backwards compatibility (the value used to be in range 0 - 10)
@@ -95,22 +89,8 @@ void ofApp::saveCurrentSettingsToXMLFile(std::string xmlFilePath)
             xmlSettingsFile.setValue("QUADS:QUAD_"+ofToString(i)+":IMG:COLORIZE:B",quads[i].imgColorize.b);
             xmlSettingsFile.setValue("QUADS:QUAD_"+ofToString(i)+":IMG:COLORIZE:A",quads[i].imgColorize.a);
 
-            xmlSettingsFile.setValue("QUADS:QUAD_"+ofToString(i)+":VIDEO:COLORIZE:R",quads[i].videoColorize.r);
-            xmlSettingsFile.setValue("QUADS:QUAD_"+ofToString(i)+":VIDEO:COLORIZE:G",quads[i].videoColorize.g);
-            xmlSettingsFile.setValue("QUADS:QUAD_"+ofToString(i)+":VIDEO:COLORIZE:B",quads[i].videoColorize.b);
-            xmlSettingsFile.setValue("QUADS:QUAD_"+ofToString(i)+":VIDEO:COLORIZE:A",quads[i].videoColorize.a);
-
-            xmlSettingsFile.setValue("QUADS:QUAD_"+ofToString(i)+":CAM:COLORIZE:R",quads[i].camColorize.r);
-            xmlSettingsFile.setValue("QUADS:QUAD_"+ofToString(i)+":CAM:COLORIZE:G",quads[i].camColorize.g);
-            xmlSettingsFile.setValue("QUADS:QUAD_"+ofToString(i)+":CAM:COLORIZE:B",quads[i].camColorize.b);
-            xmlSettingsFile.setValue("QUADS:QUAD_"+ofToString(i)+":CAM:COLORIZE:A",quads[i].camColorize.a);
-
             xmlSettingsFile.setValue("QUADS:QUAD_"+ofToString(i)+":IMG:FLIP:H",quads[i].imgHFlip);
             xmlSettingsFile.setValue("QUADS:QUAD_"+ofToString(i)+":IMG:FLIP:V",quads[i].imgVFlip);
-            xmlSettingsFile.setValue("QUADS:QUAD_"+ofToString(i)+":VIDEO:FLIP:H",quads[i].videoHFlip);
-            xmlSettingsFile.setValue("QUADS:QUAD_"+ofToString(i)+":VIDEO:FLIP:V",quads[i].videoVFlip);
-            xmlSettingsFile.setValue("QUADS:QUAD_"+ofToString(i)+":CAM:FLIP:H",quads[i].camHFlip);
-            xmlSettingsFile.setValue("QUADS:QUAD_"+ofToString(i)+":CAM:FLIP:V",quads[i].camVFlip);
 
             xmlSettingsFile.setValue("QUADS:QUAD_"+ofToString(i)+":SHARED_VIDEO:ACTIVE",quads[i].sharedVideoBg);
             xmlSettingsFile.setValue("QUADS:QUAD_"+ofToString(i)+":SHARED_VIDEO:NUM",quads[i].sharedVideoNum);
@@ -217,15 +197,15 @@ void ofApp::loadSettingsFromXMLFile(std::string xmlFilePath)
 
             #ifdef WITH_KINECT
                 #ifdef WITH_SYPHON
-                quads[i].setup(ofPoint(x0, y0), ofPoint(x1, y1), ofPoint(x2, y2), ofPoint(x3, y3), edgeBlendShader, quadMaskShader, chromaShader, hueSatLumShader, transitionShader, m_cameras, kinect, syphClient, ttf);
+                quads[i].setup(ofPoint(x0, y0), ofPoint(x1, y1), ofPoint(x2, y2), ofPoint(x3, y3), edgeBlendShader, quadMaskShader, surfaceShader, crossfadeShader, m_cameras, kinect, syphClient, ttf);
                 #else
-                quads[i].setup(ofPoint(x0, y0), ofPoint(x1, y1), ofPoint(x2, y2), ofPoint(x3, y3), edgeBlendShader, quadMaskShader, chromaShader, hueSatLumShader, transitionShader, m_cameras, kinect, ttf);
+                quads[i].setup(ofPoint(x0, y0), ofPoint(x1, y1), ofPoint(x2, y2), ofPoint(x3, y3), edgeBlendShader, quadMaskShader, surfaceShader, crossfadeShader, m_cameras, kinect, ttf);
                 #endif
             #else
                 #ifdef WITH_SYPHON
-                quads[i].setup(ofPoint(x0, y0), ofPoint(x1, y1), ofPoint(x2, y2), ofPoint(x3, y3), edgeBlendShader, quadMaskShader, chromaShader, hueSatLumShader, transitionShader, m_cameras, syphClient, ttf);
+                quads[i].setup(ofPoint(x0, y0), ofPoint(x1, y1), ofPoint(x2, y2), ofPoint(x3, y3), edgeBlendShader, quadMaskShader, surfaceShader, crossfadeShader, m_cameras, syphClient, ttf);
                 #else
-                quads[i].setup(ofPoint(x0, y0), ofPoint(x1, y1), ofPoint(x2, y2), ofPoint(x3, y3), edgeBlendShader, quadMaskShader, chromaShader, hueSatLumShader, transitionShader, m_cameras, ttf);
+                quads[i].setup(ofPoint(x0, y0), ofPoint(x1, y1), ofPoint(x2, y2), ofPoint(x3, y3), edgeBlendShader, quadMaskShader, surfaceShader, crossfadeShader, m_cameras, ttf);
                 #endif
             #endif
             quads[i].quadNumber = xmlSettingsFile.getValue("QUADS:QUAD_"+ofToString(i)+":NUMBER", 0);
@@ -265,8 +245,6 @@ void ofApp::loadSettingsFromXMLFile(std::string xmlFilePath)
             {
                 quads[i].loadVideoFromFile(quads[i].loadedVideo, quads[i].bgVideo);
             }
-            quads[i].videoHFlip = xmlSettingsFile.getValue("QUADS:QUAD_"+ofToString(i)+":VIDEO:FLIP:H", 0);
-            quads[i].videoVFlip = xmlSettingsFile.getValue("QUADS:QUAD_"+ofToString(i)+":VIDEO:FLIP:V", 0);
 
             quads[i].sharedVideoBg = xmlSettingsFile.getValue("QUADS:QUAD_"+ofToString(i)+":SHARED_VIDEO:ACTIVE",0);
             quads[i].sharedVideoNum = xmlSettingsFile.getValue("QUADS:QUAD_"+ofToString(i)+":SHARED_VIDEO:NUM", 1);
@@ -284,17 +262,9 @@ void ofApp::loadSettingsFromXMLFile(std::string xmlFilePath)
             quads[i].bFadeTransitions = xmlSettingsFile.getValue("QUADS:QUAD_"+ofToString(i)+":SLIDESHOW:TRANSITIONS", 0);
 
             quads[i].camBg = xmlSettingsFile.getValue("QUADS:QUAD_"+ofToString(i)+":CAM:ACTIVE",0);
-            quads[i].camWidth = xmlSettingsFile.getValue("QUADS:QUAD_"+ofToString(i)+":CAM:WIDTH",0);
-            quads[i].camHeight = xmlSettingsFile.getValue("QUADS:QUAD_"+ofToString(i)+":CAM:HEIGHT",0);
-            quads[i].camHFlip = xmlSettingsFile.getValue("QUADS:QUAD_"+ofToString(i)+":CAM:FLIP:H", 0);
-            quads[i].camVFlip = xmlSettingsFile.getValue("QUADS:QUAD_"+ofToString(i)+":CAM:FLIP:V", 0);
 
-            quads[i].camMultX = xmlSettingsFile.getValue("QUADS:QUAD_"+ofToString(i)+":CAM:MULT_X",1.0);
-            quads[i].camMultY = xmlSettingsFile.getValue("QUADS:QUAD_"+ofToString(i)+":CAM:MULT_Y",1.0);
             quads[i].imgMultX = xmlSettingsFile.getValue("QUADS:QUAD_"+ofToString(i)+":IMG:MULT_X",1.0);
             quads[i].imgMultY = xmlSettingsFile.getValue("QUADS:QUAD_"+ofToString(i)+":IMG:MULT_Y",1.0);
-            quads[i].videoMultX = xmlSettingsFile.getValue("QUADS:QUAD_"+ofToString(i)+":VIDEO:MULT_X",1.0);
-            quads[i].videoMultY = xmlSettingsFile.getValue("QUADS:QUAD_"+ofToString(i)+":VIDEO:MULT_Y",1.0);
             quads[i].videoSpeed = xmlSettingsFile.getValue("QUADS:QUAD_"+ofToString(i)+":VIDEO:SPEED",1.0);
             quads[i].videoVolume = xmlSettingsFile.getValue("QUADS:QUAD_"+ofToString(i)+":VIDEO:VOLUME",0);
             quads[i].videoLoop = xmlSettingsFile.getValue("QUADS:QUAD_"+ofToString(i)+":VIDEO:LOOP",1);
@@ -313,16 +283,6 @@ void ofApp::loadSettingsFromXMLFile(std::string xmlFilePath)
             quads[i].imgColorize.g = xmlSettingsFile.getValue("QUADS:QUAD_"+ofToString(i)+":IMG:COLORIZE:G",1.0);
             quads[i].imgColorize.b = xmlSettingsFile.getValue("QUADS:QUAD_"+ofToString(i)+":IMG:COLORIZE:B",1.0);
             quads[i].imgColorize.a = xmlSettingsFile.getValue("QUADS:QUAD_"+ofToString(i)+":IMG:COLORIZE:A",1.0);
-
-            quads[i].videoColorize.r = xmlSettingsFile.getValue("QUADS:QUAD_"+ofToString(i)+":VIDEO:COLORIZE:R",1.0);
-            quads[i].videoColorize.g = xmlSettingsFile.getValue("QUADS:QUAD_"+ofToString(i)+":VIDEO:COLORIZE:G",1.0);
-            quads[i].videoColorize.b = xmlSettingsFile.getValue("QUADS:QUAD_"+ofToString(i)+":VIDEO:COLORIZE:B",1.0);
-            quads[i].videoColorize.a = xmlSettingsFile.getValue("QUADS:QUAD_"+ofToString(i)+":VIDEO:COLORIZE:A",1.0);
-
-            quads[i].camColorize.r = xmlSettingsFile.getValue("QUADS:QUAD_"+ofToString(i)+":CAM:COLORIZE:R",1.0);
-            quads[i].camColorize.g = xmlSettingsFile.getValue("QUADS:QUAD_"+ofToString(i)+":CAM:COLORIZE:G",1.0);
-            quads[i].camColorize.b = xmlSettingsFile.getValue("QUADS:QUAD_"+ofToString(i)+":CAM:COLORIZE:B",1.0);
-            quads[i].camColorize.a = xmlSettingsFile.getValue("QUADS:QUAD_"+ofToString(i)+":CAM:COLORIZE:A",1.0);
 
             quads[i].bBlendModes = xmlSettingsFile.getValue("QUADS:QUAD_"+ofToString(i)+":BLENDING:ON", 0);
             quads[i].blendMode= xmlSettingsFile.getValue("QUADS:QUAD_"+ofToString(i)+":BLENDING:MODE", 0);

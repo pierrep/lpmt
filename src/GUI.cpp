@@ -79,15 +79,13 @@ void GUI::setupPages()
     m_gui.addSlider("syphon scale Y", m_dummyFloat, 0.1, 10.0);
     #endif
     //ofFloatColor& f = ofFloatColor(0,0,0);
-    m_gui.addToggle("image on/off", m_dummyBool);
-    m_gui.addButton("load image", m_app->m_loadImageFlag);
-    m_gui.addSlider("img scale X", m_dummyFloat, 0.1, 10.0);
-    m_gui.addSlider("img scale Y", m_dummyFloat, 0.1, 10.0);
-    m_gui.addToggle("img to quad size", m_dummyBool);
+    m_gui.addSlider("scale X", m_dummyFloat, 0.1, 10.0);
+    m_gui.addSlider("scale Y", m_dummyFloat, 0.1, 10.0);
+    m_gui.addToggle("fit to quad size", m_dummyBool);
     m_gui.addToggle("keep aspect ratio", m_dummyBool);
     m_gui.addToggle("H mirror", m_dummyBool);
     m_gui.addToggle("V mirror", m_dummyBool);
-    m_gui.addColorPicker("img color",&m_dummyFloat);
+    m_gui.addColorPicker("colorize",&m_dummyFloat);
     m_gui.addSlider("hue", m_dummyFloat, 0.0f, 1.0f);
     m_gui.addSlider("saturation", m_dummyFloat, 0.0f, 1.0f);
     m_gui.addSlider("luminance", m_dummyFloat, 0.0, 1.0f);
@@ -102,10 +100,40 @@ void GUI::setupPages()
     m_gui.addToggle("transition color",m_dummyBool);
     m_gui.addColorPicker("second Color", &m_dummyFloat);
     m_gui.addSlider("trans duration", m_dummyFloat, 0.1, 60.0);
-    m_gui.addTitle("Mask");
+
+    m_gui.addTitle("Image");
+    m_gui.addToggle("image on/off", m_dummyBool);
+    m_gui.addButton("load image", m_app->m_loadImageFlag);
+
+    if (m_app->m_cameras.size() > 0)
+    {
+        m_gui.addTitle("Camera");
+        m_gui.addToggle("cam on/off", m_dummyBool);
+        if(m_app->m_cameras.size() > 1)
+        {
+            m_gui.addComboBox("select camera", m_dummyInt, m_app->m_cameras.size(), &(m_app->m_cameraIds[0]));
+        }
+        m_gui.addToggle("camera greenscreen", m_dummyBool);
+    }
+
+    m_gui.addTitle("Video");
+    m_gui.addToggle("video on/off", m_dummyBool);
+    m_gui.addButton("load video", m_app->m_loadVideoFlag);
+    m_gui.addSlider("video volume", m_dummyFloat, 0.0, 1.0);
+    m_gui.addSlider("video speed", m_dummyFloat, -2.0, 4.0);
+    m_gui.addToggle("video loop", m_dummyBool);
+    m_gui.addToggle("video greenscreen", m_dummyBool);
+
+    m_gui.addTitle("Shared Videos");
+    m_gui.addToggle("shared video on/off", m_dummyBool);
+    m_gui.addToggle("shared video tiling", m_dummyBool);
+    m_gui.addSlider("shared video", m_dummyInt, 1, 8);
+
+    m_gui.addTitle("Mask").setNewColumn(true);
     m_gui.addToggle("mask on/off", m_dummyBool);
     m_gui.addToggle("invert mask", m_dummyBool);
     m_gui.addToggle("draw mask outline", m_dummyBool);
+
     m_gui.addTitle("Surface deformation");
     m_gui.addToggle("surface deform.", m_dummyBool);
     m_gui.addToggle("use bezier", m_dummyBool);
@@ -116,7 +144,10 @@ void GUI::setupPages()
     m_gui.addButton("spherize strong", m_app->m_bezierSpherizeQuadStrongFlag);
     m_gui.addButton("reset bezier warp", m_app->m_bezierResetQuadFlag);
 
-    m_gui.addTitle("Edge blending").setNewColumn(true);
+
+    // Page Two
+    m_gui.addPage("Page 2");
+    m_gui.addTitle("Edge blending");
     m_gui.addToggle("edge blend on/off", m_dummyBool);
     m_gui.addSlider("power", m_dummyFloat, 0.0, 4.0);
     m_gui.addSlider("gamma", m_dummyFloat, 0.0, 4.0);
@@ -132,46 +163,7 @@ void GUI::setupPages()
     m_gui.addSlider("Height", m_dummyInt, 0, 2400);
     m_gui.addButton("Reset", m_app->m_resetCurrentQuadFlag);
 
-    // Page Two
-    m_gui.addPage("Page 2");
-    m_gui.addTitle("Video");
-    m_gui.addToggle("video on/off", m_dummyBool);
-    //m_gui.addComboBox("video bg", quads[i].bgVideo, videoFiles.size(), videos);
-    m_gui.addButton("load video", m_app->m_loadVideoFlag);
-    m_gui.addSlider("video scale X", m_dummyFloat, 0.1, 10.0);
-    m_gui.addSlider("video scale Y", m_dummyFloat, 0.1, 10.0);
-    m_gui.addToggle("H mirror", m_dummyBool);
-    m_gui.addToggle("V mirror", m_dummyBool);
-    m_gui.addColorPicker("video color", &m_dummyFloat);
-    m_gui.addSlider("video volume", m_dummyFloat, 0.0, 1.0);
-    m_gui.addSlider("video speed", m_dummyFloat, -2.0, 4.0);
-    m_gui.addToggle("video loop", m_dummyBool);
-    m_gui.addToggle("video greenscreen", m_dummyBool);
-    m_gui.addTitle("Shared Videos");
-    m_gui.addToggle("shared video on/off", m_dummyBool);
-    m_gui.addToggle("shared video tiling", m_dummyBool);
-    m_gui.addSlider("shared video", m_dummyInt, 1, 8);
-
-    if (m_app->m_cameras.size() > 0)
-    {
-        m_gui.addTitle("Camera").setNewColumn(true);
-        m_gui.addToggle("cam on/off", m_dummyBool);
-        if(m_app->m_cameras.size() > 1)
-        {
-            m_gui.addComboBox("select camera", m_dummyInt, m_app->m_cameras.size(), &(m_app->m_cameraIds[0]));
-        }
-        m_gui.addSlider("camera scale X", m_dummyFloat, 0.1, 10.0);
-        m_gui.addSlider("camera scale Y", m_dummyFloat, 0.1, 10.0);
-        m_gui.addToggle("flip H", m_dummyBool);
-        m_gui.addToggle("flip V", m_dummyBool);
-        m_gui.addColorPicker("cam color", &m_dummyFloat);
-        m_gui.addToggle("camera greenscreen", m_dummyBool);
-        m_gui.addTitle("Greenscreen");
-    }
-    else
-    {
     m_gui.addTitle("Greenscreen").setNewColumn(true);
-    }
     m_gui.addSlider("g-screen threshold", m_dummyFloat, 0.0, 255.0);
     m_gui.addColorPicker("greenscreen col", &m_dummyFloat);
     m_gui.addTitle("Slideshow").setNewColumn(false);
@@ -262,13 +254,13 @@ void GUI::updatePages(quad& activeQuad)
 
     #endif
     dynamic_cast<ofxSimpleGuiToggle*>(firstPage.findControlByName("image on/off"))->value = &activeQuad.imgBg;
-    dynamic_cast<ofxSimpleGuiSliderFloat*>(firstPage.findControlByName("img scale X"))->value = &activeQuad.imgMultX;
-    dynamic_cast<ofxSimpleGuiSliderFloat*>(firstPage.findControlByName("img scale Y"))->value = &activeQuad.imgMultY;
-    dynamic_cast<ofxSimpleGuiToggle*>(firstPage.findControlByName("img to quad size"))->value = &activeQuad.imageFit;
+    dynamic_cast<ofxSimpleGuiSliderFloat*>(firstPage.findControlByName("scale X"))->value = &activeQuad.imgMultX;
+    dynamic_cast<ofxSimpleGuiSliderFloat*>(firstPage.findControlByName("scale Y"))->value = &activeQuad.imgMultY;
+    dynamic_cast<ofxSimpleGuiToggle*>(firstPage.findControlByName("fit to quad size"))->value = &activeQuad.imageFit;
     dynamic_cast<ofxSimpleGuiToggle*>(firstPage.findControlByName("keep aspect ratio"))->value = &activeQuad.imageKeepAspect;
     dynamic_cast<ofxSimpleGuiToggle*>(firstPage.findControlByName("H mirror"))->value = &activeQuad.imgHFlip;
     dynamic_cast<ofxSimpleGuiToggle*>(firstPage.findControlByName("V mirror"))->value = &activeQuad.imgVFlip;
-    dynamic_cast<ofxSimpleGuiColorPicker*>(firstPage.findControlByName("img color"))->value = &activeQuad.imgColorize.r;
+    dynamic_cast<ofxSimpleGuiColorPicker*>(firstPage.findControlByName("colorize"))->value = &activeQuad.imgColorize.r;
 
     dynamic_cast<ofxSimpleGuiSliderFloat*>(firstPage.findControlByName("hue"))->value = &activeQuad.hue;
     dynamic_cast<ofxSimpleGuiSliderFloat*>(firstPage.findControlByName("saturation"))->value = &activeQuad.saturation;
@@ -282,6 +274,27 @@ void GUI::updatePages(quad& activeQuad)
     dynamic_cast<ofxSimpleGuiToggle*>(firstPage.findControlByName("transition color"))->value = &activeQuad.transBg;
     dynamic_cast<ofxSimpleGuiColorPicker*>(firstPage.findControlByName("second Color"))->value = &activeQuad.secondColor.r;
     dynamic_cast<ofxSimpleGuiSliderFloat*>(firstPage.findControlByName("trans duration"))->value = &activeQuad.transDuration;
+
+    if (m_app->m_cameras.size() > 0)
+    {
+        dynamic_cast<ofxSimpleGuiToggle*>(firstPage.findControlByName("cam on/off"))->value = &activeQuad.camBg;
+        if(m_app->m_cameras.size() > 1)
+        {
+            dynamic_cast<ofxSimpleGuiComboBox*>(firstPage.findControlByName("select camera"))->m_selectedChoice = &activeQuad.camNumber;
+        }
+        dynamic_cast<ofxSimpleGuiToggle*>(firstPage.findControlByName("camera greenscreen"))->value = &activeQuad.camGreenscreen;
+    }
+
+    dynamic_cast<ofxSimpleGuiToggle*>(firstPage.findControlByName("video on/off"))->value = &activeQuad.videoBg;
+    dynamic_cast<ofxSimpleGuiSliderFloat*>(firstPage.findControlByName("video volume"))->value = &activeQuad.videoVolume;
+    dynamic_cast<ofxSimpleGuiSliderFloat*>(firstPage.findControlByName("video speed"))->value = &activeQuad.videoSpeed;
+    dynamic_cast<ofxSimpleGuiToggle*>(firstPage.findControlByName("video loop"))->value = &activeQuad.videoLoop;
+    dynamic_cast<ofxSimpleGuiToggle*>(firstPage.findControlByName("video greenscreen"))->value = &activeQuad.videoGreenscreen;
+    dynamic_cast<ofxSimpleGuiToggle*>(firstPage.findControlByName("shared video on/off"))->value = &activeQuad.sharedVideoBg;
+    dynamic_cast<ofxSimpleGuiToggle*>(firstPage.findControlByName("shared video tiling"))->value = &activeQuad.sharedVideoTiling;
+    dynamic_cast<ofxSimpleGuiSliderInt*>(firstPage.findControlByName("shared video"))->value = &activeQuad.sharedVideoNum;
+
+
     dynamic_cast<ofxSimpleGuiToggle*>(firstPage.findControlByName("mask on/off"))->value = &activeQuad.bMask;
     dynamic_cast<ofxSimpleGuiToggle*>(firstPage.findControlByName("invert mask"))->value = &activeQuad.maskInvert;
     dynamic_cast<ofxSimpleGuiToggle*>(firstPage.findControlByName("draw mask outline"))->value = &activeQuad.bDrawMaskOutline;
@@ -291,49 +304,23 @@ void GUI::updatePages(quad& activeQuad)
     dynamic_cast<ofxSimpleGuiSliderInt*>(firstPage.findControlByName("grid rows"))->value = &activeQuad.gridRows;
     dynamic_cast<ofxSimpleGuiSliderInt*>(firstPage.findControlByName("grid columns"))->value = &activeQuad.gridColumns;
 
-    dynamic_cast<ofxSimpleGuiToggle*>(firstPage.findControlByName("edge blend on/off"))->value = &activeQuad.edgeBlendBool;
-    dynamic_cast<ofxSimpleGuiSliderFloat*>(firstPage.findControlByName("power"))->value = &activeQuad.edgeBlendExponent;
-    dynamic_cast<ofxSimpleGuiSliderFloat*>(firstPage.findControlByName("gamma"))->value = &activeQuad.edgeBlendGamma;
-    dynamic_cast<ofxSimpleGuiSliderFloat*>(firstPage.findControlByName("luminosity"))->value = &activeQuad.edgeBlendLuminance;
-    dynamic_cast<ofxSimpleGuiSliderFloat*>(firstPage.findControlByName("left edge"))->value = &activeQuad.edgeBlendAmountSin;
-    dynamic_cast<ofxSimpleGuiSliderFloat*>(firstPage.findControlByName("right edge"))->value = &activeQuad.edgeBlendAmountDx;
-    dynamic_cast<ofxSimpleGuiSliderFloat*>(firstPage.findControlByName("top edge"))->value = &activeQuad.edgeBlendAmountTop;
-    dynamic_cast<ofxSimpleGuiSliderFloat*>(firstPage.findControlByName("bottom edge"))->value = &activeQuad.edgeBlendAmountBottom;
-    dynamic_cast<ofxSimpleGuiSliderInt*>(firstPage.findControlByName("X displacement"))->value = &activeQuad.quadDispX;
-    dynamic_cast<ofxSimpleGuiSliderInt*>(firstPage.findControlByName("Y displacement"))->value = &activeQuad.quadDispY;
-    dynamic_cast<ofxSimpleGuiSliderInt*>(firstPage.findControlByName("Width"))->value = &activeQuad.quadW;
-    dynamic_cast<ofxSimpleGuiSliderInt*>(firstPage.findControlByName("Height"))->value = &activeQuad.quadH;
+
 
     // Second Page
     ofxSimpleGuiPage& secondPage = m_gui.page("Page 2");
-    dynamic_cast<ofxSimpleGuiToggle*>(secondPage.findControlByName("video on/off"))->value = &activeQuad.videoBg;
-    dynamic_cast<ofxSimpleGuiSliderFloat*>(secondPage.findControlByName("video scale X"))->value = &activeQuad.videoMultX;
-    dynamic_cast<ofxSimpleGuiSliderFloat*>(secondPage.findControlByName("video scale Y"))->value = &activeQuad.videoMultY;
-    dynamic_cast<ofxSimpleGuiToggle*>(secondPage.findControlByName("H mirror"))->value = &activeQuad.videoHFlip;
-    dynamic_cast<ofxSimpleGuiToggle*>(secondPage.findControlByName("V mirror"))->value = &activeQuad.videoVFlip;
-    dynamic_cast<ofxSimpleGuiColorPicker*>(secondPage.findControlByName("video color"))->value = &activeQuad.videoColorize.r;
-    dynamic_cast<ofxSimpleGuiSliderFloat*>(secondPage.findControlByName("video volume"))->value = &activeQuad.videoVolume;
-    dynamic_cast<ofxSimpleGuiSliderFloat*>(secondPage.findControlByName("video speed"))->value = &activeQuad.videoSpeed;
-    dynamic_cast<ofxSimpleGuiToggle*>(secondPage.findControlByName("video loop"))->value = &activeQuad.videoLoop;
-    dynamic_cast<ofxSimpleGuiToggle*>(secondPage.findControlByName("video greenscreen"))->value = &activeQuad.videoGreenscreen;
-    dynamic_cast<ofxSimpleGuiToggle*>(secondPage.findControlByName("shared video on/off"))->value = &activeQuad.sharedVideoBg;
-    dynamic_cast<ofxSimpleGuiToggle*>(secondPage.findControlByName("shared video tiling"))->value = &activeQuad.sharedVideoTiling;
-    dynamic_cast<ofxSimpleGuiSliderInt*>(secondPage.findControlByName("shared video"))->value = &activeQuad.sharedVideoNum;
+    dynamic_cast<ofxSimpleGuiToggle*>(secondPage.findControlByName("edge blend on/off"))->value = &activeQuad.edgeBlendBool;
+    dynamic_cast<ofxSimpleGuiSliderFloat*>(secondPage.findControlByName("power"))->value = &activeQuad.edgeBlendExponent;
+    dynamic_cast<ofxSimpleGuiSliderFloat*>(secondPage.findControlByName("gamma"))->value = &activeQuad.edgeBlendGamma;
+    dynamic_cast<ofxSimpleGuiSliderFloat*>(secondPage.findControlByName("luminosity"))->value = &activeQuad.edgeBlendLuminance;
+    dynamic_cast<ofxSimpleGuiSliderFloat*>(secondPage.findControlByName("left edge"))->value = &activeQuad.edgeBlendAmountSin;
+    dynamic_cast<ofxSimpleGuiSliderFloat*>(secondPage.findControlByName("right edge"))->value = &activeQuad.edgeBlendAmountDx;
+    dynamic_cast<ofxSimpleGuiSliderFloat*>(secondPage.findControlByName("top edge"))->value = &activeQuad.edgeBlendAmountTop;
+    dynamic_cast<ofxSimpleGuiSliderFloat*>(secondPage.findControlByName("bottom edge"))->value = &activeQuad.edgeBlendAmountBottom;
+    dynamic_cast<ofxSimpleGuiSliderInt*>(secondPage.findControlByName("X displacement"))->value = &activeQuad.quadDispX;
+    dynamic_cast<ofxSimpleGuiSliderInt*>(secondPage.findControlByName("Y displacement"))->value = &activeQuad.quadDispY;
+    dynamic_cast<ofxSimpleGuiSliderInt*>(secondPage.findControlByName("Width"))->value = &activeQuad.quadW;
+    dynamic_cast<ofxSimpleGuiSliderInt*>(secondPage.findControlByName("Height"))->value = &activeQuad.quadH;
 
-    if (m_app->m_cameras.size() > 0)
-    {
-        dynamic_cast<ofxSimpleGuiToggle*>(secondPage.findControlByName("cam on/off"))->value = &activeQuad.camBg;
-        if(m_app->m_cameras.size() > 1)
-        {
-            dynamic_cast<ofxSimpleGuiComboBox*>(secondPage.findControlByName("select camera"))->m_selectedChoice = &activeQuad.camNumber;
-        }
-        dynamic_cast<ofxSimpleGuiSliderFloat*>(secondPage.findControlByName("camera scale X"))->value = &activeQuad.camMultX;
-        dynamic_cast<ofxSimpleGuiSliderFloat*>(secondPage.findControlByName("camera scale Y"))->value = &activeQuad.camMultY;
-        dynamic_cast<ofxSimpleGuiToggle*>(secondPage.findControlByName("flip H"))->value = &activeQuad.camHFlip;
-        dynamic_cast<ofxSimpleGuiToggle*>(secondPage.findControlByName("flip V"))->value = &activeQuad.camVFlip;
-        dynamic_cast<ofxSimpleGuiColorPicker*>(secondPage.findControlByName("cam color"))->value = &activeQuad.camColorize.r;
-        dynamic_cast<ofxSimpleGuiToggle*>(secondPage.findControlByName("camera greenscreen"))->value = &activeQuad.camGreenscreen;
-    }
     dynamic_cast<ofxSimpleGuiSliderFloat*>(secondPage.findControlByName("g-screen threshold"))->value = &activeQuad.thresholdGreenscreen;
     dynamic_cast<ofxSimpleGuiColorPicker*>(secondPage.findControlByName("greenscreen col"))->value = &activeQuad.colorGreenscreen.r;
     dynamic_cast<ofxSimpleGuiToggle*>(secondPage.findControlByName("slideshow on/off"))->value = &activeQuad.slideshowBg;
