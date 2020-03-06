@@ -1,35 +1,35 @@
-#ifndef _OF_APP
-#define _OF_APP
+#pragma once
 
-#include "config.h"
+#define MAX_QUADS 36
+//#define WITH_KINECT
+//#define WITH_MIDI
+#ifdef TARGET_OSX
+  //  #define WITH_SYPHON
+#endif
 
-#define OF_ADDON_USING_OFXXMLSETTINGS
-
-//#define WINDOW_W 800
-//#define WINDOW_H 600
+//#define OF_ADDON_USING_OFXXMLSETTINGS
 
 // OSC stuff - listen on port 12345
 #define OSC_DEFAULT_PORT 12345
 #define NUM_MSG_STRINGS 20
 
 #include "ofMain.h"
-
 #include "quad.h"
 #include "GUI.hpp"
+#include "ofxOsc.h"
+#include "ofxTimeline.h"
+#include "ofxXmlSettings.h"
+#include "ofxSimpleGuiToo.h"
+//#include "ofxMostPixelsEver.h"
 
 #ifdef WITH_KINECT
 #include "kinectManager.h"
 #endif
-#include "ofxXmlSettings.h"
-//#include "ofxMostPixelsEver.h"
-#include "ofxOsc.h"
-#ifdef WITH_TIMELINE
-#include "ofxTimeline.h"
-#endif
-#include "ofxSimpleGuiToo.h"
+
 #ifdef WITH_SYPHON
 #include "ofxSyphon.h"
 #endif
+
 #ifdef WITH_MIDI
 #include "ofxMidi.h"
 #endif
@@ -69,7 +69,11 @@ public:
     void resync();
     void startProjection();
     void stopProjection();
+    void addQuad();
+    void deleteQuad();
     void copyQuadSettings(int sourceQuad);
+    void activateNextQuad();
+    void activatePrevQuad();
     void openImageFile();
     void openVideoFile();
     void loadSlideshow();
@@ -91,8 +95,8 @@ public:
     void activateClosestQuad(ofPoint point);
     void parseOsc();
 
-    int WINDOW_W;
-    int WINDOW_H;
+    int default_window_width;
+    int default_window_height;
 
     ofTrueTypeFont ttf;
     GUI m_gui;
@@ -189,7 +193,6 @@ public:
     ofPoint m_lastMousePosition;
 
     // timeline
-    #ifdef WITH_TIMELINE
     ofxTimeline timeline;
     float timelineDurationSeconds;
     float timelinePreviousDuration;
@@ -198,7 +201,6 @@ public:
     void timelineAddQuadPage(int i);
     void timelineTriggerReceived(ofxTLBangEventArgs& trigger);
     bool useTimeline;
-    #endif
 
     #ifdef WITH_KINECT
     kinectManager kinect;
@@ -232,6 +234,4 @@ public:
     */
 
 };
-
-#endif
 

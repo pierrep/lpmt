@@ -19,6 +19,7 @@ void quad::reset()
     initialized = false;
     isActive = false;
     isOn = false;
+    layer = -1;
     isMaskSetup = false;
     colorBg = false;
     transBg = false;

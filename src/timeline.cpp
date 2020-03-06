@@ -1,5 +1,5 @@
 #include "ofApp.h"
-#ifdef WITH_TIMELINE
+
 //--------------------------------------------------------------
 void ofApp::timelineSetup(float duration){
 
@@ -178,5 +178,3 @@ void ofApp::timelineAddQuadPage(int i) {
 	timeline.addFlags("trigger_"+ofToString(i), ofToString(i)+"_trigger.xml");
 	timeline.addColors("color_"+ofToString(i), ofToString(i)+"_color.xml");
 }
-
-#endif

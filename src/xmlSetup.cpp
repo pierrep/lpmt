@@ -172,7 +172,12 @@ void ofApp::loadSettingsFromXMLFile(std::string xmlFilePath)
 
     if(wasLoadSuccessful)
     {
-        std::cout << "Loaded settings file: \"" << xmlFilePath << "\"" << std::endl;
+        ofLogNotice() << "Loaded settings file: " << xmlFilePath;
+
+        // initializes layers array
+        for (int i = 0; i < MAX_QUADS; i++) {
+            layers[i] = -1;
+        }
 
         nOfQuads = xmlSettingsFile.getValue("GENERAL:N_OF_QUADS", 0);
         activeQuad = xmlSettingsFile.getValue("GENERAL:ACTIVE_QUAD", 0);

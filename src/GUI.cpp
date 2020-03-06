@@ -53,24 +53,20 @@ void GUI::setupPages()
     m_gui.addButton("load shared video 6", m_app->m_loadSharedVideo5Flag);
     m_gui.addButton("load shared video 7", m_app->m_loadSharedVideo6Flag);
     m_gui.addButton("load shared video 8", m_app->m_loadSharedVideo7Flag);
-    #ifdef WITH_TIMELINE
     m_gui.addTitle("Timeline");
     m_gui.addToggle("use timeline", m_app->useTimeline);
     m_gui.addSlider("timeline seconds", m_app->timelineDurationSeconds, 10.0, 1200.0);
-    #endif
 
     // Page One
     m_gui.addPage("Page 1");
     m_gui.addTitle("surface");
     m_gui.addToggle("show/hide", m_dummyBool);
-    #ifdef WITH_TIMELINE
     m_gui.addToggle("use timeline", m_app->useTimeline);
     m_gui.addSlider("timeline seconds", m_app->timelineDurationSeconds, 10.0, 1200.0);
     m_gui.addToggle("use timeline tint", m_dummyBool);
     m_gui.addToggle("use timeline color", m_dummyBool);
     m_gui.addToggle("use timeline alpha", m_dummyBool);
     m_gui.addToggle("use timeline for slides", m_dummyBool);
-    #endif
     #ifdef WITH_SYPHON
     m_gui.addToggle("use Syphon", m_dummyBool);
     m_gui.addSlider("syphon origin X", m_dummyFloat, -1600, 1600);
@@ -239,19 +235,16 @@ void GUI::updatePages(quad& activeQuad)
     ofxSimpleGuiPage& firstPage = m_gui.page("Page 1");
 
     dynamic_cast<ofxSimpleGuiToggle*>(firstPage.findControlByName("show/hide"))->value = &activeQuad.isOn;
-    #ifdef WITH_TIMELINE
     dynamic_cast<ofxSimpleGuiToggle*>(firstPage.findControlByName("use timeline tint"))->value = &activeQuad.bTimelineTint;
     dynamic_cast<ofxSimpleGuiToggle*>(firstPage.findControlByName("use timeline color"))->value = &activeQuad.bTimelineColor;
     dynamic_cast<ofxSimpleGuiToggle*>(firstPage.findControlByName("use timeline alpha"))->value = &activeQuad.bTimelineAlpha;
     dynamic_cast<ofxSimpleGuiToggle*>(firstPage.findControlByName("use timeline for slides"))->value = &activeQuad.bTimelineSlideChange;
-    #endif
     #ifdef WITH_SYPHON
     dynamic_cast<ofxSimpleGuiToggle*>(firstPage.findControlByName("use Syphon"))->value = &activeQuad.bSyphon;
     dynamic_cast<ofxSimpleGuiSliderInt*>(firstPage.findControlByName("syphon origin X"))->value = &activeQuad.syphonPosX;
     dynamic_cast<ofxSimpleGuiSliderInt*>(firstPage.findControlByName("syphon origin Y"))->value = &activeQuad.syphonPosY;
     dynamic_cast<ofxSimpleGuiSliderFloat*>(firstPage.findControlByName("syphon scale X"))->value = &activeQuad.syphonScaleX;
-    dynamic_cast<ofxSimpleGuiSliderFloat*>(firstPage.findControlByName("syphon scale Y"))->value = &activeQuad.syphonScaleY;
-
+    dynamic_cast<ofxSimpleGuiSliderFloat*>(firstPage.findControlByName("syphon scale Y"))->value = &activeQuad.syphonScaleY;no
     #endif
     dynamic_cast<ofxSimpleGuiToggle*>(firstPage.findControlByName("image on/off"))->value = &activeQuad.imgBg;
     dynamic_cast<ofxSimpleGuiSliderFloat*>(firstPage.findControlByName("scale X"))->value = &activeQuad.imgMultX;

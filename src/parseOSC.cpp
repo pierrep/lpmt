@@ -120,12 +120,12 @@ void ofApp::parseOsc()
 
         if(!bFullscreen)
         {
-            ofSetWindowShape(WINDOW_W, WINDOW_H);
+            ofSetWindowShape(default_window_width, default_window_height);
             ofSetFullscreen(false);
             // figure out how to put the window in the center:
             int screenW = ofGetScreenWidth();
             int screenH = ofGetScreenHeight();
-            ofSetWindowPosition(screenW/2-WINDOW_W/2, screenH/2-WINDOW_H/2);
+            ofSetWindowPosition(screenW/2-default_window_width/2, screenH/2-default_window_height/2);
         }
         else if(bFullscreen == 1)
         {
@@ -142,12 +142,12 @@ void ofApp::parseOsc()
     else if ( m.getAddress() == "/projection/fullscreen/off" )
     {
         bFullscreen = false;
-        ofSetWindowShape(WINDOW_W, WINDOW_H);
+        ofSetWindowShape(default_window_width, default_window_height);
         ofSetFullscreen(false);
         // figure out how to put the window in the center:
         int screenW = ofGetScreenWidth();
         int screenH = ofGetScreenHeight();
-        ofSetWindowPosition(screenW/2-WINDOW_W/2, screenH/2-WINDOW_H/2);
+        ofSetWindowPosition(screenW/2-default_window_width/2, screenH/2-default_window_height/2);
     }
 
     // toggle gui
@@ -261,7 +261,6 @@ void ofApp::parseOsc()
 
 
     // timeline stuff
-#ifdef WITH_TIMELINE
     // use toggle
     else if ( m.getAddress() == "/projection/timeline/toggle" )
     {
@@ -315,8 +314,6 @@ void ofApp::parseOsc()
             timeline.disable();
         }
     }
-
-#endif
 
 //------------------------------------------------------
 // active quad stuff
