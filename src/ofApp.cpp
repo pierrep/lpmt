@@ -27,7 +27,6 @@ void ofApp::setup()
 {
     //ofDisableAntiAliasing();
     ofSetVerticalSync(true);
-    ofSetLogLevel(OF_LOG_NOTICE);
     ofSetWindowTitle("LPMT");
     ofSetEscapeQuitsApp(false);
     autoStart = false;
@@ -132,19 +131,18 @@ void ofApp::setup()
 
     setupInitialQuads();
 
-// timeline stuff initialization
+    // timeline setup
     timelineSetup(timelineDurationSeconds);
+    bTimeline = false;
+    timeline.setCurrentPage(ofToString(activeQuad));
+    timeline.hide();
+    timeline.disable();
+    timeline.setAutosave(false);
 
     // GUI stuff
     m_gui.setupPages();
     m_gui.updatePages(quads[activeQuad]);
     m_gui.showPage(2);
-
-    // timeline stuff
-    bTimeline = false;
-    timeline.setCurrentPage(ofToString(activeQuad));
-    timeline.hide();
-    timeline.disable();
 
     if (bWasConfigLoadSuccessful) {
         float timelineConfigDuration = xmlConfigFile.getValue("TIMELINE:DURATION", 10);
@@ -196,7 +194,7 @@ void ofApp::prepare()
 
     if (bStarted) {
         // updates shared video sources
-        for (int i = 0; i < 8; i++) {
+        for (unsigned int i = 0; i < 8; i++) {
             if (sharedVideos[i].isLoaded()) {
                 sharedVideos[i].update();
             }
@@ -298,7 +296,7 @@ void ofApp::prepare()
         }
 #endif
 
-        for (int i = 0; i < m_cameras.size(); i++) {
+        for (unsigned int i = 0; i < m_cameras.size(); i++) {
             if (m_cameras[i].getHeight() > 0) // isLoaded check
             {
                 m_cameras[i].update();
@@ -418,10 +416,10 @@ void ofApp::draw()
             // in setup mode writes the number of the active quad at the bottom of the window
             ofSetHexColor(0xFFFFFF); // white
             ttf.drawString("Active surface: " + ofToString(activeQuad) + " Layer: " + ofToString(quads[activeQuad].layer), 30, ofGetHeight() - 25);
-//            for (int i = 0; i < MAX_QUADS; i++) {
-//                int idx = layers[i];
-//                ttf.drawString("layers[" + ofToString(i) + "] = " + ofToString(layers[i]), 600, ofGetHeight() - 600 + i * 20);
-//            }
+            for (int i = 0; i < MAX_QUADS; i++) {
+                int idx = layers[i];
+                ttf.drawString("layers[" + ofToString(i) + "] = " + ofToString(layers[i]), 600, ofGetHeight() - 600 + i * 20);
+            }
 
             if (maskSetup) {
                 ofSetHexColor(0xFF0000);

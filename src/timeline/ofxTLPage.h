@@ -84,10 +84,9 @@ class ofxTLPage {
     virtual ofRectangle getDrawRect();
     
 	virtual void addTrack(string name, ofxTLTrack* track);
+    virtual void removeTrack(ofxTLTrack* track);
 	virtual ofxTLTrack* getTrack(string name);
-    virtual ofxTLTrackHeader* getTrackHeader(ofxTLTrack* track);
-    
-	virtual void removeTrack(ofxTLTrack* track);
+    virtual ofxTLTrackHeader* getTrackHeader(ofxTLTrack* track);    
 
     
     //computed on the fly so please use sparingly if you have to call it a lot

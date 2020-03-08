@@ -199,6 +199,7 @@ public:
     void timelineSetup(float duration);
     void timelineUpdate();
     void timelineAddQuadPage(int i);
+    void timelineRemoveQuadPage(int i);
     void timelineTriggerReceived(ofxTLBangEventArgs& trigger);
     bool useTimeline;
 

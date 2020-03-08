@@ -306,6 +306,7 @@ class ofxTimeline : ofThread {
 	void unselectAll();
 
 	virtual void addPage(string name, bool makeCurrent = true);
+    virtual void removePage(string pageName);
 	virtual void setPageName(string newName);
 	virtual void setPageName(string newName, int index);
 	virtual void setCurrentPage(string name);

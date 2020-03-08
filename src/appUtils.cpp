@@ -208,8 +208,13 @@ void ofApp::addQuad()
             quads[index].quadNumber = index;
 
             // layers
-            layers[index] = index;
-            quads[index].layer = index;
+            for (int i = 0; i < MAX_QUADS; i++) {
+                if (layers[i] == -1) {
+                    layers[i] = index;
+                    quads[index].layer = i;
+                    break;
+                }
+            }
 
             quads[activeQuad].isActive = false;
             quads[index].isActive = true;
@@ -217,8 +222,12 @@ void ofApp::addQuad()
             ++nOfQuads;
             m_gui.updatePages(quads[activeQuad]);
 
+            // add timeline page for new quad
+            timelineAddQuadPage(activeQuad);
+
             glDisable(GL_DEPTH_TEST);
-        } else if (nOfQuads < MAX_QUADS) {
+        }
+        else if (nOfQuads < MAX_QUADS) {
             quads[nOfQuads].setup(ofPoint(0.25, 0.25), ofPoint(0.75, 0.25), ofPoint(0.75, 0.75), ofPoint(0.25, 0.75), edgeBlendShader, quadMaskShader, surfaceShader, crossfadeShader, m_cameras, ttf);
             quads[nOfQuads].quadNumber = nOfQuads;
 
@@ -238,12 +247,19 @@ void ofApp::addQuad()
             // next line fixes a bug i've been tracking down for a looong time
             glDisable(GL_DEPTH_TEST);
         }
+
     }
 }
 
 //---------------------------------------------------------------
 void ofApp::deleteQuad()
 {
+    if (nOfQuads == 0)
+        return;
+
+    // remove timeline page for quad
+    timelineRemoveQuadPage(activeQuad);
+
     // delete quad
     layers[quads[activeQuad].layer] = -1;
     quads[activeQuad].reset();
@@ -268,6 +284,9 @@ void ofApp::activateNextQuad()
     if (isSetup && (nOfQuads >= 2)) {
         quads[activeQuad].isActive = false; // activates next quad
         activeQuad += 1;
+        if (activeQuad >= MAX_QUADS)
+            activeQuad = 0;
+
         while (quads[activeQuad].initialized == false) {
             activeQuad++;
             if (activeQuad > (MAX_QUADS - 1)) {
@@ -287,10 +306,13 @@ void ofApp::activatePrevQuad()
         quads[activeQuad].isActive = false; // activates prev quad
         activeQuad -= 1;
 
+        if (activeQuad < 0)
+            activeQuad = activeQuad = nOfQuads - 1;
+
         while (quads[activeQuad].initialized == false) {
             activeQuad--;
             if (activeQuad < 0) {
-                activeQuad = nOfQuads - 1;
+                activeQuad = MAX_QUADS - 1;
             }
         }
 

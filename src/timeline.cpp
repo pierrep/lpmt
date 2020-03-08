@@ -38,8 +38,8 @@ void ofApp::timelineUpdate()
                         if(timeline.hasTrack("green_"+ofToString(j)))
                             quads[j].timelineGreen = timeline.getValue("green_"+ofToString(j));
 
-                        if(timeline.hasTrack("blu_"+ofToString(j)))
-                            quads[j].timelineBlue = timeline.getValue("blu_"+ofToString(j));
+                        if(timeline.hasTrack("blue_"+ofToString(j)))
+                            quads[j].timelineBlue = timeline.getValue("blue_"+ofToString(j));
                     } else {
                         quads[j].timelineRed = 1.0f;
                         quads[j].timelineGreen = 1.0f;
@@ -47,9 +47,8 @@ void ofApp::timelineUpdate()
                     }
                     if(quads[j].bTimelineColor)
                     {
-                        if(timeline.hasTrack("color_"+ofToString(j))) {
-                            quads[j].timelineColor = timeline.getColor("color_"+ofToString(j));
-                           // quads[j].bgColor = quads[j].timelineColor;
+                        if(timeline.hasTrack("colour_"+ofToString(j))) {
+                            quads[j].timelineColor = timeline.getColor("colour_"+ofToString(j));
                         }
                     } else {
                          quads[j].timelineColor = ofColor(1.0f,1.0f,1.0f);
@@ -173,8 +172,23 @@ void ofApp::timelineAddQuadPage(int i) {
     timeline.addPage(ofToString(i), true);
     timeline.addCurves("red_"+ofToString(i), ofToString(i)+"_red.xml", ofRange(0, 1.0));
 	timeline.addCurves("green_"+ofToString(i), ofToString(i)+"_green.xml", ofRange(0, 1.0));
-	timeline.addCurves("blu_"+ofToString(i), ofToString(i)+"_blu.xml", ofRange(0, 1.0));
+    timeline.addCurves("blue_"+ofToString(i), ofToString(i)+"_blue.xml", ofRange(0, 1.0));
 	timeline.addCurves("alpha_"+ofToString(i), ofToString(i)+"_alpha.xml", ofRange(0, 1.0));
 	timeline.addFlags("trigger_"+ofToString(i), ofToString(i)+"_trigger.xml");
-	timeline.addColors("color_"+ofToString(i), ofToString(i)+"_color.xml");
+    timeline.addColors("colour_"+ofToString(i), ofToString(i)+"_colour.xml");
+}
+
+//--------------------------------------------------------------
+void ofApp::timelineRemoveQuadPage(int i) {
+
+    timeline.setCurrentPage(timeline.getPages().at(0)->getName());
+    timeline.removeTrack("red_"+ofToString(i));
+    timeline.removeTrack("green_"+ofToString(i));
+    timeline.removeTrack("blue_"+ofToString(i));
+    timeline.removeTrack("alpha_"+ofToString(i));
+    timeline.removeTrack("trigger_"+ofToString(i));
+    timeline.removeTrack("colour_"+ofToString(i));
+    timeline.getPage(ofToString(i))->clear();
+    timeline.removePage(ofToString(i));
+
 }

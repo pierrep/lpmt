@@ -51,18 +51,18 @@ bool headersort(ofxTLTrackHeader* a, ofxTLTrackHeader* b){
 ofxTimeline::ofxTimeline()
 :	width(1024),
 	offset(ofVec2f(0,0)),
-	autosave(true),
-	isFrameBased(false),
 	timelineHasFocus(false),
 	showTicker(true), 
 	showInoutControl(true),
 	showZoomer(true),
-	durationInSeconds(100.0f/30.0f),
+    autosave(true),
+    isFrameBased(false),
 	isShowing(true),
 	isSetup(false),
 	usingEvents(false),
 	isPlaying(false),
 	isEnabled(false),
+    durationInSeconds(100.0f/30.0f),
 	dragAnchorSet(false),
 	snapToBPM(false),
 	snapToOtherElements(true),
@@ -479,8 +479,7 @@ bool ofxTimeline::getUserChangedValue(){
     return hasChanged;
 }
 
-void ofxTimeline::flagTrackModified(ofxTLTrack* track){
-//	cout << "modified track " << track->getDisplayName() << endl;
+void ofxTimeline::flagTrackModified(ofxTLTrack* track){    
 	flagUserChangedValue();
     
     if(undoEnabled){
@@ -489,6 +488,7 @@ void ofxTimeline::flagTrackModified(ofxTLTrack* track){
 	
     unsavedChanges = true;
     if(autosave){
+        ofLogVerbose() << "Modified track: " << track->getDisplayName() <<" ...saving";
         track->save();
     }
 }
@@ -827,14 +827,11 @@ void ofxTimeline::clear(){
     }
 }
 
-void ofxTimeline::reset(){ //gets rid of everything
-    
+void ofxTimeline::reset(){ //gets rid of everything    
     if(!isSetup){
         return;
     }
-    
-	
-	
+
 	if(isOnThread){
 		waitForThread(true);
 	}
@@ -855,9 +852,6 @@ void ofxTimeline::reset(){ //gets rid of everything
     modalTrack = NULL;
     timeControl = NULL;
 	addPage("Page One", true);
-//	if(isOnThread){
-//		startThread();
-//	}
 
 	ofRemoveListener(ofEvents().update, this, &ofxTimeline::update);
 //	ofRemoveListener(ofEvents().windowResized, this, &ofxTimeline::windowResized);
@@ -1051,7 +1045,7 @@ void ofxTimeline::updatePagePositions(){
 		ofVec2f pageOffset = ofVec2f(offset.x, ticker->getBottomEdge());
 		for(int i = 0; i < pages.size(); i++){
 			pages[i]->setContainer(pageOffset, width);
-		}
+        }
 		if(currentPage != NULL){
 			currentPage->recalculateHeight();
 		}
@@ -1587,6 +1581,20 @@ void ofxTimeline::addPage(string pageName, bool makeCurrent){
 	}
 }
 
+void ofxTimeline::removePage(string pageName)
+{
+    for(int i = 0; i < pages.size(); i++){
+        if(pageName == pages[i]->getName()){
+            delete pages[i];
+            pages.erase(pages.begin()+i);
+        }
+    }
+
+    if(pages.size() == 0) currentPage = NULL;
+    tabs->removePage(pageName);
+
+}
+
 void ofxTimeline::setPageName(string newName){
 	tabs->changeName(currentPage->getName(), newName);
 	currentPage->setName( newName );
@@ -2066,13 +2074,16 @@ void ofxTimeline::removeTrack(string name){
 	if(track == (ofxTLTrack*)timeControl){
 		timeControl =  NULL;
 	}
+
+    track->clear();
+
     //quick fix for now -- we need to have Undo and Delete track work together
     //but to prevent crashes, let's just go through the undo queue and remove any items that have to do with this track
     for(int i = 0; i < undoStack.size(); i++){
         for(int q = undoStack[i].size()-1; q >= 0; q--){
 			if(undoStack[i][q].track == track){
                 undoStack[i].erase(undoStack[i].begin() + q);
-                cout << "temporary fix -- deleting undo queue element for track " << track->getName() << endl;
+                ofLogWarning() << "temporary fix -- deleting undo queue element for track " << track->getName() << endl;
             }
         }
     }
