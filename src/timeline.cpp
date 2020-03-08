@@ -4,7 +4,7 @@
 void ofApp::timelineSetup(float duration){
 
     timeline.setup();
-    timeline.setSpacebarTogglePlay(false);
+    timeline.setSpacebarTogglePlay(true);
     timeline.setWorkingFolder("timeline");
     timeline.setDurationInSeconds(duration);
     timeline.setPageName("main"); //changes the first page name
@@ -171,10 +171,10 @@ void ofApp::timelineTriggerReceived(ofxTLBangEventArgs& trigger){
 void ofApp::timelineAddQuadPage(int i) {
     timeline.addPage(ofToString(i), true);
     timeline.addCurves("red_"+ofToString(i), ofToString(i)+"_red.xml", ofRange(0, 1.0));
-	timeline.addCurves("green_"+ofToString(i), ofToString(i)+"_green.xml", ofRange(0, 1.0));
+    timeline.addCurves("green_"+ofToString(i), ofToString(i)+"_green.xml", ofRange(0, 1.0));
     timeline.addCurves("blue_"+ofToString(i), ofToString(i)+"_blue.xml", ofRange(0, 1.0));
-	timeline.addCurves("alpha_"+ofToString(i), ofToString(i)+"_alpha.xml", ofRange(0, 1.0));
-	timeline.addFlags("trigger_"+ofToString(i), ofToString(i)+"_trigger.xml");
+    timeline.addCurves("alpha_"+ofToString(i), ofToString(i)+"_alpha.xml", ofRange(0, 1.0));
+    timeline.addFlags("trigger_"+ofToString(i), ofToString(i)+"_trigger.xml");
     timeline.addColors("colour_"+ofToString(i), ofToString(i)+"_colour.xml");
 }
 
