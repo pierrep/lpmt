@@ -31,7 +31,7 @@ void ofApp::loadSlideshow()
     if (dialog_result.bSuccess) {
         const std::string slideshowFolderName = dialog_result.getPath();
         quads[activeQuad].slideshowName = slideshowFolderName;
-        std::cout << "Set slide show folder: \"" << slideshowFolderName << "\"" << std::endl;
+        ofLogNotice() << "Set slide show folder: \"" << slideshowFolderName << "\"";
     }
 }
 
@@ -63,7 +63,7 @@ void ofApp::openSharedVideoFile(std::string path, int i)
     }
     sharedVideos[i].load(path);
     if (sharedVideos[i].isLoaded()) {
-        std::cout << "Loaded shared video: #" << i + 1 << ": \"" << path << "\"" << std::endl;
+        ofLogNotice() << "Loaded shared video: #" << i + 1 << ": \"" << path << "\"";
         sharedVideosFiles[i] = path;
         sharedVideos[i].setLoopState(OF_LOOP_NORMAL);
         sharedVideos[i].play();

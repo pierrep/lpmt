@@ -134,10 +134,6 @@ void ofApp::setup()
     // timeline setup
     timelineSetup(timelineDurationSeconds);
     bTimeline = false;
-    timeline.setCurrentPage(ofToString(activeQuad));
-    timeline.hide();
-    timeline.disable();
-    timeline.setAutosave(false);
 
     // GUI stuff
     m_gui.setupPages();

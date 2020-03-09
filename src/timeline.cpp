@@ -2,10 +2,9 @@
 
 //--------------------------------------------------------------
 void ofApp::timelineSetup(float duration){
-
+    timeline.setWorkingFolder("timeline/");
     timeline.setup();
-    timeline.setSpacebarTogglePlay(true);
-    timeline.setWorkingFolder("timeline");
+    timeline.setSpacebarTogglePlay(true);    
     timeline.setDurationInSeconds(duration);
     timeline.setPageName("main"); //changes the first page name
     timeline.addFlags("trigger_main", "main_trigger.xml");
@@ -18,9 +17,13 @@ void ofApp::timelineSetup(float duration){
     timeline.setLoopType(OF_LOOP_NORMAL);
     //timeline.enableSnapToBPM(60.0);
     timeline.enableSnapToOtherKeyframes(false);
-    timeline.setEditableHeaders(true);
-    //timeline.collapseAllTracks();
+    timeline.setEditableHeaders(true);    
     ofAddListener(timeline.events().bangFired, this, &ofApp::timelineTriggerReceived);
+
+    timeline.setCurrentPage(ofToString(activeQuad));
+    timeline.hide();
+    timeline.disable();
+    timeline.setAutosave(true);
 }
 
 //--------------------------------------------------------------
@@ -170,12 +173,18 @@ void ofApp::timelineTriggerReceived(ofxTLBangEventArgs& trigger){
 //--------------------------------------------------------------
 void ofApp::timelineAddQuadPage(int i) {
     timeline.addPage(ofToString(i), true);
-    timeline.addCurves("red_"+ofToString(i), ofToString(i)+"_red.xml", ofRange(0, 1.0));
-    timeline.addCurves("green_"+ofToString(i), ofToString(i)+"_green.xml", ofRange(0, 1.0));
-    timeline.addCurves("blue_"+ofToString(i), ofToString(i)+"_blue.xml", ofRange(0, 1.0));
-    timeline.addCurves("alpha_"+ofToString(i), ofToString(i)+"_alpha.xml", ofRange(0, 1.0));
-    timeline.addFlags("trigger_"+ofToString(i), ofToString(i)+"_trigger.xml");
-    timeline.addColors("colour_"+ofToString(i), ofToString(i)+"_colour.xml");
+    timeline.addCurves("red_"+ofToString(i), "timeline/" + ofToString(i)+"_red.xml", ofRange(0, 1.0));
+    timeline.addCurves("green_"+ofToString(i), "timeline/" + ofToString(i)+"_green.xml", ofRange(0, 1.0));
+    timeline.addCurves("blue_"+ofToString(i), "timeline/" + ofToString(i)+"_blue.xml", ofRange(0, 1.0));
+    timeline.addCurves("alpha_"+ofToString(i), "timeline/" + ofToString(i)+"_alpha.xml", ofRange(0, 1.0));
+    timeline.addFlags("trigger_"+ofToString(i), "timeline/" + ofToString(i)+"_trigger.xml");
+    timeline.addColors("colour_"+ofToString(i), "timeline/" + ofToString(i)+"_colour.xml");
+//    timeline.addCurves("red_"+ofToString(i), ofToString(i)+"_red.xml", ofRange(0, 1.0));
+//    timeline.addCurves("green_"+ofToString(i), ofToString(i)+"_green.xml", ofRange(0, 1.0));
+//    timeline.addCurves("blue_"+ofToString(i), ofToString(i)+"_blue.xml", ofRange(0, 1.0));
+//    timeline.addCurves("alpha_"+ofToString(i), ofToString(i)+"_alpha.xml", ofRange(0, 1.0));
+//    timeline.addFlags("trigger_"+ofToString(i), ofToString(i)+"_trigger.xml");
+//    timeline.addColors("colour_"+ofToString(i), ofToString(i)+"_colour.xml");
 }
 
 //--------------------------------------------------------------

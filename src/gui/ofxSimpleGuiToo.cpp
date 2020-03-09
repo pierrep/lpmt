@@ -290,7 +290,7 @@ ofxSimpleGuiPage &ofxSimpleGuiToo::addPage(string name) {
             tabButtonPointer[lastPageIndex] = button;
         }
         else {
-            std::cout << "Warning: A Tab in the header bar will only be created for the first 10 GUI pages. You currently have " << pages.size() - 1 << " pages." << std::endl;
+            ofLogWarning() << "Warning: A Tab in the header bar will only be created for the first 10 GUI pages. You currently have " << pages.size() - 1 << " pages.";
         }
 	}
 	setPage(pages.size() - 1);
