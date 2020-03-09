@@ -33,50 +33,53 @@
  *
  * ***********************************************************************/
 
-
 #include "ofxSimpleGuiConfig.h"
 
 ofxSimpleGuiConfig defaultSimpleGuiConfig;
 
+ofxSimpleGuiConfig::ofxSimpleGuiConfig()
+{
 
-ofxSimpleGuiConfig::ofxSimpleGuiConfig() {
+    sliderHeight = 16; // 10 must be even number, otherwise labels will be badly rendered, don't know why
+    colorSliderHeight = 16;
+    sliderTextHeight = 24;
+    titleHeight = sliderHeight + sliderTextHeight +10;
+    toggleHeight = titleHeight;
+    buttonHeight = titleHeight;
+    slider2DTextHeight = titleHeight * 1.5;
+    comboBoxHeight = titleHeight; //15
+    comboBoxTextHeight = 15;
+    headerTabWidth = 135;
+    headerTabHeight = titleHeight;
 
-	sliderHeight		= 10; // 10 must be even number, otherwise labels will be badly rendered, don't know why
-	colorSliderHeight	= 16;
-	sliderTextHeight	= 36;
-	titleHeight			= sliderHeight + sliderTextHeight;
-	toggleHeight		= titleHeight;
-	buttonHeight		= titleHeight;
-	slider2DTextHeight	= titleHeight * 1.5;
-	comboBoxHeight		= titleHeight;	//15
-	comboBoxTextHeight	= 15;
-	headerTabWidth      = 135;
-	headerTabHeight     = titleHeight;
+    padding.set(titleHeight / 3, 4); // was titleHeight/2 , 10
+    offset.set(titleHeight / 2, titleHeight / 2);
+    slider2DSize.set(titleHeight * 4, titleHeight * 4);
 
+    gridSize.x = 190 + padding.x;
+    gridSize.y = toggleHeight + padding.y;
 
-	padding.set			(titleHeight/2, 3); // was titleHeight/2 , 10
-	offset.set			(titleHeight/2, titleHeight/2);
-	slider2DSize.set	(titleHeight * 4, titleHeight * 4);
-
-	gridSize.x			= 200 + padding.x;
-	gridSize.y			= toggleHeight + padding.y;
-
-	textColor			= 0x888888;
-	textOverColor		= 0xFFFFFF;
+    textColor = 0x888888;
+    textOverColor = 0xFFFFFF;
 
     /* Background colour */
     textBGColor.r = textBGColor.g = 70;
     textBGColor.b = 80;
-	textBGColor.a = 180;
+    textBGColor.a = 255;
 
-	textBGOverColor		= 0x222222;
+    //textBGOverColor = 0x222222;
+    textBGOverColor = 20;
 
-    fullColor			= 0xaaaaaa;
-	fullOverColor		= 0xffffff;
-	fullActiveColor		= 0x881818;
-    emptyColor.r = emptyColor.g = emptyColor.b = 64;
-    emptyColor.a = 180;
-	borderColor			= 0x333333;
-	rectRadius = 2;
-	rounded = false;
+    fullColor = 0x888888;
+    fullOverColor = 0xaaaaaa;
+    fullActiveColor = 0x881818;
+    emptyColor.r = emptyColor.g = emptyColor.b = 104;
+    emptyColor.a = 255;
+    borderColor = 0x333333;
+    rectRadius = 2;
+    rounded = false;
+
+    /* set up font */
+    bUseFont = true;
+    ttf.load("data/type/Roboto-Regular.ttf", 9);
 }

@@ -233,8 +233,19 @@ void ofxSimpleGuiComboBox::draw(float x, float y) {
 
 	setTextColor();
 
-	ofDrawBitmapString(m_title, kSGCBTextPaddingX, kSGCBTextPaddingY);
-	ofDrawBitmapString(m_choices.size() ? m_choices[*m_selectedChoice] : "N/A", kSGCBTextPaddingX, kSGCBTextPaddingY * 2 + 3); // 3 pixel margin between texts
+    if (config->bUseFont) {
+        config->ttf.drawString(m_title, kSGCBTextPaddingX, kSGCBTextPaddingY);
+    } else {
+        ofDrawBitmapString(m_title, kSGCBTextPaddingX, kSGCBTextPaddingY);
+    }
+
+
+    if (config->bUseFont) {
+        config->ttf.drawString(m_choices.size() ? m_choices[*m_selectedChoice] : "N/A", kSGCBTextPaddingX, kSGCBTextPaddingY * 2 + 3);
+    } else {
+        ofDrawBitmapString(m_choices.size() ? m_choices[*m_selectedChoice] : "N/A", kSGCBTextPaddingX, kSGCBTextPaddingY * 2 + 3); // 3 pixel margin between texts
+    }
+
 	//draw a combobox down triangle icon so the users know to click
     ofDrawTriangle(width - (kSGCBTriangleWidth + KSGCBTrianglePadding), kSGCBTextPaddingY/2,
 			   width - (KSGCBTrianglePadding), kSGCBTextPaddingY/2,
@@ -256,7 +267,11 @@ void ofxSimpleGuiComboBox::draw(float x, float y) {
 				setCBTextBGColor();
 			}
 
-			ofDrawBitmapString(m_choices[i], kSGCBTextPaddingX, curY + kSGCBTextPaddingY);
+            if (config->bUseFont) {
+                config->ttf.drawString(m_choices[i], kSGCBTextPaddingX, curY + kSGCBTextPaddingY);
+            } else {
+                ofDrawBitmapString(m_choices[i], kSGCBTextPaddingX, curY + kSGCBTextPaddingY);
+            }
 		}
 	}
 	ofDisableAlphaBlending();

@@ -91,7 +91,7 @@ ofxTimeline::ofxTimeline()
    	//copy from ofxTimeline/assets into bin/data/
 	defaultPalettePath("GUI/defaultColorPalette.png"),
 	//TODO: should be able to use bitmap font if need be
-	fontPath("GUI/NewMedia Fett.ttf"),
+    fontPath("type/Roboto-Regular.ttf"),
 	fontSize(9),
 	footersHidden(false)
 {

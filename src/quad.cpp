@@ -22,8 +22,6 @@ void quad::reset()
     layer = -1;
     isMaskSetup = false;
     colorBg = false;
-    transBg = false;
-    transUp = true;
     camBg = false;
     imgBg = false;
     videoBg = false;
@@ -60,15 +58,6 @@ void quad::reset()
 
     transDuration = 1.0;
     fps = ofGetFrameRate();
-    transCounter = 0;
-
-    // initialize the solid and transition colors with solid white
-    bgColor = ofFloatColor(1, 1, 1, 1);
-    secondColor = ofFloatColor(1, 1, 1, 1);
-
-    // initialize some colors with transparent black
-    startColor = ofFloatColor(0, 0, 0, 0);
-    endColor = ofFloatColor(0, 0, 0, 0);
 
     // initialize some colors with solid white
     imgColorize = ofFloatColor(1, 1, 1, 1);
@@ -246,36 +235,6 @@ void quad::update()
         }
         //recalculates center of quad
         center = (corners[0] + corners[1] + corners[2] + corners[3]) / 4;
-
-        // solid colors ---------------------------------------------------------------
-        // calculates transition between two solid colors
-        if (colorBg && transBg) {
-            if (transUp) {
-                startColor = bgColor;
-                endColor = secondColor;
-            } else {
-                startColor = secondColor;
-                endColor = bgColor;
-            }
-            // using fps detected at setup is suboptimal
-            // but updating it at each cycle triggers a flickering effect
-            // needs more work (e.g. introducing a roundup of actual framerate)
-            // now we update fps value just if it differs more than 50fps from actual rate
-            //transStep = (transDuration * ofGetFrameRate());
-            //if (abs(fps-ofGetFrameRate()) > 50) {fps = ofGetFrameRate();}
-            transStep = (transDuration * fps);
-            transColor.r = startColor.r + (((endColor.r - startColor.r) / transStep) * transCounter);
-            transColor.g = startColor.g + (((endColor.g - startColor.g) / transStep) * transCounter);
-            transColor.b = startColor.b + (((endColor.b - startColor.b) / transStep) * transCounter);
-            transColor.a = startColor.a + (((endColor.a - startColor.a) / transStep) * transCounter);
-            transCounter += 1;
-            if (transCounter >= transStep) {
-                transCounter = 0;
-                transUp = !transUp;
-            }
-        }
-
-        // live camera --------------------------------------------------------------
 
         // video --------------------------------------------------------------------
         // loads video

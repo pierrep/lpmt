@@ -48,8 +48,6 @@ void ofApp::saveCurrentSettingsToXMLFile(std::string xmlFilePath)
 
             xmlSettingsFile.setValue("QUADS:QUAD_" + ofToString(i) + ":IS_ON", quads[i].isOn);
             xmlSettingsFile.setValue("QUADS:QUAD_" + ofToString(i) + ":COLOR:ACTIVE", quads[i].colorBg);
-            xmlSettingsFile.setValue("QUADS:QUAD_" + ofToString(i) + ":COLOR:TRANS:ACTIVE", quads[i].transBg);
-            xmlSettingsFile.setValue("QUADS:QUAD_" + ofToString(i) + ":COLOR:TRANS:DURATION", quads[i].transDuration);
             xmlSettingsFile.setValue("QUADS:QUAD_" + ofToString(i) + ":SLIDESHOW:ACTIVE", quads[i].slideshowBg);
             xmlSettingsFile.setValue("QUADS:QUAD_" + ofToString(i) + ":SLIDESHOW:SPEED", quads[i].slideshowSpeed);
             xmlSettingsFile.setValue("QUADS:QUAD_" + ofToString(i) + ":SLIDESHOW:TRANSITIONS", quads[i].bFadeTransitions);
@@ -68,16 +66,6 @@ void ofApp::saveCurrentSettingsToXMLFile(std::string xmlFilePath)
             xmlSettingsFile.setValue("QUADS:QUAD_" + ofToString(i) + ":VIDEO:VOLUME", quads[i].videoVolume);
             ofClamp(quads[i].videoVolume, 0.f, 1.f); // this is to avoid warnings and for backwards compatibility (the value used to be in range 0 - 10)
             xmlSettingsFile.setValue("QUADS:QUAD_" + ofToString(i) + ":VIDEO:LOOP", quads[i].videoLoop);
-
-            xmlSettingsFile.setValue("QUADS:QUAD_" + ofToString(i) + ":COLOR:R", quads[i].bgColor.r);
-            xmlSettingsFile.setValue("QUADS:QUAD_" + ofToString(i) + ":COLOR:G", quads[i].bgColor.g);
-            xmlSettingsFile.setValue("QUADS:QUAD_" + ofToString(i) + ":COLOR:B", quads[i].bgColor.b);
-            xmlSettingsFile.setValue("QUADS:QUAD_" + ofToString(i) + ":COLOR:A", quads[i].bgColor.a);
-
-            xmlSettingsFile.setValue("QUADS:QUAD_" + ofToString(i) + ":COLOR:SECOND_COLOR:R", quads[i].secondColor.r);
-            xmlSettingsFile.setValue("QUADS:QUAD_" + ofToString(i) + ":COLOR:SECOND_COLOR:G", quads[i].secondColor.g);
-            xmlSettingsFile.setValue("QUADS:QUAD_" + ofToString(i) + ":COLOR:SECOND_COLOR:B", quads[i].secondColor.b);
-            xmlSettingsFile.setValue("QUADS:QUAD_" + ofToString(i) + ":COLOR:SECOND_COLOR:A", quads[i].secondColor.a);
 
             xmlSettingsFile.setValue("QUADS:QUAD_" + ofToString(i) + ":IMG:COLORIZE:R", quads[i].imgColorize.r);
             xmlSettingsFile.setValue("QUADS:QUAD_" + ofToString(i) + ":IMG:COLORIZE:G", quads[i].imgColorize.g);
@@ -244,8 +232,6 @@ void ofApp::loadSettingsFromXMLFile(std::string xmlFilePath)
 
             quads[i].colorBg = xmlSettingsFile.getValue("QUADS:QUAD_" + ofToString(i) + ":COLOR:ACTIVE", 0);
 
-            quads[i].transBg = xmlSettingsFile.getValue("QUADS:QUAD_" + ofToString(i) + ":COLOR:TRANS:ACTIVE", 0);
-            quads[i].transDuration = xmlSettingsFile.getValue("QUADS:QUAD_" + ofToString(i) + ":COLOR:TRANS:DURATION", 1.0);
             quads[i].slideshowBg = xmlSettingsFile.getValue("QUADS:QUAD_" + ofToString(i) + ":SLIDESHOW:ACTIVE", 0);
             quads[i].slideshowSpeed = xmlSettingsFile.getValue("QUADS:QUAD_" + ofToString(i) + ":SLIDESHOW:SPEED", 1.0);
             quads[i].bFadeTransitions = xmlSettingsFile.getValue("QUADS:QUAD_" + ofToString(i) + ":SLIDESHOW:TRANSITIONS", 0);
@@ -257,16 +243,6 @@ void ofApp::loadSettingsFromXMLFile(std::string xmlFilePath)
             quads[i].videoSpeed = xmlSettingsFile.getValue("QUADS:QUAD_" + ofToString(i) + ":VIDEO:SPEED", 1.0);
             quads[i].videoVolume = xmlSettingsFile.getValue("QUADS:QUAD_" + ofToString(i) + ":VIDEO:VOLUME", 0);
             quads[i].videoLoop = xmlSettingsFile.getValue("QUADS:QUAD_" + ofToString(i) + ":VIDEO:LOOP", 1);
-
-            quads[i].bgColor.r = xmlSettingsFile.getValue("QUADS:QUAD_" + ofToString(i) + ":COLOR:R", 0.0);
-            quads[i].bgColor.g = xmlSettingsFile.getValue("QUADS:QUAD_" + ofToString(i) + ":COLOR:G", 0.0);
-            quads[i].bgColor.b = xmlSettingsFile.getValue("QUADS:QUAD_" + ofToString(i) + ":COLOR:B", 0.0);
-            quads[i].bgColor.a = xmlSettingsFile.getValue("QUADS:QUAD_" + ofToString(i) + ":COLOR:A", 0.0);
-
-            quads[i].secondColor.r = xmlSettingsFile.getValue("QUADS:QUAD_" + ofToString(i) + ":COLOR:SECOND_COLOR:R", 0.0);
-            quads[i].secondColor.g = xmlSettingsFile.getValue("QUADS:QUAD_" + ofToString(i) + ":COLOR:SECOND_COLOR:G", 0.0);
-            quads[i].secondColor.b = xmlSettingsFile.getValue("QUADS:QUAD_" + ofToString(i) + ":COLOR:SECOND_COLOR:B", 0.0);
-            quads[i].secondColor.a = xmlSettingsFile.getValue("QUADS:QUAD_" + ofToString(i) + ":COLOR:SECOND_COLOR:A", 0.0);
 
             quads[i].imgColorize.r = xmlSettingsFile.getValue("QUADS:QUAD_" + ofToString(i) + ":IMG:COLORIZE:R", 1.0);
             quads[i].imgColorize.g = xmlSettingsFile.getValue("QUADS:QUAD_" + ofToString(i) + ":IMG:COLORIZE:G", 1.0);

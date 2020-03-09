@@ -101,7 +101,12 @@ void ofxSimpleGuiButton::draw(float x, float y) {
 	}
 
 	setTextColor();
-	ofDrawBitmapString(name, 3, 15);
+
+    if (config->bUseFont) {
+        config->ttf.drawString(name, 3, 15);
+    } else {
+        ofDrawBitmapString(name, 3, 15);
+    }
 
 	ofDisableAlphaBlending();
 

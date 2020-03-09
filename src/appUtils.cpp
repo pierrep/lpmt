@@ -103,11 +103,6 @@ void ofApp::resync()
                 quads[i].currentSlideId = 0;
                 quads[i].slideTimer = 0;
             }
-            // reset trans colors
-            if (quads[i].colorBg && quads[i].transBg) {
-                quads[i].transCounter = 0;
-                quads[i].transUp = true;
-            }
         }
     }
     for (int i = 0; i < 8; i++) {

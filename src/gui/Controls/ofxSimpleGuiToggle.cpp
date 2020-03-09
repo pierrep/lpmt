@@ -103,11 +103,13 @@ void ofxSimpleGuiToggle::draw(float x, float y) {
         ofDrawLine(height-4, 2, 2, height-4);
 	}
 
-	//setTextBGColor();
-	//ofRect(height, 0, width - height, height);
-
 	setTextColor();
-	ofDrawBitmapString(name, height + 15, 12);
+    if (config->bUseFont) {
+        config->ttf.drawString(name, height + 5, 12);
+    } else {
+        ofDrawBitmapString(name, height + 5, 12);
+    }
+
 	ofDisableAlphaBlending();
 
 	glPopMatrix();

@@ -33,48 +33,49 @@
  *
  * ***********************************************************************/
 
-
 #pragma once
 
 #include "ofColor.h"
 #include "ofPoint.h"
+#include "ofTrueTypeFont.h"
 
 class ofxSimpleGuiConfig {
 public:
-	ofPoint	gridSize;
+    ofPoint gridSize;
 
-	float	buttonHeight;
-	float	toggleHeight;
-	float	sliderHeight;
-	float	colorSliderHeight;
-	float	sliderTextHeight;
-	float	slider2DTextHeight;
-	float	titleHeight;
-	float	comboBoxHeight;
-	float	comboBoxTextHeight;
-	float   headerTabWidth;
-	float   headerTabHeight;
+    float buttonHeight;
+    float toggleHeight;
+    float sliderHeight;
+    float colorSliderHeight;
+    float sliderTextHeight;
+    float slider2DTextHeight;
+    float titleHeight;
+    float comboBoxHeight;
+    float comboBoxTextHeight;
+    float headerTabWidth;
+    float headerTabHeight;
 
-	ofPoint padding;
-	ofPoint offset;
-	ofPoint	slider2DSize;
+    ofPoint padding;
+    ofPoint offset;
+    ofPoint slider2DSize;
 
-	int	textColor;
-	int textOverColor;
-	ofColor textBGColor;
-	int textBGOverColor;
+    int textColor;
+    int textOverColor;
+    ofColor textBGColor;
+    int textBGOverColor;
 
-	int fullColor;
-	int	fullOverColor;
-	int fullActiveColor;
-	ofColor emptyColor;
-	int borderColor;
-	int rectRadius;
-	bool rounded;
+    int fullColor;
+    int fullOverColor;
+    int fullActiveColor;
+    ofColor emptyColor;
+    int borderColor;
+    int rectRadius;
+    bool rounded;
 
-	ofxSimpleGuiConfig();
+    ofTrueTypeFont ttf;
+    bool bUseFont;
+
+    ofxSimpleGuiConfig();
 };
 
-
 extern ofxSimpleGuiConfig defaultSimpleGuiConfig;
-

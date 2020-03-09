@@ -73,11 +73,6 @@ public:
     int videoWidth;
     int videoHeight;
 
-    ofFloatColor bgColor;
-    ofFloatColor secondColor;
-    ofFloatColor startColor;
-    ofFloatColor endColor;
-    ofFloatColor transColor;
     ofFloatColor imgColorize;
     ofFloatColor colorGreenscreen;
     ofFloatColor kinectColorize;
@@ -128,8 +123,6 @@ public:
     bool isOn;
     bool isMaskSetup;
     bool colorBg;
-    bool transBg;
-    bool transUp;
     bool camBg;
     bool imgBg;
     bool videoBg;
@@ -185,8 +178,6 @@ public:
     float thresholdGreenscreen;
     int bgSlideshow;
     unsigned int currentSlideId;
-    int transStep;
-    int transCounter;
     int fps;
     int slideFramesDuration;
     int slideTimer;
