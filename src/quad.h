@@ -67,6 +67,7 @@ public:
     /* img and video stuff */
     ofImage img;
     ofVideoPlayer video;
+    ofTexture blank;
     ofTrueTypeFont ttf;
 
     int videoWidth;

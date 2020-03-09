@@ -168,6 +168,7 @@ void quad::reset()
         video.stop();
         video.close();
     }
+
 }
 
 //---------------------------------------------------------------
@@ -219,6 +220,13 @@ void quad::setup(ofPoint point1, ofPoint point2, ofPoint point3, ofPoint point4,
     circularCrop[2] = 0.0;
 
     allocateFbo(ofGetWidth(), ofGetHeight());
+
+    // create a 1x1 white texture
+    ofPixels texpixels;
+    texpixels.allocate(1, 1,OF_PIXELS_RGBA);
+    texpixels[0] = 255; texpixels[1] = 255; texpixels[2] = 255; texpixels[3] = 255;
+    blank.allocate(texpixels);
+    blank.loadData(texpixels);
 
     //calculates screen ratio factor for window and fullscreen
     screenFactorX = (ofGetWidth() / (float)ofGetScreenWidth());
@@ -864,91 +872,23 @@ void quad::draw(vector<ofVideoPlayer>& sharedVideos)
 void quad::drawSurface(vector<ofVideoPlayer>& sharedVideos)
 {
     // solid colors and transitions ----------------------------------------------------------------
-    if (colorBg) {
-        ofFill();
-        // if we have two colors it draws with calculated transition color
-        if (transBg) {
-            ofSetColor(transColor.r * 255 * timelineRed, transColor.g * 255 * timelineGreen, transColor.b * 255 * timelineBlue, transColor.a * 255 * timelineAlpha);
-        }
-        // this in case of only one color set
-        else {
-            if (bTimelineColor) {
-                ofSetColor(timelineColor.r * 255 * timelineRed, timelineColor.g * 255 * timelineGreen, timelineColor.b * 255 * timelineBlue, timelineColor.a * 255 * timelineAlpha);
-            } else {
-                ofSetColor(bgColor.r * 255 * timelineRed, bgColor.g * 255 * timelineGreen, bgColor.b * 255 * timelineBlue, bgColor.a * 255 * timelineAlpha);
-            }
-        }
-        ofDrawRectangle(0, 0, ofGetWidth(), ofGetHeight());
-        ofNoFill();
-    }
-
-    // draws slideshows ------------------------------------------------------------------------------
-    //    if (slideshowBg) {
-    //        if (slides.size() > 0) {
-    //            // if we reached the end of slides vector, it loops back to first slide
-    //            if (currentSlide >= slides.size()) {
-    //                currentSlide = 0;
-    //            }
-    //            ofImage& slide = slides[currentSlide];
-    //            // color is set according to still img colorization combo
-    //            ofSetColor(imgColorize.r * 255 * timelineRed, imgColorize.g * 255 * timelineGreen, imgColorize.b * 255 * timelineBlue, imgColorize.a * 255 * timelineAlpha);
-    //            // default is drawing image with its size unchanged, so we set mult factors = 1.0
-    //            float multX = 1.0;
-    //            float multY = 1.0;
-    //            if (slideFit) {
-    //                float fitX = ofGetWidth() / slide.getWidth();
-    //                float fitY = ofGetHeight() / slide.getHeight();
-    //                if (slideKeepAspect) {
-    //                    // we calculate the factor for fitting the image in quad respecting img aspect ratio
-    //                    if (fitX >= fitY) {
-    //                        multX = fitY;
-    //                        multY = fitY;
-    //                    } else {
-    //                        multX = fitX;
-    //                        multY = fitX;
-    //                    }
-    //                } else {
-    //                    // this is for stretching image to whole quad size
-    //                    multX = fitX;
-    //                    multY = fitY;
-    //                }
-    //            }
-
-    //            int nextSlideId = 0;
-    //            if (bFadeTransitions && (slides.size() > 1)) {
-
-    //                if ((currentSlide + 1) >= slides.size())
-    //                    nextSlideId = 0;
-    //                else
-    //                    nextSlideId = currentSlide + 1;
-    //                ofImage& nextSlide = slides[nextSlideId];
-
-    //                float fade = (float)slideTimer / (float)slideFramesDuration;
-
-    //                crossfadeShader->begin();
-    //                crossfadeShader->setUniformTexture("tex1", slide.getTexture(), 0);
-    //                crossfadeShader->setUniformTexture("tex2", nextSlide.getTexture(), 1);
-    //                crossfadeShader->setUniform1f("crossfade", fade);
-    //                crossfadeShader->setUniform2f("ratio", ofVec2f(nextSlide.getWidth() / slide.getWidth(), nextSlide.getHeight() / slide.getHeight()));
-    //                slide.draw(0, 0, slide.getWidth() * multX, slide.getHeight() * multY);
-    //                crossfadeShader->end();
-    //            } else {
-    //                // at last we draw the image with appropriate size multiplier
-    //                ofSetColor(imgColorize.r * 255 * timelineRed, imgColorize.g * 255 * timelineGreen, imgColorize.b * 255 * timelineBlue, imgColorize.a * 255 * timelineAlpha);
-    //                slide.draw(0, 0, slide.getWidth() * multX, slide.getHeight() * multY);
-    //            }
-
-    //            // if slide showing time has elapsed it switches to next slide
-    //            if (slideTimer > slideFramesDuration) {
-    //                // check if we are using timeline to change slides
-    //                if (!bTimelineSlideChange) {
-    //                    currentSlide += 1;
-    //                }
-    //                slideTimer = 0;
-    //            }
-    //            slideTimer += 1;
-    //        }
-    //    }
+//    if (colorBg) {
+//        ofFill();
+//        // if we have two colors it draws with calculated transition color
+//        if (transBg) {
+//            ofSetColor(transColor.r * 255 * timelineRed, transColor.g * 255 * timelineGreen, transColor.b * 255 * timelineBlue, transColor.a * 255 * timelineAlpha);
+//        }
+//        // this in case of only one color set
+//        else {
+//            if (bTimelineColor) {
+//                ofSetColor(timelineColor.r * 255 * timelineRed, timelineColor.g * 255 * timelineGreen, timelineColor.b * 255 * timelineBlue, timelineColor.a * 255 * timelineAlpha);
+//            } else {
+//                ofSetColor(bgColor.r * 255 * timelineRed, bgColor.g * 255 * timelineGreen, bgColor.b * 255 * timelineBlue, bgColor.a * 255 * timelineAlpha);
+//            }
+//        }
+//        ofDrawRectangle(0, 0, ofGetWidth(), ofGetHeight());
+//        ofNoFill();
+//    }
 
     // draw the content ------------------------------------------------------------------------------
     if (isValidContent(sharedVideos)) {
@@ -961,7 +901,12 @@ void quad::drawSurface(vector<ofVideoPlayer>& sharedVideos)
         ofVec2f ratio = ofVec2f(1, 1);
         float fade = 0.0f;
 
-        if (imgBg && (img.getWidth() > 0)) {
+        if(colorBg) {
+            srcWidth = ofGetWidth();
+            srcHeight = ofGetHeight();
+            imageTex = imageTex2 = blank;
+        }
+        else if (imgBg && (img.getWidth() > 0)) {
             srcWidth = img.getWidth();
             srcHeight = img.getHeight();
             imageTex = imageTex2 = img.getTexture();
@@ -1141,7 +1086,9 @@ void quad::drawSurface(vector<ofVideoPlayer>& sharedVideos)
 //--------------------------------------------------------------
 bool quad::isValidContent(vector<ofVideoPlayer>& sharedVideos)
 {
-    if (imgBg && img.getWidth() > 0)
+    if(colorBg)
+        return true;
+    else if (imgBg && img.getWidth() > 0)
         return true;
     else if (camAvailable && camBg && cams[camNumber].getWidth() > 0)
         return true;
@@ -1158,7 +1105,10 @@ bool quad::isValidContent(vector<ofVideoPlayer>& sharedVideos)
 //--------------------------------------------------------------
 void quad::drawContent(float w, float h, vector<ofVideoPlayer>& sharedVideos)
 {
-    if (imgBg && img.getWidth() > 0) {
+    if(colorBg) {
+        blank.draw(0, 0, w, h);
+    }
+    else if (imgBg && img.getWidth() > 0) {
         img.draw(0, 0, w, h);
     } else if (camAvailable && camBg && cams[camNumber].getWidth() > 0) {
         cams[camNumber].getTexture().draw(0, 0, w, h);

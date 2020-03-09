@@ -1,0 +1,38 @@
+<positions>
+    <element name="alpha_3">
+        <x>0.000000000</x>
+        <y>262.000000000</y>
+        <width>1920.000000000</width>
+        <height>40.000000000</height>
+    </element>
+    <element name="blue_3">
+        <x>0.000000000</x>
+        <y>198.000000000</y>
+        <width>1920.000000000</width>
+        <height>40.000000000</height>
+    </element>
+    <element name="colour_3">
+        <x>0.000000000</x>
+        <y>390.000000000</y>
+        <width>1920.000000000</width>
+        <height>40.000000000</height>
+    </element>
+    <element name="green_3">
+        <x>0.000000000</x>
+        <y>134.000000000</y>
+        <width>1920.000000000</width>
+        <height>40.000000000</height>
+    </element>
+    <element name="red_3">
+        <x>0.000000000</x>
+        <y>70.000000000</y>
+        <width>1920.000000000</width>
+        <height>40.000000000</height>
+    </element>
+    <element name="trigger_3">
+        <x>0.000000000</x>
+        <y>326.000000000</y>
+        <width>1920.000000000</width>
+        <height>40.000000000</height>
+    </element>
+</positions>
