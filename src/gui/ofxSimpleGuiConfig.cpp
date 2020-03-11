@@ -43,17 +43,17 @@ ofxSimpleGuiConfig::ofxSimpleGuiConfig()
     sliderHeight = 16; // 10 must be even number, otherwise labels will be badly rendered, don't know why
     colorSliderHeight = 16;
     sliderTextHeight = 24;
-    titleHeight = sliderHeight + sliderTextHeight +10;
+    titleHeight = sliderHeight + sliderTextHeight - 10;
     toggleHeight = titleHeight;
     buttonHeight = titleHeight;
     slider2DTextHeight = titleHeight * 1.5;
     comboBoxHeight = titleHeight; //15
     comboBoxTextHeight = 15;
-    headerTabWidth = 135;
+    headerTabWidth = 139;
     headerTabHeight = titleHeight;
 
     padding.set(titleHeight / 3, 4); // was titleHeight/2 , 10
-    offset.set(titleHeight / 2, titleHeight / 2);
+    offset.set(titleHeight / 2, titleHeight/2 );
     slider2DSize.set(titleHeight * 4, titleHeight * 4);
 
     gridSize.x = 190 + padding.x;
@@ -70,13 +70,13 @@ ofxSimpleGuiConfig::ofxSimpleGuiConfig()
     //textBGOverColor = 0x222222;
     textBGOverColor = 20;
 
-    fullColor = 0x888888;
-    fullOverColor = 0xaaaaaa;
+    fullColor = 0x00aaaa;
+    fullOverColor = 0x00aaaa;
     fullActiveColor = 0x881818;
     emptyColor.r = emptyColor.g = emptyColor.b = 104;
     emptyColor.a = 255;
     borderColor = 0x333333;
-    rectRadius = 2;
+    rectRadius = 10;
     rounded = false;
 
     /* set up font */

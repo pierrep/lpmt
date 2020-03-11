@@ -194,7 +194,7 @@ public:
 
     // timeline
     ofxTimeline timeline;
-    float timelineDurationSeconds;
+    int timelineDurationSeconds;
     float timelinePreviousDuration;
     void timelineSetup(float duration);
     void timelineUpdate();

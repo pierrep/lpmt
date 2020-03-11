@@ -19,6 +19,7 @@ GUI::GUI(ofApp* app) : m_app(app),
     m_config.fullActiveColor = 0x648B96; // bluish-grey
     m_config.textColor = 0xFFFFFF;       // white
     m_config.textBGOverColor = 0x777788; // grey
+   // m_config.fullColor
 
     defaultSimpleGuiConfig = m_config;
 }
@@ -58,11 +59,11 @@ void GUI::setupPages()
     m_gui.addSlider("timeline seconds", m_app->timelineDurationSeconds, 10.0, 1200.0);
 
     // Page One
-    m_gui.addPage("Page 1");
+    m_gui.addPage("PAGE 1");
     m_gui.addTitle("Surface");
     m_gui.addToggle("Enable", m_dummyBool);
     m_gui.addToggle("Use Timeline", m_app->useTimeline);
-    m_gui.addSlider("Timeline seconds", m_app->timelineDurationSeconds, 10.0, 1200.0);
+    m_gui.addSlider("Timeline seconds", m_app->timelineDurationSeconds, 10, 600);
     m_gui.addToggle("Use Timeline tint", m_dummyBool);
     m_gui.addToggle("Use Timeline color", m_dummyBool);
     m_gui.addToggle("Use Timeline alpha", m_dummyBool);
@@ -75,8 +76,8 @@ void GUI::setupPages()
     m_gui.addSlider("Syphon scale Y", m_dummyFloat, 0.1, 10.0);
     #endif
 
-    m_gui.addSlider("Scale X", m_dummyFloat, 0.1, 10.0);
-    m_gui.addSlider("Scale Y", m_dummyFloat, 0.1, 10.0);
+    m_gui.addSlider("Scale X", m_dummyFloat, 0.1, 5.0);
+    m_gui.addSlider("Scale Y", m_dummyFloat, 0.1, 5.0);
     m_gui.addToggle("Fit to quad size", m_dummyBool);
     m_gui.addToggle("Keep aspect ratio", m_dummyBool);
     m_gui.addToggle("H mirror", m_dummyBool);
@@ -137,7 +138,7 @@ void GUI::setupPages()
 
 
     // Page Two
-    m_gui.addPage("Page 2");
+    m_gui.addPage("PAGE 2");
     m_gui.addTitle("Edge blending");
     m_gui.addToggle("Edge blend on/off", m_dummyBool);
     m_gui.addSlider("Power", m_dummyFloat, 0.0, 4.0);
@@ -193,7 +194,7 @@ void GUI::setupPages()
     #endif
 
     // Page Three
-    m_gui.addPage("Page 3");
+    m_gui.addPage("PAGE 3");
     m_gui.addTitle("Corner 0");
     m_gui.addSlider("corner 0 X", m_dummyFloat, -1.0, 2.0);
     m_gui.addSlider("corner 0 Y", m_dummyFloat, -1.0, 2.0);
@@ -228,7 +229,7 @@ void GUI::setupPages()
 
 void GUI::updatePages(quad& activeQuad)
 {
-    ofxSimpleGuiPage& firstPage = m_gui.page("Page 1");
+    ofxSimpleGuiPage& firstPage = m_gui.page("PAGE 1");
 
     dynamic_cast<ofxSimpleGuiToggle*>(firstPage.findControlByName("Enable"))->value = &activeQuad.isOn;
     dynamic_cast<ofxSimpleGuiToggle*>(firstPage.findControlByName("Use Timeline tint"))->value = &activeQuad.bTimelineTint;
@@ -295,7 +296,7 @@ void GUI::updatePages(quad& activeQuad)
 
 
     // Second Page
-    ofxSimpleGuiPage& secondPage = m_gui.page("Page 2");
+    ofxSimpleGuiPage& secondPage = m_gui.page("PAGE 2");
     dynamic_cast<ofxSimpleGuiToggle*>(secondPage.findControlByName("Edge blend on/off"))->value = &activeQuad.edgeBlendBool;
     dynamic_cast<ofxSimpleGuiSliderFloat*>(secondPage.findControlByName("Power"))->value = &activeQuad.edgeBlendExponent;
     dynamic_cast<ofxSimpleGuiSliderFloat*>(secondPage.findControlByName("Gamma"))->value = &activeQuad.edgeBlendGamma;
@@ -338,7 +339,7 @@ void GUI::updatePages(quad& activeQuad)
     }
     #endif
 
-    ofxSimpleGuiPage& thirdPage = m_gui.page("Page 3");
+    ofxSimpleGuiPage& thirdPage = m_gui.page("PAGE 3");
     dynamic_cast<ofxSimpleGuiSliderFloat*>(thirdPage.findControlByName("corner 0 X"))->value = &activeQuad.corners[0].x;
     dynamic_cast<ofxSimpleGuiSliderFloat*>(thirdPage.findControlByName("corner 0 Y"))->value = &activeQuad.corners[0].y;
     dynamic_cast<ofxSimpleGuiSliderFloat*>(thirdPage.findControlByName("corner 3 X"))->value = &activeQuad.corners[3].x;

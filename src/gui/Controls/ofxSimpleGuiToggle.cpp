@@ -75,12 +75,10 @@ void ofxSimpleGuiToggle::onKeyEnter() {
 }
 
 void ofxSimpleGuiToggle::update() {
-//	if(!enabled) return;
-//	enabled = false;
+
 }
 
 void ofxSimpleGuiToggle::draw(float x, float y) {
-//	enabled = true;
 	setPosition(x, y);
 
 	glPushMatrix();
@@ -94,13 +92,16 @@ void ofxSimpleGuiToggle::draw(float x, float y) {
 	else if(bLearnt){ofSetColor(0,255,0);}
     ofDrawRectangle(0, 0, width, height);
 
-	setFullColor(*value);
+    setFullColor(*value);
     ofDrawRectangle(2, 2, height-4, height-4);
 
 	if((*value)) {
+        ofPushStyle();
 		setTextColor();
+        ofSetLineWidth(2);
         ofDrawLine(2, 2, height-4, height-4);
         ofDrawLine(height-4, 2, 2, height-4);
+        ofPopStyle();
 	}
 
 	setTextColor();

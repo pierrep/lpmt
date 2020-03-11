@@ -18,7 +18,6 @@ ofApp::ofApp()
 void ofApp::exit()
 {
     timeline.reset();
-
     ofLogNotice() << "exiting...";
 }
 
@@ -409,7 +408,7 @@ void ofApp::draw()
             ofNoFill();
             ofDisableAlphaBlending();
 
-            // in setup mode writes the number of the active quad at the bottom of the window
+            // Writes the number of the active quad at the bottom of the window
             ofSetHexColor(0xFFFFFF); // white
             ttf.drawString("Active surface: " + ofToString(activeQuad) + " Layer: " + ofToString(quads[activeQuad].layer), 30, ofGetHeight() - 25);
 //            for (int i = 0; i < MAX_QUADS; i++) {

@@ -25,6 +25,7 @@ public:
     void update();
     void draw(vector<ofVideoPlayer> &sharedVideos);
     void drawSurface(vector<ofVideoPlayer> &sharedVideos);
+    void drawDeformation(ofTexture& tex, bool alphaFix);
     void applyBlendmode();
     void gaussian_elimination(float *input, int n);
     void findHomography(ofPoint src[4], ofPoint dst[4], float homography[16]);

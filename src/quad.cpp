@@ -153,11 +153,10 @@ void quad::reset()
     bTimelineAlpha = false;
     bTimelineSlideChange = false;
 
-    if(video.isLoaded()) {
+    if (video.isLoaded()) {
         video.stop();
         video.close();
     }
-
 }
 
 //---------------------------------------------------------------
@@ -212,8 +211,11 @@ void quad::setup(ofPoint point1, ofPoint point2, ofPoint point3, ofPoint point4,
 
     // create a 1x1 white texture
     ofPixels texpixels;
-    texpixels.allocate(1, 1,OF_PIXELS_RGBA);
-    texpixels[0] = 255; texpixels[1] = 255; texpixels[2] = 255; texpixels[3] = 255;
+    texpixels.allocate(1, 1, OF_PIXELS_RGBA);
+    texpixels[0] = 255;
+    texpixels[1] = 255;
+    texpixels[2] = 255;
+    texpixels[3] = 255;
     blank.allocate(texpixels);
     blank.loadData(texpixels);
 
@@ -239,7 +241,7 @@ void quad::update()
         // video --------------------------------------------------------------------
         // loads video
         if (videoBg) {
-            if(video.isPaused()) {
+            if (video.isPaused()) {
                 video.setPaused(false);
             }
             video.setVolume(videoVolume);
@@ -260,7 +262,7 @@ void quad::update()
                 previousSpeed = videoSpeed;
             }
         } else {
-            if(video.isLoaded()) {
+            if (video.isLoaded()) {
                 video.setPaused(true);
             }
         }
@@ -378,7 +380,7 @@ void quad::draw(vector<ofVideoPlayer>& sharedVideos)
         ofClear(0.0, 0.0, 0.0, 0.0);
         ofEnableAlphaBlending();
 
-        // -- NOW LETS DRAW!!!!!!  -----
+        // -- NOW LETS DRAW!!!!!!
         drawSurface(sharedVideos);
 
         ofDisableAlphaBlending();
@@ -443,7 +445,6 @@ void quad::draw(vector<ofVideoPlayer>& sharedVideos)
         // find transformation matrix
         findHomography(src, dst, matrix);
         //finally lets multiply our matrix
-        //wooooo hoooo!
         glMultMatrixf(matrix);
 
         if (edgeBlendBool) {
@@ -457,9 +458,8 @@ void quad::draw(vector<ofVideoPlayer>& sharedVideos)
                 edgeBlendShader->setUniform4f("amount", edgeBlendAmountSin, edgeBlendAmountTop, edgeBlendAmountDx, edgeBlendAmountBottom);
                 edgeBlendShader->setUniform1i("w", ofGetWidth());
                 edgeBlendShader->setUniform1i("h", ofGetHeight());
-                //set ofColor to white
+
                 ofSetColor(255, 255, 255);
-                //Blend modes stuff (with shaders would be better, but it scales bad on older GPUs)
                 if (bBlendModes) {
                     glEnable(GL_BLEND);
                     applyBlendmode();
@@ -468,54 +468,13 @@ void quad::draw(vector<ofVideoPlayer>& sharedVideos)
                     quadFbo.draw(0 + quadDispX, 0 + quadDispY, quadW, quadH);
                     edgeBlendShader->end();
                 } else {
-
                     targetFbo.begin();
                     ofClear(0.0, 0.0, 0.0, 0.0);
                     quadFbo.draw(0 + quadDispX, 0 + quadDispY, quadW, quadH);
                     edgeBlendShader->end();
                     targetFbo.end();
 
-                    if (bBezier) {
-                        targetFbo.getTexture().bind();
-
-                        glMatrixMode(GL_TEXTURE);
-                        glPushMatrix(); //to scale the texture
-                        glLoadIdentity();
-
-                        ofTextureData texData = targetFbo.getTexture().getTextureData();
-                        if (texData.textureTarget == GL_TEXTURE_RECTANGLE_ARB) {
-                            glScalef(targetFbo.getTexture().getWidth(), targetFbo.getTexture().getHeight(), 1.0f);
-                        } else {
-                            glScalef(targetFbo.getTexture().getWidth() / texData.tex_w, targetFbo.getTexture().getHeight() / texData.tex_h, 1.0f);
-                        }
-                        glMatrixMode(GL_MODELVIEW);
-
-                        glEnable(GL_MAP2_VERTEX_3);
-                        glEnable(GL_AUTO_NORMAL);
-                        // this tries to prevent the double alpha problem
-                        glEnable(GL_BLEND);
-                        glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
-                        //draw the bezier shape
-                        glEvalMesh2(GL_FILL, 0, 20, 0, 20);
-                        glDisable(GL_BLEND);
-                        glDisable(GL_MAP2_VERTEX_3);
-                        glDisable(GL_AUTO_NORMAL);
-
-                        targetFbo.getTexture().unbind();
-                        glMatrixMode(GL_TEXTURE);
-                        glPopMatrix(); // texture scale pop matrix
-                        glMatrixMode(GL_MODELVIEW);
-                    } else if (bGrid) {
-                        targetFbo.getTexture().bind();
-                        gridMesh.drawFaces();
-                        targetFbo.getTexture().unbind();
-                        if (isActive && isBezierSetup) {
-                            ofPushStyle();
-                            ofSetColor(255, 255, 255, 200);
-                            gridMesh.drawWireframe();
-                            ofPopStyle();
-                        }
-                    }
+                    drawDeformation(targetFbo.getTexture(), true);
                 }
 
                 if (bBlendModes) {
@@ -523,9 +482,7 @@ void quad::draw(vector<ofVideoPlayer>& sharedVideos)
                 }
                 ofDisableAlphaBlending();
             }
-        }
-
-        else {
+        } else {
             if (bMask) {
                 if (quadFbo.getWidth() > 0) {
                     ofEnableAlphaBlending();
@@ -538,9 +495,8 @@ void quad::draw(vector<ofVideoPlayer>& sharedVideos)
                     maskShader->setUniformTexture("tex", quadFbo.getTexture(), 0);
                     maskShader->setUniformTexture("mask", maskFbo.getTexture(), 1);
                     maskShader->setUniform1i("mode", maskMode);
-                    //set ofColor to white
+
                     ofSetColor(255, 255, 255);
-                    //Blend modes stuff (with shaders would be better, but it scales bad on older GPUs)
                     if (bBlendModes) {
                         glEnable(GL_BLEND);
                         applyBlendmode();
@@ -555,46 +511,7 @@ void quad::draw(vector<ofVideoPlayer>& sharedVideos)
                         maskShader->end();
                         targetFbo.end();
 
-                        if (bBezier) {
-                            targetFbo.getTexture().bind();
-
-                            glMatrixMode(GL_TEXTURE);
-                            glPushMatrix(); //to scale the texture
-                            glLoadIdentity();
-
-                            ofTextureData texData = targetFbo.getTexture().getTextureData();
-                            if (texData.textureTarget == GL_TEXTURE_RECTANGLE_ARB) {
-                                glScalef(targetFbo.getTexture().getWidth(), targetFbo.getTexture().getHeight(), 1.0f);
-                            } else {
-                                glScalef(targetFbo.getTexture().getWidth() / texData.tex_w, targetFbo.getTexture().getHeight() / texData.tex_h, 1.0f);
-                            }
-                            glMatrixMode(GL_MODELVIEW);
-                            glEnable(GL_MAP2_VERTEX_3);
-                            glEnable(GL_AUTO_NORMAL);
-                            // this tries to prevent the double alpha problem
-                            glEnable(GL_BLEND);
-                            glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
-                            //draw the bezier shape
-                            glEvalMesh2(GL_FILL, 0, 20, 0, 20);
-                            glDisable(GL_BLEND);
-                            glDisable(GL_MAP2_VERTEX_3);
-                            glDisable(GL_AUTO_NORMAL);
-
-                            targetFbo.getTexture().unbind();
-                            glMatrixMode(GL_TEXTURE);
-                            glPopMatrix(); // texture scale pop matrix
-                            glMatrixMode(GL_MODELVIEW);
-                        } else if (bGrid) {
-                            targetFbo.getTexture().bind();
-                            gridMesh.drawFaces();
-                            targetFbo.getTexture().unbind();
-                            if (isActive && isBezierSetup) {
-                                ofPushStyle();
-                                ofSetColor(255, 255, 255, 200);
-                                gridMesh.drawWireframe();
-                                ofPopStyle();
-                            }
-                        }
+                        drawDeformation(targetFbo.getTexture(), true);
                     }
 
                     if (bBlendModes) {
@@ -602,14 +519,11 @@ void quad::draw(vector<ofVideoPlayer>& sharedVideos)
                     }
                     ofDisableAlphaBlending();
                 }
-            }
-
-            else {
+            } else {
                 if (quadFbo.getWidth() > 0) {
                     ofEnableAlphaBlending();
-                    //set ofColor to white
+
                     ofSetColor(255, 255, 255);
-                    //Blend modes stuff (with shaders would be better, but it scales bad on older GPUs)
                     if (bBlendModes) {
                         glEnable(GL_BLEND);
                         applyBlendmode();
@@ -618,45 +532,7 @@ void quad::draw(vector<ofVideoPlayer>& sharedVideos)
                     if (!bDeform) {
                         quadFbo.draw(quadDispX, quadDispY, quadW, quadH);
                     } else {
-
-                        if (bBezier) {
-                            quadFbo.getTexture().bind();
-
-                            glMatrixMode(GL_TEXTURE);
-                            glPushMatrix(); //to scale the texture
-                            glLoadIdentity();
-
-                            ofTextureData texData = quadFbo.getTexture().getTextureData();
-                            if (texData.textureTarget == GL_TEXTURE_RECTANGLE_ARB) {
-                                glScalef(quadFbo.getTexture().getWidth(), quadFbo.getTexture().getHeight(), 1.0f);
-                            } else {
-                                glScalef(quadFbo.getTexture().getWidth() / texData.tex_w, quadFbo.getTexture().getHeight() / texData.tex_h, 1.0f);
-                            }
-                            glMatrixMode(GL_MODELVIEW);
-                            //draw the bezier shape
-                            glEnable(GL_MAP2_VERTEX_3);
-                            glEnable(GL_AUTO_NORMAL);
-
-                            glEvalMesh2(GL_FILL, 0, 20, 0, 20);
-
-                            glDisable(GL_MAP2_VERTEX_3);
-                            glDisable(GL_AUTO_NORMAL);
-
-                            quadFbo.getTexture().unbind();
-                            glMatrixMode(GL_TEXTURE);
-                            glPopMatrix(); // texture scale pop matrix
-                            glMatrixMode(GL_MODELVIEW);
-                        } else if (bGrid) {
-                            quadFbo.getTexture().bind();
-                            gridMesh.drawFaces();
-                            quadFbo.getTexture().unbind();
-                            if (isActive && isBezierSetup) {
-                                ofPushStyle();
-                                ofSetColor(255, 255, 255, 200);
-                                gridMesh.drawWireframe();
-                                ofPopStyle();
-                            }
-                        }
+                        drawDeformation(quadFbo.getTexture(), false);
                     }
 
                     if (bBlendModes) {
@@ -828,28 +704,61 @@ void quad::draw(vector<ofVideoPlayer>& sharedVideos)
 }
 
 //--------------------------------------------------------------
+void quad::drawDeformation(ofTexture& tex, bool bAlphaFix)
+{
+    if (bBezier) {
+        tex.bind();
+
+        glMatrixMode(GL_TEXTURE);
+        glPushMatrix(); //to scale the texture
+        glLoadIdentity();
+
+        ofTextureData texData = tex.getTextureData();
+        if (texData.textureTarget == GL_TEXTURE_RECTANGLE_ARB) {
+            glScalef(tex.getWidth(), tex.getHeight(), 1.0f);
+        } else {
+            glScalef(tex.getWidth() / texData.tex_w, tex.getHeight() / texData.tex_h, 1.0f);
+        }
+        glMatrixMode(GL_MODELVIEW);
+        glEnable(GL_MAP2_VERTEX_3);
+        glEnable(GL_AUTO_NORMAL);
+
+        if (bAlphaFix) {
+            // this tries to prevent the double alpha problem
+            glEnable(GL_BLEND);
+            glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
+        }
+
+        //draw the bezier shape
+        glEvalMesh2(GL_FILL, 0, 20, 0, 20);
+
+        if (bAlphaFix) {
+            glDisable(GL_BLEND);
+        }
+
+        glDisable(GL_MAP2_VERTEX_3);
+        glDisable(GL_AUTO_NORMAL);
+
+        tex.unbind();
+        glMatrixMode(GL_TEXTURE);
+        glPopMatrix(); // texture scale pop matrix
+        glMatrixMode(GL_MODELVIEW);
+    } else if (bGrid) {
+        tex.bind();
+        gridMesh.drawFaces();
+        tex.unbind();
+        if (isActive && isBezierSetup) {
+            ofPushStyle();
+            ofSetColor(255, 255, 255, 200);
+            gridMesh.drawWireframe();
+            ofPopStyle();
+        }
+    }
+}
+
+//--------------------------------------------------------------
 void quad::drawSurface(vector<ofVideoPlayer>& sharedVideos)
 {
-    // solid colors and transitions ----------------------------------------------------------------
-//    if (colorBg) {
-//        ofFill();
-//        // if we have two colors it draws with calculated transition color
-//        if (transBg) {
-//            ofSetColor(transColor.r * 255 * timelineRed, transColor.g * 255 * timelineGreen, transColor.b * 255 * timelineBlue, transColor.a * 255 * timelineAlpha);
-//        }
-//        // this in case of only one color set
-//        else {
-//            if (bTimelineColor) {
-//                ofSetColor(timelineColor.r * 255 * timelineRed, timelineColor.g * 255 * timelineGreen, timelineColor.b * 255 * timelineBlue, timelineColor.a * 255 * timelineAlpha);
-//            } else {
-//                ofSetColor(bgColor.r * 255 * timelineRed, bgColor.g * 255 * timelineGreen, bgColor.b * 255 * timelineBlue, bgColor.a * 255 * timelineAlpha);
-//            }
-//        }
-//        ofDrawRectangle(0, 0, ofGetWidth(), ofGetHeight());
-//        ofNoFill();
-//    }
-
-    // draw the content ------------------------------------------------------------------------------
     if (isValidContent(sharedVideos)) {
 
         bool bUseSurfaceShader = true;
@@ -860,12 +769,11 @@ void quad::drawSurface(vector<ofVideoPlayer>& sharedVideos)
         ofVec2f ratio = ofVec2f(1, 1);
         float fade = 0.0f;
 
-        if(colorBg) {
+        if (colorBg) {
             srcWidth = ofGetWidth();
             srcHeight = ofGetHeight();
             imageTex = imageTex2 = blank;
-        }
-        else if (imgBg && (img.getWidth() > 0)) {
+        } else if (imgBg && (img.getWidth() > 0)) {
             srcWidth = img.getWidth();
             srcHeight = img.getHeight();
             imageTex = imageTex2 = img.getTexture();
@@ -1045,7 +953,7 @@ void quad::drawSurface(vector<ofVideoPlayer>& sharedVideos)
 //--------------------------------------------------------------
 bool quad::isValidContent(vector<ofVideoPlayer>& sharedVideos)
 {
-    if(colorBg)
+    if (colorBg)
         return true;
     else if (imgBg && img.getWidth() > 0)
         return true;
@@ -1064,10 +972,9 @@ bool quad::isValidContent(vector<ofVideoPlayer>& sharedVideos)
 //--------------------------------------------------------------
 void quad::drawContent(float w, float h, vector<ofVideoPlayer>& sharedVideos)
 {
-    if(colorBg) {
+    if (colorBg) {
         blank.draw(0, 0, w, h);
-    }
-    else if (imgBg && img.getWidth() > 0) {
+    } else if (imgBg && img.getWidth() > 0) {
         img.draw(0, 0, w, h);
     } else if (camAvailable && camBg && cams[camNumber].getWidth() > 0) {
         cams[camNumber].getTexture().draw(0, 0, w, h);
@@ -1334,7 +1241,7 @@ void quad::bezierSurfaceUpdate()
 
 //---------------------------------------------------------------
 // Grid helpers -----------------------------------
-// grid setup -------------------------------------
+
 void quad::gridSurfaceSetup()
 {
 
@@ -1425,8 +1332,6 @@ void quad::gridSurfaceUpdate()
             gridMesh.addIndex((i * (gridColumns + 1) + j)); //a
         }
     }
-
-    //glMap2f(GL_MAP2_VERTEX_3, 0, 1, 3, (gridColumns+1), 0, 1, (gridColumns+1)*3, (gridRows+1), &gridCtrlPoints[0]);
 }
 
 // Markers -----------------------------------------------------
@@ -1438,182 +1343,182 @@ void quad::drawBezierMarkers()
     ofSetLineWidth(1.5);
     for (unsigned int i = 0; i < 4; i++) {
         for (unsigned int j = 0; j < 4; j++) {
-            ofVec3f punto;
-            punto.x = bezierCtrlPoints[i][j][0];
-            punto.y = bezierCtrlPoints[i][j][1];
-            punto.z = bezierCtrlPoints[i][j][2];
-            punto = findWarpedPoint(dst, src, punto);
+            ofVec3f point;
+            point.x = bezierCtrlPoints[i][j][0];
+            point.y = bezierCtrlPoints[i][j][1];
+            point.z = bezierCtrlPoints[i][j][2];
+            point = findWarpedPoint(dst, src, point);
 
             if (bHighlightCtrlPoint && highlightedCtrlPointRow == i && highlightedCtrlPointCol == j) {
                 ofFill();
             }
-            ofDrawCircle(punto.x, punto.y, 3.6);
+            ofDrawCircle(point.x, point.y, 3.6);
             ofNoFill();
         }
     }
     ofSetLineWidth(1.2);
-    ofVec3f puntoA;
-    ofVec3f puntoB;
+    ofVec3f pointA;
+    ofVec3f pointB;
     //
-    puntoA.x = bezierCtrlPoints[0][0][0];
-    puntoA.y = bezierCtrlPoints[0][0][1];
-    puntoA.z = bezierCtrlPoints[0][0][2];
-    puntoB.x = bezierCtrlPoints[0][1][0];
-    puntoB.y = bezierCtrlPoints[0][1][1];
-    puntoB.z = bezierCtrlPoints[0][1][2];
-    puntoA = findWarpedPoint(dst, src, puntoA);
-    puntoB = findWarpedPoint(dst, src, puntoB);
-    ofDrawLine(puntoA, puntoB);
+    pointA.x = bezierCtrlPoints[0][0][0];
+    pointA.y = bezierCtrlPoints[0][0][1];
+    pointA.z = bezierCtrlPoints[0][0][2];
+    pointB.x = bezierCtrlPoints[0][1][0];
+    pointB.y = bezierCtrlPoints[0][1][1];
+    pointB.z = bezierCtrlPoints[0][1][2];
+    pointA = findWarpedPoint(dst, src, pointA);
+    pointB = findWarpedPoint(dst, src, pointB);
+    ofDrawLine(pointA, pointB);
     //
-    puntoA.x = bezierCtrlPoints[0][0][0];
-    puntoA.y = bezierCtrlPoints[0][0][1];
-    puntoA.z = bezierCtrlPoints[0][0][2];
-    puntoB.x = bezierCtrlPoints[1][0][0];
-    puntoB.y = bezierCtrlPoints[1][0][1];
-    puntoB.z = bezierCtrlPoints[1][0][2];
-    puntoA = findWarpedPoint(dst, src, puntoA);
-    puntoB = findWarpedPoint(dst, src, puntoB);
-    ofDrawLine(puntoA, puntoB);
+    pointA.x = bezierCtrlPoints[0][0][0];
+    pointA.y = bezierCtrlPoints[0][0][1];
+    pointA.z = bezierCtrlPoints[0][0][2];
+    pointB.x = bezierCtrlPoints[1][0][0];
+    pointB.y = bezierCtrlPoints[1][0][1];
+    pointB.z = bezierCtrlPoints[1][0][2];
+    pointA = findWarpedPoint(dst, src, pointA);
+    pointB = findWarpedPoint(dst, src, pointB);
+    ofDrawLine(pointA, pointB);
     //
-    puntoA.x = bezierCtrlPoints[0][0][0];
-    puntoA.y = bezierCtrlPoints[0][0][1];
-    puntoA.z = bezierCtrlPoints[0][0][2];
-    puntoB.x = bezierCtrlPoints[1][1][0];
-    puntoB.y = bezierCtrlPoints[1][1][1];
-    puntoB.z = bezierCtrlPoints[1][1][2];
-    puntoA = findWarpedPoint(dst, src, puntoA);
-    puntoB = findWarpedPoint(dst, src, puntoB);
-    ofDrawLine(puntoA, puntoB);
+    pointA.x = bezierCtrlPoints[0][0][0];
+    pointA.y = bezierCtrlPoints[0][0][1];
+    pointA.z = bezierCtrlPoints[0][0][2];
+    pointB.x = bezierCtrlPoints[1][1][0];
+    pointB.y = bezierCtrlPoints[1][1][1];
+    pointB.z = bezierCtrlPoints[1][1][2];
+    pointA = findWarpedPoint(dst, src, pointA);
+    pointB = findWarpedPoint(dst, src, pointB);
+    ofDrawLine(pointA, pointB);
     //
-    puntoA.x = bezierCtrlPoints[0][3][0];
-    puntoA.y = bezierCtrlPoints[0][3][1];
-    puntoA.z = bezierCtrlPoints[0][3][2];
-    puntoB.x = bezierCtrlPoints[1][3][0];
-    puntoB.y = bezierCtrlPoints[1][3][1];
-    puntoB.z = bezierCtrlPoints[1][3][2];
-    puntoA = findWarpedPoint(dst, src, puntoA);
-    puntoB = findWarpedPoint(dst, src, puntoB);
-    ofDrawLine(puntoA, puntoB);
+    pointA.x = bezierCtrlPoints[0][3][0];
+    pointA.y = bezierCtrlPoints[0][3][1];
+    pointA.z = bezierCtrlPoints[0][3][2];
+    pointB.x = bezierCtrlPoints[1][3][0];
+    pointB.y = bezierCtrlPoints[1][3][1];
+    pointB.z = bezierCtrlPoints[1][3][2];
+    pointA = findWarpedPoint(dst, src, pointA);
+    pointB = findWarpedPoint(dst, src, pointB);
+    ofDrawLine(pointA, pointB);
     //
-    puntoA.x = bezierCtrlPoints[0][3][0];
-    puntoA.y = bezierCtrlPoints[0][3][1];
-    puntoA.z = bezierCtrlPoints[0][3][2];
-    puntoB.x = bezierCtrlPoints[0][2][0];
-    puntoB.y = bezierCtrlPoints[0][2][1];
-    puntoB.z = bezierCtrlPoints[0][2][2];
-    puntoA = findWarpedPoint(dst, src, puntoA);
-    puntoB = findWarpedPoint(dst, src, puntoB);
-    ofDrawLine(puntoA, puntoB);
+    pointA.x = bezierCtrlPoints[0][3][0];
+    pointA.y = bezierCtrlPoints[0][3][1];
+    pointA.z = bezierCtrlPoints[0][3][2];
+    pointB.x = bezierCtrlPoints[0][2][0];
+    pointB.y = bezierCtrlPoints[0][2][1];
+    pointB.z = bezierCtrlPoints[0][2][2];
+    pointA = findWarpedPoint(dst, src, pointA);
+    pointB = findWarpedPoint(dst, src, pointB);
+    ofDrawLine(pointA, pointB);
     //
-    puntoA.x = bezierCtrlPoints[0][3][0];
-    puntoA.y = bezierCtrlPoints[0][3][1];
-    puntoA.z = bezierCtrlPoints[0][3][2];
-    puntoB.x = bezierCtrlPoints[1][2][0];
-    puntoB.y = bezierCtrlPoints[1][2][1];
-    puntoB.z = bezierCtrlPoints[1][2][2];
-    puntoA = findWarpedPoint(dst, src, puntoA);
-    puntoB = findWarpedPoint(dst, src, puntoB);
-    ofDrawLine(puntoA, puntoB);
+    pointA.x = bezierCtrlPoints[0][3][0];
+    pointA.y = bezierCtrlPoints[0][3][1];
+    pointA.z = bezierCtrlPoints[0][3][2];
+    pointB.x = bezierCtrlPoints[1][2][0];
+    pointB.y = bezierCtrlPoints[1][2][1];
+    pointB.z = bezierCtrlPoints[1][2][2];
+    pointA = findWarpedPoint(dst, src, pointA);
+    pointB = findWarpedPoint(dst, src, pointB);
+    ofDrawLine(pointA, pointB);
     //
-    puntoA.x = bezierCtrlPoints[3][0][0];
-    puntoA.y = bezierCtrlPoints[3][0][1];
-    puntoA.z = bezierCtrlPoints[3][0][2];
-    puntoB.x = bezierCtrlPoints[3][1][0];
-    puntoB.y = bezierCtrlPoints[3][1][1];
-    puntoB.z = bezierCtrlPoints[3][1][2];
-    puntoA = findWarpedPoint(dst, src, puntoA);
-    puntoB = findWarpedPoint(dst, src, puntoB);
-    ofDrawLine(puntoA, puntoB);
+    pointA.x = bezierCtrlPoints[3][0][0];
+    pointA.y = bezierCtrlPoints[3][0][1];
+    pointA.z = bezierCtrlPoints[3][0][2];
+    pointB.x = bezierCtrlPoints[3][1][0];
+    pointB.y = bezierCtrlPoints[3][1][1];
+    pointB.z = bezierCtrlPoints[3][1][2];
+    pointA = findWarpedPoint(dst, src, pointA);
+    pointB = findWarpedPoint(dst, src, pointB);
+    ofDrawLine(pointA, pointB);
     //
-    puntoA.x = bezierCtrlPoints[3][0][0];
-    puntoA.y = bezierCtrlPoints[3][0][1];
-    puntoA.z = bezierCtrlPoints[3][0][2];
-    puntoB.x = bezierCtrlPoints[2][0][0];
-    puntoB.y = bezierCtrlPoints[2][0][1];
-    puntoB.z = bezierCtrlPoints[2][0][2];
-    puntoA = findWarpedPoint(dst, src, puntoA);
-    puntoB = findWarpedPoint(dst, src, puntoB);
-    ofDrawLine(puntoA, puntoB);
+    pointA.x = bezierCtrlPoints[3][0][0];
+    pointA.y = bezierCtrlPoints[3][0][1];
+    pointA.z = bezierCtrlPoints[3][0][2];
+    pointB.x = bezierCtrlPoints[2][0][0];
+    pointB.y = bezierCtrlPoints[2][0][1];
+    pointB.z = bezierCtrlPoints[2][0][2];
+    pointA = findWarpedPoint(dst, src, pointA);
+    pointB = findWarpedPoint(dst, src, pointB);
+    ofDrawLine(pointA, pointB);
     //
-    puntoA.x = bezierCtrlPoints[3][0][0];
-    puntoA.y = bezierCtrlPoints[3][0][1];
-    puntoA.z = bezierCtrlPoints[3][0][2];
-    puntoB.x = bezierCtrlPoints[2][1][0];
-    puntoB.y = bezierCtrlPoints[2][1][1];
-    puntoB.z = bezierCtrlPoints[2][1][2];
-    puntoA = findWarpedPoint(dst, src, puntoA);
-    puntoB = findWarpedPoint(dst, src, puntoB);
-    ofDrawLine(puntoA, puntoB);
+    pointA.x = bezierCtrlPoints[3][0][0];
+    pointA.y = bezierCtrlPoints[3][0][1];
+    pointA.z = bezierCtrlPoints[3][0][2];
+    pointB.x = bezierCtrlPoints[2][1][0];
+    pointB.y = bezierCtrlPoints[2][1][1];
+    pointB.z = bezierCtrlPoints[2][1][2];
+    pointA = findWarpedPoint(dst, src, pointA);
+    pointB = findWarpedPoint(dst, src, pointB);
+    ofDrawLine(pointA, pointB);
     //
-    puntoA.x = bezierCtrlPoints[3][3][0];
-    puntoA.y = bezierCtrlPoints[3][3][1];
-    puntoA.z = bezierCtrlPoints[3][3][2];
-    puntoB.x = bezierCtrlPoints[3][2][0];
-    puntoB.y = bezierCtrlPoints[3][2][1];
-    puntoB.z = bezierCtrlPoints[3][2][2];
-    puntoA = findWarpedPoint(dst, src, puntoA);
-    puntoB = findWarpedPoint(dst, src, puntoB);
-    ofDrawLine(puntoA, puntoB);
+    pointA.x = bezierCtrlPoints[3][3][0];
+    pointA.y = bezierCtrlPoints[3][3][1];
+    pointA.z = bezierCtrlPoints[3][3][2];
+    pointB.x = bezierCtrlPoints[3][2][0];
+    pointB.y = bezierCtrlPoints[3][2][1];
+    pointB.z = bezierCtrlPoints[3][2][2];
+    pointA = findWarpedPoint(dst, src, pointA);
+    pointB = findWarpedPoint(dst, src, pointB);
+    ofDrawLine(pointA, pointB);
     //
-    puntoA.x = bezierCtrlPoints[3][3][0];
-    puntoA.y = bezierCtrlPoints[3][3][1];
-    puntoA.z = bezierCtrlPoints[3][3][2];
-    puntoB.x = bezierCtrlPoints[2][3][0];
-    puntoB.y = bezierCtrlPoints[2][3][1];
-    puntoB.z = bezierCtrlPoints[2][3][2];
-    puntoA = findWarpedPoint(dst, src, puntoA);
-    puntoB = findWarpedPoint(dst, src, puntoB);
-    ofDrawLine(puntoA, puntoB);
+    pointA.x = bezierCtrlPoints[3][3][0];
+    pointA.y = bezierCtrlPoints[3][3][1];
+    pointA.z = bezierCtrlPoints[3][3][2];
+    pointB.x = bezierCtrlPoints[2][3][0];
+    pointB.y = bezierCtrlPoints[2][3][1];
+    pointB.z = bezierCtrlPoints[2][3][2];
+    pointA = findWarpedPoint(dst, src, pointA);
+    pointB = findWarpedPoint(dst, src, pointB);
+    ofDrawLine(pointA, pointB);
     //
-    puntoA.x = bezierCtrlPoints[3][3][0];
-    puntoA.y = bezierCtrlPoints[3][3][1];
-    puntoA.z = bezierCtrlPoints[3][3][2];
-    puntoB.x = bezierCtrlPoints[2][2][0];
-    puntoB.y = bezierCtrlPoints[2][2][1];
-    puntoB.z = bezierCtrlPoints[2][2][2];
-    puntoA = findWarpedPoint(dst, src, puntoA);
-    puntoB = findWarpedPoint(dst, src, puntoB);
-    ofDrawLine(puntoA, puntoB);
+    pointA.x = bezierCtrlPoints[3][3][0];
+    pointA.y = bezierCtrlPoints[3][3][1];
+    pointA.z = bezierCtrlPoints[3][3][2];
+    pointB.x = bezierCtrlPoints[2][2][0];
+    pointB.y = bezierCtrlPoints[2][2][1];
+    pointB.z = bezierCtrlPoints[2][2][2];
+    pointA = findWarpedPoint(dst, src, pointA);
+    pointB = findWarpedPoint(dst, src, pointB);
+    ofDrawLine(pointA, pointB);
     //
-    puntoA.x = bezierCtrlPoints[1][2][0];
-    puntoA.y = bezierCtrlPoints[1][2][1];
-    puntoA.z = bezierCtrlPoints[1][2][2];
-    puntoB.x = bezierCtrlPoints[2][2][0];
-    puntoB.y = bezierCtrlPoints[2][2][1];
-    puntoB.z = bezierCtrlPoints[2][2][2];
-    puntoA = findWarpedPoint(dst, src, puntoA);
-    puntoB = findWarpedPoint(dst, src, puntoB);
-    ofDrawLine(puntoA, puntoB);
+    pointA.x = bezierCtrlPoints[1][2][0];
+    pointA.y = bezierCtrlPoints[1][2][1];
+    pointA.z = bezierCtrlPoints[1][2][2];
+    pointB.x = bezierCtrlPoints[2][2][0];
+    pointB.y = bezierCtrlPoints[2][2][1];
+    pointB.z = bezierCtrlPoints[2][2][2];
+    pointA = findWarpedPoint(dst, src, pointA);
+    pointB = findWarpedPoint(dst, src, pointB);
+    ofDrawLine(pointA, pointB);
     //
-    puntoA.x = bezierCtrlPoints[1][2][0];
-    puntoA.y = bezierCtrlPoints[1][2][1];
-    puntoA.z = bezierCtrlPoints[1][2][2];
-    puntoB.x = bezierCtrlPoints[1][1][0];
-    puntoB.y = bezierCtrlPoints[1][1][1];
-    puntoB.z = bezierCtrlPoints[1][1][2];
-    puntoA = findWarpedPoint(dst, src, puntoA);
-    puntoB = findWarpedPoint(dst, src, puntoB);
-    ofDrawLine(puntoA, puntoB);
+    pointA.x = bezierCtrlPoints[1][2][0];
+    pointA.y = bezierCtrlPoints[1][2][1];
+    pointA.z = bezierCtrlPoints[1][2][2];
+    pointB.x = bezierCtrlPoints[1][1][0];
+    pointB.y = bezierCtrlPoints[1][1][1];
+    pointB.z = bezierCtrlPoints[1][1][2];
+    pointA = findWarpedPoint(dst, src, pointA);
+    pointB = findWarpedPoint(dst, src, pointB);
+    ofDrawLine(pointA, pointB);
     //
-    puntoA.x = bezierCtrlPoints[2][1][0];
-    puntoA.y = bezierCtrlPoints[2][1][1];
-    puntoA.z = bezierCtrlPoints[2][1][2];
-    puntoB.x = bezierCtrlPoints[1][1][0];
-    puntoB.y = bezierCtrlPoints[1][1][1];
-    puntoB.z = bezierCtrlPoints[1][1][2];
-    puntoA = findWarpedPoint(dst, src, puntoA);
-    puntoB = findWarpedPoint(dst, src, puntoB);
-    ofDrawLine(puntoA, puntoB);
+    pointA.x = bezierCtrlPoints[2][1][0];
+    pointA.y = bezierCtrlPoints[2][1][1];
+    pointA.z = bezierCtrlPoints[2][1][2];
+    pointB.x = bezierCtrlPoints[1][1][0];
+    pointB.y = bezierCtrlPoints[1][1][1];
+    pointB.z = bezierCtrlPoints[1][1][2];
+    pointA = findWarpedPoint(dst, src, pointA);
+    pointB = findWarpedPoint(dst, src, pointB);
+    ofDrawLine(pointA, pointB);
     //
-    puntoA.x = bezierCtrlPoints[2][1][0];
-    puntoA.y = bezierCtrlPoints[2][1][1];
-    puntoA.z = bezierCtrlPoints[2][1][2];
-    puntoB.x = bezierCtrlPoints[2][2][0];
-    puntoB.y = bezierCtrlPoints[2][2][1];
-    puntoB.z = bezierCtrlPoints[2][2][2];
-    puntoA = findWarpedPoint(dst, src, puntoA);
-    puntoB = findWarpedPoint(dst, src, puntoB);
-    ofDrawLine(puntoA, puntoB);
+    pointA.x = bezierCtrlPoints[2][1][0];
+    pointA.y = bezierCtrlPoints[2][1][1];
+    pointA.z = bezierCtrlPoints[2][1][2];
+    pointB.x = bezierCtrlPoints[2][2][0];
+    pointB.y = bezierCtrlPoints[2][2][1];
+    pointB.z = bezierCtrlPoints[2][2][2];
+    pointA = findWarpedPoint(dst, src, pointA);
+    pointB = findWarpedPoint(dst, src, pointB);
+    ofDrawLine(pointA, pointB);
 }
 
 // Bezier markers ----------------------------------------------
@@ -1624,15 +1529,15 @@ void quad::drawGridMarkers()
 
     for (int i = 0; i <= gridRows; i++) {
         for (int j = 0; j <= gridColumns; j++) {
-            ofVec3f punto;
-            punto.x = gridPoints[i][j][0] * ofGetWidth();
-            punto.y = gridPoints[i][j][1] * ofGetHeight();
-            punto.z = 0.0;
-            punto = findWarpedPoint(dst, src, punto);
+            ofVec3f point;
+            point.x = gridPoints[i][j][0] * ofGetWidth();
+            point.y = gridPoints[i][j][1] * ofGetHeight();
+            point.z = 0.0;
+            point = findWarpedPoint(dst, src, point);
             if (bHighlightCtrlPoint && highlightedCtrlPointRow == i && highlightedCtrlPointCol == j) {
                 ofFill();
             }
-            ofDrawCircle(punto.x, punto.y, 3.0);
+            ofDrawCircle(point.x, point.y, 3.0);
             ofNoFill();
         }
     }

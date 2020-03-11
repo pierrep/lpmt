@@ -82,13 +82,13 @@ void ofxSimpleGuiButton::draw(float x, float y) {
 	ofEnableAlphaBlending();
 	ofFill();
 	ofSetColor(backgroundColor);
-	if(config->rounded)
+    //if(config->rounded)
 	{
         roundedRect(0,0,width,height,config->rectRadius);
 	}
-    else
+    //else
     {
-        ofDrawRectangle(0, 0, width, height);
+       // ofDrawRectangle(0, 0, width, height);
     }
 
 
@@ -103,9 +103,10 @@ void ofxSimpleGuiButton::draw(float x, float y) {
 	setTextColor();
 
     if (config->bUseFont) {
-        config->ttf.drawString(name, 3, 15);
+        float offset = config->ttf.stringWidth(name);
+        config->ttf.drawString(name, width/2-offset/2, 14);
     } else {
-        ofDrawBitmapString(name, 3, 15);
+        ofDrawBitmapString(name, 4, 14);
     }
 
 	ofDisableAlphaBlending();
