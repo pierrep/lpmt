@@ -27,23 +27,25 @@ public:
     void drawSurface(vector<ofVideoPlayer> &sharedVideos);
     void drawDeformation(ofTexture& tex, bool alphaFix);
     void applyBlendmode();
+
     void gaussian_elimination(float *input, int n);
     void findHomography(ofPoint src[4], ofPoint dst[4], float homography[16]);
     ofMatrix4x4 findVectorHomography(ofPoint src[4], ofPoint dst[4]);
     ofPoint findWarpedPoint(ofPoint src[4], ofPoint dst[4], ofPoint point);
+    ofPoint getWarpedPoint(ofPoint point);
+
     void loadImageFromFile(string imgName, string imgPath);
     void loadVideoFromFile(string videoName, string videoPath);
     void allocateFbo(int w, int h);
     void maskAddPoint(ofPoint point);
     void drawMaskMarkers();
+    void drawGridMarkers();
+    void drawBezierMarkers();
+    void gridSurfaceSetup();
+    void gridSurfaceUpdate(bool bRefresh);
     void bezierSurfaceSetup();
     void bezierSurfaceUpdate();
-    void drawBezierMarkers();
-    int getdir (string dir, vector<string> &files); // a func for reading a dir content to a vector of strings
-    ofPoint getWarpedPoint(ofPoint point);
-    void gridSurfaceSetup();
-    void gridSurfaceUpdate();
-    void drawGridMarkers();
+    //int getdir (string dir, vector<string> &files); // a func for reading a dir content to a vector of strings
     bool isValidContent(vector<ofVideoPlayer>& sharedVideos);
     void drawContent(float w, float h, vector<ofVideoPlayer> &sharedVideos);
 

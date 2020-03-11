@@ -133,6 +133,23 @@ public:
         } else {
             updateSlider();
         }
+
+        if (enterText) {
+            enterText = false;
+            setValue((Type)ofToFloat(textField.text));
+            textField.endEditing();
+            textField.disable();
+            textField.cursorPosition = 0;
+        }
+    }
+
+    void onDoublePress(int x, int y, int button)
+    {
+        enterText = true;
+        textField.cursorPosition = 0;
+        textField.text = ofToString((*value));
+        //textField.enable();
+        textField.beginEditing();
     }
 
     void onDragOver(int x, int y, int button)
@@ -246,7 +263,7 @@ public:
             } else {
                 ofDrawBitmapString(s, 3, 14);
             }
-            textField.bounds.x = s.size() * 8;
+            textField.bounds.x = width - config->ttf.stringWidth(textField.text)-30;
             textField.bounds.y = config->sliderHeight + 3;
             textField.draw();
         } else {
@@ -254,7 +271,7 @@ public:
             if (config->bUseFont) {
                 config->ttf.drawString(s, 3, 14);
                 s = ofToString((*value));
-               config->ttf.drawString(s, 3, config->sliderHeight+14);
+                config->ttf.drawString(s, 3, config->sliderHeight + 14);
             } else {
                 ofDrawBitmapString(s, 3, 12);
             }

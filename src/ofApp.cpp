@@ -313,7 +313,7 @@ void ofApp::prepare()
         }
 #endif
 
-//timeline update
+        //timeline update
         if (timelineDurationSeconds != timelinePreviousDuration) {
             timelinePreviousDuration = timelineDurationSeconds;
             timeline.setDurationInSeconds(timelineDurationSeconds);
@@ -411,10 +411,10 @@ void ofApp::draw()
             // Writes the number of the active quad at the bottom of the window
             ofSetHexColor(0xFFFFFF); // white
             ttf.drawString("Active surface: " + ofToString(activeQuad) + " Layer: " + ofToString(quads[activeQuad].layer), 30, ofGetHeight() - 25);
-//            for (int i = 0; i < MAX_QUADS; i++) {
-//                int idx = layers[i];
-//                ttf.drawString("layers[" + ofToString(i) + "] = " + ofToString(layers[i]), 600, ofGetHeight() - 600 + i * 20);
-//            }
+            //            for (int i = 0; i < MAX_QUADS; i++) {
+            //                int idx = layers[i];
+            //                ttf.drawString("layers[" + ofToString(i) + "] = " + ofToString(layers[i]), 600, ofGetHeight() - 600 + i * 20);
+            //            }
 
             if (maskSetup) {
                 ofSetHexColor(0xFF0000);
@@ -659,7 +659,7 @@ void ofApp::keyPressed(ofKeyEventArgs& args)
                 }
             }
         } else
-// toggle timeline
+            // toggle timeline
             if (args.key == OF_KEY_F10) {
             bTimeline = !bTimeline;
             timeline.toggleShow();
@@ -879,6 +879,7 @@ void ofApp::mouseDragged(int x, int y, int button)
         if (m_selectedCorner >= 0) {
             // move the selected corner
             quads[activeQuad].corners[m_selectedCorner] += normalizedMouseMovement;
+            ofLogNotice() << "normalizedMouseMovement = " << normalizedMouseMovement;
 
             // scale the whole quad if shift is pressed and one of the corners is moved
             if (ofGetKeyPressed(OF_KEY_LEFT_SHIFT)) {
@@ -1047,6 +1048,9 @@ void ofApp::windowResized(int w, int h)
             quads[i].bHighlightCorner = false;
             quads[i].allocateFbo(w, h);
             quadDimensionsReset(i);
+            if (quads[i].bGrid) {
+                quads[i].gridSurfaceUpdate(true);
+            }
         }
     }
 }

@@ -373,7 +373,7 @@ void quad::draw(vector<ofVideoPlayer>& sharedVideos)
             bezierSurfaceUpdate();
         }
         if (bGrid) {
-            gridSurfaceUpdate();
+            gridSurfaceUpdate(false);
         }
 
         quadFbo.begin();
@@ -1287,14 +1287,14 @@ void quad::gridSurfaceSetup()
 }
 
 //---------------------------------------------------------------
-void quad::gridSurfaceUpdate()
+void quad::gridSurfaceUpdate(bool bRefresh)
 {
     // TODO: to optimize this try to limit recalculation to cases when it's really needed
     //This sets up my Grid Surface
     gridMesh.clearVertices();
     gridMesh.clearIndices();
 
-    if (gridPoints.size() != (gridRows + 1) || gridPoints[0].size() != (gridColumns + 1)) {
+    if (bRefresh || (gridPoints.size() != (gridRows + 1)) || (gridPoints[0].size() != (gridColumns + 1)) ) {
         gridMesh.clearTexCoords();
         gridPoints.clear();
         for (int i = 0; i <= gridRows; i++) {

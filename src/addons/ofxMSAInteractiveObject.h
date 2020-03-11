@@ -33,6 +33,7 @@
 #pragma once
 
 #include "ofMain.h"
+#include "ofxMSATimer.h"
 
 
 class ofxMSAInteractiveObject : public ofRectangle {
@@ -84,6 +85,7 @@ public:
 	virtual void onDragOver(int x, int y, int button)		{}		// called when mouse moves while over object and button is down
 	virtual void onDragOutside(int x, int y, int button)	{}		// called when mouse moves while outside the object after being clicked on it
 	virtual void onPress(int x, int y, int button)			{}		// called when mouse presses while over object
+    virtual void onDoublePress(int x, int y, int button)	{}		// called when mouse presses twice while over object
 	virtual void onPressOutside(int x, int y, int button)	{}		// called when mouse presses while outside object
 	virtual void onRelease(int x, int y, int button)		{}		// called when mouse releases while over object
 	virtual void onReleaseOutside(int x, int y, int button)	{}		// called when mouse releases outside of object after being pressed on object
@@ -112,6 +114,9 @@ protected:
 	int			_mouseX, _mouseY, _mouseButton;
 	bool		_mouseOver;
 	bool		_mouseDown;
+    bool		_doublePress;
+    bool        _timerStart;
 	ofRectangle	oldRect;
+    ofxMSATimer timer;
 };
 
