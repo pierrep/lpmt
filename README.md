@@ -20,6 +20,11 @@ The original LPMT code can be found here: https://github.com/hvfrancesco/lpmt
 
 Bug fixes or reports are welcome!
 
+Screenshots of the current version:
+![Screenshot of LPMT](screenshots/screenshot1.jpg)
+![Screenshot of LPMT](screenshots/screenshot2.jpg)
+![Screenshot of LPMT](screenshots/screenshot3.jpg)
+
 ## Installation instructions
 
 You'll need to add the following addons to your Addons folder:
