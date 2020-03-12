@@ -26,6 +26,14 @@ You'll need to add the following addons to your Addons folder:
 
 - https://github.com/danomatika/ofxMidi.git
 
+e.g.
+
+```
+cd addons
+git clone https://github.com/danomatika/ofxMidi.git
+```
+All the other addons are either core ones, or are custom versions specific to LPMT that have been integrated into the main code base (e.h. ofxTimeline)
+
 ### Linux
 Type ```Make``` or use the provided QtCreator project.
 
