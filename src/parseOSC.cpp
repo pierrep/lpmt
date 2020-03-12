@@ -205,25 +205,25 @@ void ofApp::parseOsc()
     // toggle setup
     else if ( m.getAddress() == "/projection/mode/setup/toggle" )
     {
-        if (isSetup)
+        if (isEditMode)
         {
-            isSetup = false;
+            isEditMode = false;
             for(int i = 0; i < MAX_QUADS; i++)
             {
                 if (quads[i].initialized)
                 {
-                    quads[i].isSetup = false;
+                    quads[i].isEditMode = false;
                 }
             }
         }
         else
         {
-            isSetup = true;
+            isEditMode = true;
             for(int i = 0; i < MAX_QUADS; i++)
             {
                 if (quads[i].initialized)
                 {
-                    quads[i].isSetup = true;
+                    quads[i].isEditMode = true;
                 }
             }
         }
@@ -231,24 +231,24 @@ void ofApp::parseOsc()
 
     else if ( m.getAddress() == "/projection/mode/setup/on" )
     {
-        isSetup = true;
+        isEditMode = true;
         for(int i = 0; i < MAX_QUADS; i++)
         {
             if (quads[i].initialized)
             {
-                quads[i].isSetup = true;
+                quads[i].isEditMode = true;
             }
         }
     }
 
     else if ( m.getAddress() == "/projection/mode/setup/off" )
     {
-        isSetup = false;
+        isEditMode = false;
         for(int i = 0; i < MAX_QUADS; i++)
         {
             if (quads[i].initialized)
             {
-                quads[i].isSetup = false;
+                quads[i].isEditMode = false;
             }
         }
     }
@@ -682,14 +682,14 @@ void ofApp::parseOsc()
     if ( m.getAddress() == "/active/edgeblend/show" )
     {
         // argument is int32
-        int osc_quad_edgeBlendBool = m.getArgAsInt32( 0 );
-        if(osc_quad_edgeBlendBool == 0)
+        int osc_quad_bEdgeBlend = m.getArgAsInt32( 0 );
+        if(osc_quad_bEdgeBlend == 0)
         {
-            quads[activeQuad].edgeBlendBool = false;
+            quads[activeQuad].bEdgeBlend = false;
         }
-        else if(osc_quad_edgeBlendBool == 1)
+        else if(osc_quad_bEdgeBlend == 1)
         {
-            quads[activeQuad].edgeBlendBool = true;
+            quads[activeQuad].bEdgeBlend = true;
         }
     }
 

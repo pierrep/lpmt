@@ -27,7 +27,6 @@ ofxTextInputField::ofxTextInputField() {
     drawCursor = false;
 	autoClear = false;
 	mouseDownInRect = false;
-    //isSetup = false;
 }
 
 ofxTextInputField::~ofxTextInputField(){

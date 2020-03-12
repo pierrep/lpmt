@@ -188,7 +188,7 @@ void ofApp::copyQuadSettings(int sourceQuad)
 //---------------------------------------------------------------
 void ofApp::addQuad()
 {
-    if (isSetup) {
+    if (isEditMode) {
         bool hasSpareQuad = false;
         int index = 0;
         for (int i = 0; i < nOfQuads; i++) {
@@ -276,7 +276,7 @@ void ofApp::deleteQuad()
 //---------------------------------------------------------------
 void ofApp::activateNextQuad()
 {
-    if (isSetup && (nOfQuads >= 2)) {
+    if (isEditMode && (nOfQuads >= 2)) {
         quads[activeQuad].isActive = false; // activates next quad
         activeQuad += 1;
         if (activeQuad >= MAX_QUADS)
@@ -297,7 +297,7 @@ void ofApp::activateNextQuad()
 //---------------------------------------------------------------
 void ofApp::activatePrevQuad()
 {
-    if (isSetup && (nOfQuads >= 2)) {
+    if (isEditMode && (nOfQuads >= 2)) {
         quads[activeQuad].isActive = false; // activates prev quad
         activeQuad -= 1;
 
