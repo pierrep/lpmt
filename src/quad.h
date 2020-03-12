@@ -1,10 +1,8 @@
-#ifndef QUAD_INCLUDE
-#define QUAD_INCLUDE
-
-#include "config.h"
+#pragma once
 
 #include "ofMain.h"
-#include "ofGraphics.h"
+
+//#define WITH_KINECT
 
 #ifdef WITH_KINECT
 #include "ofxOpenCv.h"
@@ -15,7 +13,7 @@
 #include "ofxSyphon.h"
 #endif
 
-class quad: public ofNode
+class quad
 {
 
 public:
@@ -50,7 +48,7 @@ public:
     void drawContent(float w, float h, vector<ofVideoPlayer> &sharedVideos);
 
     #ifdef WITH_KINECT
-    void setKinect(kinectManager &kinect);
+    void setKinect(kinectManager* kinect);
     #endif
 
     #ifdef WITH_SYPHON
@@ -222,8 +220,6 @@ public:
     bool bHighlightMaskPoint;
     int highlightedMaskPoint;
 
-    bool bDeform;
-
     bool isBezierSetup;
     bool bHighlightCtrlPoint;
     int highlightedCtrlPointRow;
@@ -240,7 +236,7 @@ public:
     ofMesh gridMesh;
 
     #ifdef WITH_KINECT
-    kinectManager * quadKinect;
+    kinectManager* quadKinect;
     ofxCvGrayscaleImage kinectThreshImage;
     ofxCvGrayscaleImage kinectContourImage;
     ofxCvContourFinder kinectContourFinder;
@@ -256,8 +252,5 @@ public:
     float syphonScaleY;
     #endif
 
-
 };
-
-#endif //QUAD_INCLUDE
 

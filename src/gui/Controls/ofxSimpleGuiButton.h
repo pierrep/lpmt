@@ -9,7 +9,7 @@ public:
 	bool			beToggle;
 	bool			beenPressed;
 
-	ofxSimpleGuiButton(string name, bool &value);
+    ofxSimpleGuiButton(string name, bool &value, bool bSquare = false);
 	void setup();
 
 	void loadFromXML(ofxXmlSettings &XML);
@@ -31,4 +31,5 @@ public:
 private:
     ofColor backgroundColor;
     bool isBGColorFixed;
+    bool bForceSquare;
 };

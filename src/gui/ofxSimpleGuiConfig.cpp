@@ -47,13 +47,13 @@ ofxSimpleGuiConfig::ofxSimpleGuiConfig()
     toggleHeight = titleHeight;
     buttonHeight = titleHeight;
     slider2DTextHeight = titleHeight * 1.5;
-    comboBoxHeight = titleHeight; //15
+    comboBoxHeight = titleHeight+10; //15
     comboBoxTextHeight = 15;
     headerTabWidth = 139;
     headerTabHeight = titleHeight;
 
     padding.set(titleHeight / 3, 4); // was titleHeight/2 , 10
-    offset.set(titleHeight / 2, titleHeight/2 );
+    offset.set(titleHeight / 2, 4 );
     slider2DSize.set(titleHeight * 4, titleHeight * 4);
 
     gridSize.x = 190 + padding.x;
@@ -70,11 +70,13 @@ ofxSimpleGuiConfig::ofxSimpleGuiConfig()
     //textBGOverColor = 0x222222;
     textBGOverColor = 20;
 
-    fullColor = 0x00aaaa;
-    fullOverColor = 0x00aaaa;
+    fullColor = 0x888888;
+    fullOverColor = 0x999999;
     fullActiveColor = 0x881818;
+
     emptyColor.r = emptyColor.g = emptyColor.b = 104;
     emptyColor.a = 255;
+
     borderColor = 0x333333;
     rectRadius = 10;
     rounded = false;

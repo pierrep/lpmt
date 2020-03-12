@@ -590,23 +590,6 @@ void ofApp::parseOsc()
         }
     }
 
-    // deform stuff
-
-    // deform on/off
-    if ( m.getAddress() == "/active/deform/show" )
-    {
-        // argument is int32
-        int osc_quad_bDeform = m.getArgAsInt32( 0 );
-        if(osc_quad_bDeform == 0)
-        {
-            quads[activeQuad].bDeform = false;
-        }
-        else if(osc_quad_bDeform == 1)
-        {
-            quads[activeQuad].bDeform = true;
-        }
-    }
-
     // deform bezier
     else if ( m.getAddress() == "/active/deform/bezier" )
     {

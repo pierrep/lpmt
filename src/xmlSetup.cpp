@@ -116,7 +116,6 @@ void ofApp::saveCurrentSettingsToXMLFile(std::string xmlFilePath)
             xmlSettingsFile.setValue("QUADS:QUAD_" + ofToString(i) + ":MASK:CROP:CIRCULAR:Y", quads[i].circularCrop[1]);
             xmlSettingsFile.setValue("QUADS:QUAD_" + ofToString(i) + ":MASK:CROP:CIRCULAR:RADIUS", quads[i].circularCrop[2]);
             // deform stuff
-            xmlSettingsFile.setValue("QUADS:QUAD_" + ofToString(i) + ":DEFORM:ON", quads[i].bDeform);
             xmlSettingsFile.setValue("QUADS:QUAD_" + ofToString(i) + ":DEFORM:BEZIER:ON", quads[i].bBezier);
             xmlSettingsFile.setValue("QUADS:QUAD_" + ofToString(i) + ":DEFORM:GRID:ON", quads[i].bGrid);
             // bezier stuff
@@ -180,7 +179,7 @@ void ofApp::loadSettingsFromXMLFile(std::string xmlFilePath)
 #ifdef WITH_SYPHON
             quads[i].setup(ofPoint(x0, y0), ofPoint(x1, y1), ofPoint(x2, y2), ofPoint(x3, y3), edgeBlendShader, quadMaskShader, surfaceShader, crossfadeShader, m_cameras, kinect, syphClient, ttf);
 #else
-            quads[i].setup(ofPoint(x0, y0), ofPoint(x1, y1), ofPoint(x2, y2), ofPoint(x3, y3), edgeBlendShader, quadMaskShader, surfaceShader, crossfadeShader, m_cameras, kinect, ttf);
+            quads[i].setup(ofPoint(x0, y0), ofPoint(x1, y1), ofPoint(x2, y2), ofPoint(x3, y3), edgeBlendShader, quadMaskShader, surfaceShader, crossfadeShader, m_cameras, ttf);
 #endif
 #else
 #ifdef WITH_SYPHON
@@ -290,7 +289,6 @@ void ofApp::loadSettingsFromXMLFile(std::string xmlFilePath)
             quads[i].circularCrop[1] = xmlSettingsFile.getValue("QUADS:QUAD_" + ofToString(i) + ":MASK:CROP:CIRCULAR:Y", 0.5);
             quads[i].circularCrop[2] = xmlSettingsFile.getValue("QUADS:QUAD_" + ofToString(i) + ":MASK:CROP:CIRCULAR:RADIUS", 0.0);
             // deform stuff
-            quads[i].bDeform = xmlSettingsFile.getValue("QUADS:QUAD_" + ofToString(i) + ":DEFORM:ON", 0);
             quads[i].bBezier = xmlSettingsFile.getValue("QUADS:QUAD_" + ofToString(i) + ":DEFORM:BEZIER:ON", 0);
             quads[i].bGrid = xmlSettingsFile.getValue("QUADS:QUAD_" + ofToString(i) + ":DEFORM:GRID:ON", 0);
             // bezier stuff

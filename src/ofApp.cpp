@@ -49,7 +49,7 @@ void ofApp::setup()
 
     // shared videos setup
     sharedVideos.clear();
-    for (int i = 0; i < 8; i++) {
+    for (int i = 0; i < MAX_SHARED_VIDEOS; i++) {
         ofVideoPlayer video;
         sharedVideos.push_back(video);
         sharedVideosFiles.push_back("");
@@ -189,7 +189,7 @@ void ofApp::prepare()
 
     if (bStarted) {
         // updates shared video sources
-        for (unsigned int i = 0; i < 8; i++) {
+        for (unsigned int i = 0; i < MAX_SHARED_VIDEOS; i++) {
             if (sharedVideos[i].isLoaded()) {
                 sharedVideos[i].update();
             }
@@ -304,7 +304,6 @@ void ofApp::prepare()
         } else {
             ofBackground(0, 0, 0);
         }
-//ofSetWindowShape(800, 600);
 
 // kinect update
 #ifdef WITH_KINECT
@@ -483,254 +482,256 @@ void ofApp::draw()
 //}
 
 //--------------------------------------------------------------
-void ofApp::keyPressed(ofKeyEventArgs& args)
+void ofApp::keyPressed(int key)
 {
     if (bMidiHotkeyCoupling) {
         bMidiHotkeyLearning = true;
-        midiHotkeyPressed = args.key;
-    } else {
+        midiHotkeyPressed = key;
+    }
 
-        if (args.hasModifier(OF_KEY_CONTROL) && (args.keycode == 'Q')) {
-            ofExit(1);
-        } else if (args.key == '+' && !bTimeline && !bGui) {
-            raiseLayer(); // moves active layer one position up
-        } else if (args.key == '-' && !bTimeline && !bGui) {
-            lowerLayer(); // moves active layer one position down
-        } else if ((args.key == 's' || args.key == 'S') && !bTimeline) {
-            saveProject(); // saves quads settings to an .xml project file in data directory
-        } else if ((args.key == 'l') && !bTimeline) {
-            loadProject(); // let the user choose an .xml project file with all the quads settings and loads it
-        } else if (args.key == 'w' && !bTimeline) {
-            if (m_cameras.size() > 0) // if cameras are connected, take a snapshot of the specified camera and uses it as window background
-            {
-                m_isSnapshotTextureOn = !m_isSnapshotTextureOn;
-                if (m_isSnapshotTextureOn) {
-                    const int width = m_snapshotBackgroundCamera->getWidth();
-                    const int height = m_snapshotBackgroundCamera->getHeight();
-                    m_snapshotBackgroundCamera->update();
-                    m_snapshotBackgroundTexture.allocate(width, height, GL_RGB);
-                    m_snapshotBackgroundTexture.loadData(m_snapshotBackgroundCamera->getPixels().getData(), width, height, GL_RGB);
-                }
-            } else {
-                ofLogError() << "Can't take a snapshot background picture. No camera connected.";
-            }
-        } else if (args.key == 'W' && !bTimeline) {
-            m_isSnapshotTextureOn = !m_isSnapshotTextureOn; // loads an image file and uses it as window background
-            if (m_isSnapshotTextureOn) {
-                ofImage image(loadImageFromFile());
-                m_snapshotBackgroundTexture.allocate(image.getWidth(), image.getHeight(), GL_RGB);
-                m_snapshotBackgroundTexture.loadData(image.getPixels().getData(), image.getWidth(), image.getHeight(), GL_RGB);
-            }
-        } else if ((args.key == 'q' || args.key == 'Q') && !bTimeline) {
-            if (isEditMode) {
-                quads[activeQuad].corners[0] = ofPoint(0.0, 0.0); // fills window with active quad
-                quads[activeQuad].corners[1] = ofPoint(1.0, 0.0);
-                quads[activeQuad].corners[2] = ofPoint(1.0, 1.0);
-                quads[activeQuad].corners[3] = ofPoint(0.0, 1.0);
-            }
-        } else if (args.key == '>' && !bTimeline) {
-            activateNextQuad();
-        } else if (args.key == '<' && !bTimeline) {
-            activatePrevQuad();
-        } else if ((args.hasModifier(OF_KEY_CONTROL) && (args.keycode == 'C')) && !bTimeline) //copy
-        {
-            m_sourceQuadForCopying = activeQuad; // make currently active quad the source quad for copying
-        } else if ((args.hasModifier(OF_KEY_CONTROL) && (args.keycode == 'V')) && !bTimeline) // paste
-        {
-            copyQuadSettings(m_sourceQuadForCopying); // paste settings from source surface to currently active surface
-        } else
-            // goes to first page of gui for active quad or, in mask edit mode, delete last drawn point
-            if ((args.key == OF_KEY_F2) && !bTimeline) {
-            if (maskSetup && quads[activeQuad].m_maskPoints.size() > 0) {
-                quads[activeQuad].m_maskPoints.pop_back();
-            } else {
-                m_gui.showPage(2);
-            }
-        } else if ((args.key == 'd' || args.key == 'D') && !bTimeline) {
-            if (maskSetup && quads[activeQuad].m_maskPoints.size() > 0) {
-                if (quads[activeQuad].bHighlightMaskPoint) {
-                    quads[activeQuad].m_maskPoints.erase(quads[activeQuad].m_maskPoints.begin() + quads[activeQuad].highlightedMaskPoint);
-                }
-            }
-        } else if ((args.key == OF_KEY_F3) && !bTimeline) // goes to second page of gui for active quad
-        {
-            m_gui.showPage(3);
-        } else if ((args.key == 'c' || args.key == 'C') && !bTimeline) // goes to third page of gui for active quad or, in edit mask mode, clears mask
-        {
-            if (maskSetup) {
-                quads[activeQuad].m_maskPoints.clear();
-            }
-        } else if (args.key == OF_KEY_F4) {
-            m_gui.showPage(4);
-        } else if (args.key == OF_KEY_F1 && !bTimeline) // show general settings page of gui
-        {
-            m_gui.showPage(1);
-        } else if ((args.key == 'a' || args.key == 'A') && !bTimeline) // adds a new quad in the middle of the screen
-        {
-            addQuad();
-        } else if ((args.hasModifier(OF_KEY_CONTROL) && (args.keycode == 'X')) && !bTimeline) {
-            deleteQuad();
-        } else if (args.key == ' ' && !bTimeline) // toggles edit mode
-        {
-            toggleEditMode();
-        } else if ((args.key == 'f' || args.key == 'F') && !bTimeline) // toggles fullscreen mode
-        {
-            bFullscreen = !bFullscreen;
-            if (!bFullscreen) {
-                ofSetWindowShape(default_window_width, default_window_height);
-                ofSetFullscreen(false);
-                int screenW = ofGetScreenWidth();
-                int screenH = ofGetScreenHeight();
-                ofSetWindowPosition(screenW / 2 - default_window_width / 2, screenH / 2 - default_window_height / 2);
-            } else if (bFullscreen == 1) {
-                ofSetFullscreen(true);
-            }
-        } else if ((args.key == 'g' || args.key == 'G') && !bTimeline) // toggles gui
-        {
-            if (maskSetup) {
-                maskSetup = false;
-                for (int i = 0; i < MAX_QUADS; i++) {
-                    if (quads[i].initialized) {
-                        quads[i].isMaskSetup = false;
-                    }
-                }
-            }
-            m_gui.toggleDraw();
-            bGui = !bGui;
-        } else if ((args.key == 'm' || args.key == 'M') && !bTimeline) // toggles mask editing
-        {
-            if (!bGui) {
-                maskSetup = !maskSetup;
-                for (int i = 0; i < MAX_QUADS; i++) {
-                    if (quads[i].initialized) {
-                        quads[i].isMaskSetup = !quads[i].isMaskSetup;
-                    }
-                }
-            }
-        } else if ((args.key == 'b' || args.key == 'B') && !bTimeline) // toggles bezier deformation editing
-        {
-            if (!bGui) {
-                gridSetup = !gridSetup;
-                for (int i = 0; i < MAX_QUADS; i++) {
-                    if (quads[i].initialized) {
-                        quads[i].isBezierSetup = !quads[i].isBezierSetup;
-                    }
-                }
-            }
-        } else if (args.key == '[' && !bTimeline) {
-            m_gui.prevPage();
-        } else if (args.key == ']' && !bTimeline) {
-            m_gui.nextPage();
-        } else if ((args.key == 'r' || args.key == 'R') && !bTimeline) // resyncs videos to start point in every quad
-        {
-            resync();
-        } else if ((args.key == 'p' || args.key == 'P') && !bTimeline) // starts and stops rendering
-        {
-            startProjection();
-        } else if ((args.key == 'o' || args.key == 'O') && !bTimeline) {
-            stopProjection();
-        } else if ((args.key == 'n' || args.key == 'N') && !bTimeline) {
-            //   mpeSetup();
-        } else if ((args.key == 'h' || args.key == 'H' || args.key == OF_KEY_F1) && !bTimeline) // displays help in system dialog
-        {
-            ofBuffer buf = ofBufferFromFile("help_keys.txt");
-            ofSystemAlertDialog(buf);
-        } else if (args.key == OF_KEY_F11 && bTimeline) // show-hide stage when timeline is shown
-        {
-            if (bStarted) {
-                bStarted = false;
-                for (int i = 0; i < MAX_QUADS; i++) {
-                    if (quads[i].initialized) {
-                        quads[i].isOn = false;
-                        if (quads[i].videoBg && quads[i].video.isLoaded()) {
-                            quads[i].video.setVolume(0);
-                            quads[i].video.stop();
-                        }
-                    }
-                }
-            } else if (!bStarted) {
-                bStarted = true;
-                for (int i = 0; i < MAX_QUADS; i++) {
-                    if (quads[i].initialized) {
-                        quads[i].isOn = true;
-                        if (quads[i].videoBg && quads[i].video.isLoaded()) {
-                            quads[i].video.setVolume(quads[i].videoVolume);
-                            quads[i].video.play();
-                        }
-                    }
-                }
-            }
-        } else
-            // toggle timeline
-            if (args.key == OF_KEY_F10) {
-            bTimeline = !bTimeline;
-            timeline.toggleShow();
-            if (bTimeline) {
-                timeline.enable();
-                m_gui.hide();
-                bGui = false;
-            } else {
-                bStarted = true;
-                for (int i = 0; i < MAX_QUADS; i++) {
-                    if (quads[i].initialized) {
-                        quads[i].isOn = true;
-                        if (quads[i].videoBg && quads[i].video.isLoaded()) {
-                            quads[i].video.setVolume(quads[i].videoVolume);
-                            quads[i].video.play();
-                        }
-                    }
-                }
-            }
-        } else if (args.key == OF_KEY_F12) // toggle timeline playing
-        {
-            timeline.togglePlay();
-        } else if (args.key == OF_KEY_F9 && bTimeline) // toggle timeline BPM grid drawing
-        {
-            timeline.toggleShowBPMGrid();
-        } else
-
-            if (args.key == '*' && !bTimeline) {
-            if (m_cameras.size() > 0) {
-
-                if (m_cameras[quads[activeQuad].camNumber].getPixelFormat() == OF_PIXELS_RGBA) {
-                    m_cameras[quads[activeQuad].camNumber].setPixelFormat(OF_PIXELS_BGRA);
-                } else if (m_cameras[quads[activeQuad].camNumber].getPixelFormat() == OF_PIXELS_BGRA) {
-                    m_cameras[quads[activeQuad].camNumber].setPixelFormat(OF_PIXELS_RGBA);
-                }
-            }
-        } else if (args.key == '#' && !bTimeline) // rotation of surface around its center
-        {
-            ofMatrix4x4 rotation;
-            ofMatrix4x4 centerToOrigin;
-            ofMatrix4x4 originToCenter;
-            ofMatrix4x4 resultingMatrix;
-            centerToOrigin.makeTranslationMatrix(-quads[activeQuad].center);
-            originToCenter.makeTranslationMatrix(quads[activeQuad].center);
-            rotation.makeRotationMatrix(-5.0, 0, 0, 1);
-            resultingMatrix = centerToOrigin * rotation * originToCenter;
-            for (int i = 0; i < 4; i++) {
-                quads[activeQuad].corners[i] = quads[activeQuad].corners[i] * resultingMatrix;
-            }
-        } else if (args.key == '$' && !bTimeline) {
-            ofMatrix4x4 rotation;
-            ofMatrix4x4 centerToOrigin;
-            ofMatrix4x4 originToCenter;
-            ofMatrix4x4 resultingMatrix;
-            centerToOrigin.makeTranslationMatrix(-quads[activeQuad].center);
-            originToCenter.makeTranslationMatrix(quads[activeQuad].center);
-            rotation.makeRotationMatrix(5.0, 0, 0, 1);
-            resultingMatrix = centerToOrigin * rotation * originToCenter;
-            for (int i = 0; i < 4; i++) {
-                quads[activeQuad].corners[i] = quads[activeQuad].corners[i] * resultingMatrix;
-            }
-        }
-
-    } //end keys
-
-    if (args.key == OF_KEY_F5) {
+    if (key == OF_KEY_F5) {
         bMidiHotkeyCoupling = !bMidiHotkeyCoupling;
         bMidiHotkeyLearning = false;
         midiHotkeyPressed = -1;
+    }
+}
+
+//--------------------------------------------------------------
+void ofApp::keyPressed(ofKeyEventArgs& args)
+{
+    if (args.hasModifier(OF_KEY_CONTROL) && (args.keycode == 'Q')) {
+        ofExit(1);
+    } else if (args.key == '+' && !bTimeline && !bGui) {
+        raiseLayer(); // moves active layer one position up
+    } else if (args.key == '-' && !bTimeline && !bGui) {
+        lowerLayer(); // moves active layer one position down
+    } else if ((args.key == 's' || args.key == 'S') && !bTimeline) {
+        saveProject(); // saves quads settings to an .xml project file in data directory
+    } else if ((args.key == 'l') && !bTimeline) {
+        loadProject(); // let the user choose an .xml project file with all the quads settings and loads it
+    } else if (args.key == 'w' && !bTimeline) {
+        if (m_cameras.size() > 0) // if cameras are connected, take a snapshot of the specified camera and uses it as window background
+        {
+            m_isSnapshotTextureOn = !m_isSnapshotTextureOn;
+            if (m_isSnapshotTextureOn) {
+                const int width = m_snapshotBackgroundCamera->getWidth();
+                const int height = m_snapshotBackgroundCamera->getHeight();
+                m_snapshotBackgroundCamera->update();
+                m_snapshotBackgroundTexture.allocate(width, height, GL_RGB);
+                m_snapshotBackgroundTexture.loadData(m_snapshotBackgroundCamera->getPixels().getData(), width, height, GL_RGB);
+            }
+        } else {
+            ofLogError() << "Can't take a snapshot background picture. No camera connected.";
+        }
+    } else if (args.key == 'W' && !bTimeline) {
+        m_isSnapshotTextureOn = !m_isSnapshotTextureOn; // loads an image file and uses it as window background
+        if (m_isSnapshotTextureOn) {
+            ofImage image(loadImageFromFile());
+            m_snapshotBackgroundTexture.allocate(image.getWidth(), image.getHeight(), GL_RGB);
+            m_snapshotBackgroundTexture.loadData(image.getPixels().getData(), image.getWidth(), image.getHeight(), GL_RGB);
+        }
+    } else if ((args.key == 'q' || args.key == 'Q') && !bTimeline) {
+        if (isEditMode) {
+            quads[activeQuad].corners[0] = ofPoint(0.0, 0.0); // fills window with active quad
+            quads[activeQuad].corners[1] = ofPoint(1.0, 0.0);
+            quads[activeQuad].corners[2] = ofPoint(1.0, 1.0);
+            quads[activeQuad].corners[3] = ofPoint(0.0, 1.0);
+        }
+    } else if (args.key == '>' && !bTimeline) {
+        activateNextQuad();
+    } else if (args.key == '<' && !bTimeline) {
+        activatePrevQuad();
+    } else if ((args.hasModifier(OF_KEY_CONTROL) && (args.keycode == 'C')) && !bTimeline) //copy
+    {
+        m_sourceQuadForCopying = activeQuad; // make currently active quad the source quad for copying
+    } else if ((args.hasModifier(OF_KEY_CONTROL) && (args.keycode == 'V')) && !bTimeline) // paste
+    {
+        copyQuadSettings(m_sourceQuadForCopying); // paste settings from source surface to currently active surface
+    } else
+        // goes to first page of gui for active quad or, in mask edit mode, delete last drawn point
+        if ((args.key == OF_KEY_F2) && !bTimeline) {
+        if (maskSetup && quads[activeQuad].m_maskPoints.size() > 0) {
+            quads[activeQuad].m_maskPoints.pop_back();
+        } else {
+            m_gui.showPage(2);
+        }
+    } else if ((args.key == 'd' || args.key == 'D') && !bTimeline) {
+        if (maskSetup && quads[activeQuad].m_maskPoints.size() > 0) {
+            if (quads[activeQuad].bHighlightMaskPoint) {
+                quads[activeQuad].m_maskPoints.erase(quads[activeQuad].m_maskPoints.begin() + quads[activeQuad].highlightedMaskPoint);
+            }
+        }
+    } else if ((args.key == OF_KEY_F3) && !bTimeline) // goes to second page of gui for active quad
+    {
+        m_gui.showPage(3);
+    } else if ((args.key == 'c' || args.key == 'C') && !bTimeline) // goes to third page of gui for active quad or, in edit mask mode, clears mask
+    {
+        if (maskSetup) {
+            quads[activeQuad].m_maskPoints.clear();
+        }
+    } else if (args.key == OF_KEY_F4) {
+        m_gui.showPage(4);
+    } else if (args.key == OF_KEY_F1 && !bTimeline) // show general settings page of gui
+    {
+        m_gui.showPage(1);
+    } else if ((args.key == 'a' || args.key == 'A') && !bTimeline) // adds a new quad in the middle of the screen
+    {
+        addQuad();
+    } else if ((args.hasModifier(OF_KEY_CONTROL) && (args.keycode == 'X')) && !bTimeline) {
+        deleteQuad();
+    } else if (args.key == ' ' && !bTimeline) // toggles edit mode
+    {
+        toggleEditMode();
+    } else if ((args.key == 'f' || args.key == 'F') && !bTimeline) // toggles fullscreen mode
+    {
+        bFullscreen = !bFullscreen;
+        if (!bFullscreen) {
+            ofSetWindowShape(default_window_width, default_window_height);
+            ofSetFullscreen(false);
+            int screenW = ofGetScreenWidth();
+            int screenH = ofGetScreenHeight();
+            ofSetWindowPosition(screenW / 2 - default_window_width / 2, screenH / 2 - default_window_height / 2);
+        } else if (bFullscreen == 1) {
+            ofSetFullscreen(true);
+        }
+    } else if ((args.key == 'g' || args.key == 'G') && !bTimeline) // toggles gui
+    {
+        if (maskSetup) {
+            maskSetup = false;
+            for (int i = 0; i < MAX_QUADS; i++) {
+                if (quads[i].initialized) {
+                    quads[i].isMaskSetup = false;
+                }
+            }
+        }
+        m_gui.toggleDraw();
+        bGui = !bGui;
+    } else if ((args.key == 'm' || args.key == 'M') && !bTimeline) // toggles mask editing
+    {
+        if (!bGui) {
+            maskSetup = !maskSetup;
+            for (int i = 0; i < MAX_QUADS; i++) {
+                if (quads[i].initialized) {
+                    quads[i].isMaskSetup = !quads[i].isMaskSetup;
+                }
+            }
+        }
+    } else if ((args.key == 'b' || args.key == 'B') && !bTimeline) // toggles bezier deformation editing
+    {
+        if (!bGui) {
+            gridSetup = !gridSetup;
+            for (int i = 0; i < MAX_QUADS; i++) {
+                if (quads[i].initialized) {
+                    quads[i].isBezierSetup = !quads[i].isBezierSetup;
+                }
+            }
+        }
+    } else if (args.key == '[' && !bTimeline) {
+        m_gui.prevPage();
+    } else if (args.key == ']' && !bTimeline) {
+        m_gui.nextPage();
+    } else if ((args.key == 'r' || args.key == 'R') && !bTimeline) // resyncs videos to start point in every quad
+    {
+        resync();
+    } else if ((args.key == 'p' || args.key == 'P') && !bTimeline) // starts and stops rendering
+    {
+        startProjection();
+    } else if ((args.key == 'o' || args.key == 'O') && !bTimeline) {
+        stopProjection();
+    } else if ((args.key == 'n' || args.key == 'N') && !bTimeline) {
+        //   mpeSetup();
+    } else if ((args.key == 'h' || args.key == 'H' || args.key == OF_KEY_F1) && !bTimeline) // displays help in system dialog
+    {
+        ofBuffer buf = ofBufferFromFile("help_keys.txt");
+        ofSystemAlertDialog(buf);
+    } else if (args.key == OF_KEY_F11 && bTimeline) // show-hide stage when timeline is shown
+    {
+        if (bStarted) {
+            bStarted = false;
+            for (int i = 0; i < MAX_QUADS; i++) {
+                if (quads[i].initialized) {
+                    quads[i].isOn = false;
+                    if (quads[i].videoBg && quads[i].video.isLoaded()) {
+                        quads[i].video.setVolume(0);
+                        quads[i].video.stop();
+                    }
+                }
+            }
+        } else if (!bStarted) {
+            bStarted = true;
+            for (int i = 0; i < MAX_QUADS; i++) {
+                if (quads[i].initialized) {
+                    quads[i].isOn = true;
+                    if (quads[i].videoBg && quads[i].video.isLoaded()) {
+                        quads[i].video.setVolume(quads[i].videoVolume);
+                        quads[i].video.play();
+                    }
+                }
+            }
+        }
+    } else
+        // toggle timeline
+        if (args.key == OF_KEY_F10) {
+        bTimeline = !bTimeline;
+        timeline.toggleShow();
+        if (bTimeline) {
+            timeline.enable();
+            m_gui.hide();
+            bGui = false;
+        } else {
+            bStarted = true;
+            for (int i = 0; i < MAX_QUADS; i++) {
+                if (quads[i].initialized) {
+                    quads[i].isOn = true;
+                    if (quads[i].videoBg && quads[i].video.isLoaded()) {
+                        quads[i].video.setVolume(quads[i].videoVolume);
+                        quads[i].video.play();
+                    }
+                }
+            }
+        }
+    } else if (args.key == OF_KEY_F12) // toggle timeline playing
+    {
+        timeline.togglePlay();
+    } else if (args.key == OF_KEY_F9 && bTimeline) // toggle timeline BPM grid drawing
+    {
+        timeline.toggleShowBPMGrid();
+    } else
+
+        if (args.key == '*' && !bTimeline) {
+        if (m_cameras.size() > 0) {
+
+            if (m_cameras[quads[activeQuad].camNumber].getPixelFormat() == OF_PIXELS_RGBA) {
+                m_cameras[quads[activeQuad].camNumber].setPixelFormat(OF_PIXELS_BGRA);
+            } else if (m_cameras[quads[activeQuad].camNumber].getPixelFormat() == OF_PIXELS_BGRA) {
+                m_cameras[quads[activeQuad].camNumber].setPixelFormat(OF_PIXELS_RGBA);
+            }
+        }
+    } else if (args.key == '#' && !bTimeline) // rotation of surface around its center
+    {
+        ofMatrix4x4 rotation;
+        ofMatrix4x4 centerToOrigin;
+        ofMatrix4x4 originToCenter;
+        ofMatrix4x4 resultingMatrix;
+        centerToOrigin.makeTranslationMatrix(-quads[activeQuad].center);
+        originToCenter.makeTranslationMatrix(quads[activeQuad].center);
+        rotation.makeRotationMatrix(-5.0, 0, 0, 1);
+        resultingMatrix = centerToOrigin * rotation * originToCenter;
+        for (int i = 0; i < 4; i++) {
+            quads[activeQuad].corners[i] = quads[activeQuad].corners[i] * resultingMatrix;
+        }
+    } else if (args.key == '$' && !bTimeline) {
+        ofMatrix4x4 rotation;
+        ofMatrix4x4 centerToOrigin;
+        ofMatrix4x4 originToCenter;
+        ofMatrix4x4 resultingMatrix;
+        centerToOrigin.makeTranslationMatrix(-quads[activeQuad].center);
+        originToCenter.makeTranslationMatrix(quads[activeQuad].center);
+        rotation.makeRotationMatrix(5.0, 0, 0, 1);
+        resultingMatrix = centerToOrigin * rotation * originToCenter;
+        for (int i = 0; i < 4; i++) {
+            quads[activeQuad].corners[i] = quads[activeQuad].corners[i] * resultingMatrix;
+        }
     }
 }
 
@@ -881,7 +882,6 @@ void ofApp::mouseDragged(int x, int y, int button)
         if (m_selectedCorner >= 0) {
             // move the selected corner
             quads[activeQuad].corners[m_selectedCorner] += normalizedMouseMovement;
-            ofLogNotice() << "normalizedMouseMovement = " << normalizedMouseMovement;
 
             // scale the whole quad if shift is pressed and one of the corners is moved
             if (ofGetKeyPressed(OF_KEY_LEFT_SHIFT)) {
@@ -1282,6 +1282,7 @@ void ofApp::setupInitialQuads()
 //--------------------------------------------------------------
 void ofApp::setupCameras()
 {
+
     xmlConfigFile.pushTag("cameras");
     // check how many cameras are defined in settings
     int numberOfCameras = 0;
@@ -1370,7 +1371,8 @@ void ofApp::setupMidi()
 {
 #ifdef WITH_MIDI
     // print input ports to console
-    midiIn.listPorts();
+    midiIn.listInPorts();
+
     // open port by number
     //midiIn.openPort(1);
     //midiIn.openPort("IAC Pure Data In");	// by name

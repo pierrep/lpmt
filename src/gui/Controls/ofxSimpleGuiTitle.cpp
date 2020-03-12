@@ -1,7 +1,7 @@
 
 #include "ofxSimpleGuiTitle.h"
 
-ofxSimpleGuiTitle::ofxSimpleGuiTitle(string name, float height)
+ofxSimpleGuiTitle::ofxSimpleGuiTitle(string name, float height, bool bSquare)
     : ofxSimpleGuiControl(name)
 {
     beToggle = false;
@@ -9,7 +9,7 @@ ofxSimpleGuiTitle::ofxSimpleGuiTitle(string name, float height)
     //		this->value	= &value;
     value = NULL;
     controlType = "Title";
-    //		newColumn	= true;
+    bForceSquare = bSquare;
 
     if (height == 0)
         height = config->titleHeight;
@@ -98,12 +98,12 @@ void ofxSimpleGuiTitle::draw(float x, float y)
 
     ofEnableAlphaBlending();
     ofFill();
-    //		setTextBGColor(value != NULL);
-    //		ofSetHexColor(0, 0, 0);
+
     ofSetHexColor(config->fullActiveColor);
-    if (config->rounded) {
-        roundedRect(0, 0, width, height, config->rectRadius);
-    } else {
+//    if (config->rounded && !bForceSquare) {
+//        roundedRect(0, 0, width, height, config->rectRadius);
+//    } else
+    {
         ofDrawRectangle(0, 0, width, height);
     }
 

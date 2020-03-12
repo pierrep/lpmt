@@ -126,8 +126,6 @@ void quad::reset()
     bHighlightMaskPoint = false;
     highlightedMaskPoint = -1;
 
-    bDeform = false;
-
     //This sets up my Bezier Surface
     bBezier = false;
     isBezierSetup = false;
@@ -325,7 +323,7 @@ void quad::update()
                 poly.simplify(kinectContourSimplify);
                 ofPolyline polySmoothed = poly.getSmoothed(kinectContourSmooth);
                 //polySmoothed.close();
-                vector<ofPoint> points = polySmoothed.getVertices();
+                vector<glm::vec3> points = polySmoothed.getVertices();
 
                 for (size_t j = 0; j < points.size(); j++) {
                     if (kinectContourCurved) {
@@ -466,7 +464,7 @@ void quad::draw(vector<ofVideoPlayer>& sharedVideos)
                     glEnable(GL_BLEND);
                     applyBlendmode();
                 }
-                if (!bDeform) {
+                if ((!bBezier && !bGrid)) {
                     quadFbo.draw(0 + quadDispX, 0 + quadDispY, quadW, quadH);
                     edgeBlendShader->end();
                 } else {
@@ -503,7 +501,7 @@ void quad::draw(vector<ofVideoPlayer>& sharedVideos)
                         glEnable(GL_BLEND);
                         applyBlendmode();
                     }
-                    if (!bDeform) {
+                    if (!bBezier && !bGrid) {
                         quadFbo.draw(0 + quadDispX, 0 + quadDispY, quadW, quadH);
                         maskShader->end();
                     } else {
@@ -531,7 +529,7 @@ void quad::draw(vector<ofVideoPlayer>& sharedVideos)
                         applyBlendmode();
                     }
 
-                    if (!bDeform) {
+                    if (!bBezier && !bGrid) {
                         quadFbo.draw(quadDispX, quadDispY, quadW, quadH);
                     } else {
                         drawDeformation(quadFbo.getTexture(), false);
@@ -1598,9 +1596,9 @@ void quad::drawMaskMarkers()
 }
 
 #ifdef WITH_KINECT
-void quad::setKinect(kinectManager& kinect)
+void quad::setKinect(kinectManager* kinect)
 {
-    quadKinect = &kinect;
+    quadKinect = kinect;
 }
 #endif
 

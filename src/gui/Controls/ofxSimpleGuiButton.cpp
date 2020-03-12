@@ -2,11 +2,12 @@
 #include "ofxSimpleGuiButton.h"
 
 
-ofxSimpleGuiButton::ofxSimpleGuiButton(string name, bool &value) : ofxSimpleGuiValueControl<bool>(name, value) {
+ofxSimpleGuiButton::ofxSimpleGuiButton(string name, bool &value, bool bSquare) : ofxSimpleGuiValueControl<bool>(name, value) {
 	beToggle	= false;
 	beenPressed = false;
 	isBGColorFixed = false;
 	controlType = "Button";
+    bForceSquare = bSquare;
 	setup();
 }
 
@@ -82,13 +83,13 @@ void ofxSimpleGuiButton::draw(float x, float y) {
 	ofEnableAlphaBlending();
 	ofFill();
 	ofSetColor(backgroundColor);
-    //if(config->rounded)
+    if(config->rounded || !bForceSquare)
 	{
         roundedRect(0,0,width,height,config->rectRadius);
 	}
-    //else
+    else
     {
-       // ofDrawRectangle(0, 0, width, height);
+        ofDrawRectangle(0, 0, width, height);
     }
 
 

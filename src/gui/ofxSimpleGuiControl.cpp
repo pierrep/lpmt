@@ -53,9 +53,6 @@ ofxSimpleGuiControl::ofxSimpleGuiControl(string name) {
 	setup();
 
 	disableAllEvents();		// just for safety to make sure nothing is registered twice
-//	enableAppEvents();
-//	enableMouseEvents();
-//	disableKeyEvents();
 }
 
 ofxSimpleGuiControl &ofxSimpleGuiControl::setConfig(ofxSimpleGuiConfig *config) {
@@ -119,7 +116,7 @@ ofxSimpleGuiControl &ofxSimpleGuiControl::setEmptyColor() {
 ofxSimpleGuiControl &ofxSimpleGuiControl::setKeyboardShortcut(char c) {
 	keyboardShortcut = c;
 	if(c) {
-	//	printf("ofxSimpleGuiControl::setKeyboardShortcut %s %c\n", name.c_str(), c);
+    ofLog(OF_LOG_NOTICE,"ofxSimpleGuiControl::setKeyboardShortcut %s %c\n", name.c_str(), c);
 		name = origName + " (" + c + ")";
 	} else {
 		name = origName;

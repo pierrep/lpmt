@@ -70,33 +70,21 @@ void ofxSimpleGuiToo::setup() {
 
 
 void ofxSimpleGuiToo::addListeners() {
-//	ofAddListener(ofEvents().setup, this, &ofxSimpleGuiToo::setup);
 	ofAddListener(ofEvents().update, this, &ofxSimpleGuiToo::update);
-//	ofAddListener(ofEvents().draw, this, &ofxSimpleGuiToo::draw);
-//	ofAddListener(ofEvents().exit, this, &ofxSimpleGuiToo::exit);
-
 	ofAddListener(ofEvents().mousePressed, this, &ofxSimpleGuiToo::mousePressed);
 	ofAddListener(ofEvents().mouseMoved, this, &ofxSimpleGuiToo::mouseMoved);
 	ofAddListener(ofEvents().mouseDragged, this, &ofxSimpleGuiToo::mouseDragged);
 	ofAddListener(ofEvents().mouseReleased, this, &ofxSimpleGuiToo::mouseReleased);
-
-//	ofAddListener(ofEvents().keyPressed, this, &ofxSimpleGuiToo::keyPressed);
 	ofAddListener(ofEvents().keyReleased, this, &ofxSimpleGuiToo::keyReleased);
 }
 
 
 void ofxSimpleGuiToo::removeListeners() {
-//	ofRemoveListener(ofEvents().setup, this, &ofxSimpleGuiToo::setup);
 	ofRemoveListener(ofEvents().update, this, &ofxSimpleGuiToo::update);
-//	ofRemoveListener(ofEvents().draw, this, &ofxSimpleGuiToo::draw);
-//	ofRemoveListener(ofEvents().exit, this, &ofxSimpleGuiToo::exit);
-
 	ofRemoveListener(ofEvents().mousePressed, this, &ofxSimpleGuiToo::mousePressed);
 	ofRemoveListener(ofEvents().mouseMoved, this, &ofxSimpleGuiToo::mouseMoved);
 	ofRemoveListener(ofEvents().mouseDragged, this, &ofxSimpleGuiToo::mouseDragged);
 	ofRemoveListener(ofEvents().mouseReleased, this, &ofxSimpleGuiToo::mouseReleased);
-
-//	ofRemoveListener(ofEvents().keyPressed, this, &ofxSimpleGuiToo::keyPressed);
 	ofRemoveListener(ofEvents().keyReleased, this, &ofxSimpleGuiToo::keyReleased);
 }
 
@@ -178,16 +166,16 @@ void ofxSimpleGuiToo::draw() {
 	ofPushStyle();
 
 	glDisable(GL_DEPTH_TEST);
-
 	ofSetLineWidth(3);
-
 	glDisableClientState(GL_COLOR_ARRAY);
 
 	// draw the header
 	headerPage->draw(0, 0, alignRight);
+
 	// draw the line underneath it
 	ofSetHexColor(config->borderColor);
 	ofSetLineWidth(3);
+
 	if(alignRight)
         ofDrawLine(ofGetWidth() - headerPage->width - config->padding.x, headerPage->height, ofGetWidth(), headerPage->height);
 	else
@@ -283,7 +271,7 @@ ofxSimpleGuiPage &ofxSimpleGuiToo::addPage(string name) {
         // for the first 10 pages create a tab button in the header
         if(lastPageIndex < 10) {
             activePageFlags[lastPageIndex] = false;
-            ofxSimpleGuiButton* button = new ofxSimpleGuiButton(newPage->name, activePageFlags[lastPageIndex]);
+            ofxSimpleGuiButton* button = new ofxSimpleGuiButton(newPage->name, activePageFlags[lastPageIndex],true);
             button->setWidth(config->headerTabWidth);
             button->setHeight(config->headerTabHeight);
             headerPage->addControl(*button);

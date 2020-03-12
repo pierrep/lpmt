@@ -9,8 +9,9 @@ public:
 	bool*			value;
 	bool			beToggle;
 	bool			beenPressed;
+    bool            bForceSquare;
 
-	ofxSimpleGuiTitle(string name, float height);
+    ofxSimpleGuiTitle(string name, float height,bool bSquare = false);
 	void setup();
 	void loadFromXML(ofxXmlSettings &XML);
 	void saveToXML(ofxXmlSettings &XML);

@@ -15,15 +15,20 @@
         <useForSnapshotBackround>1</useForSnapshotBackround>
     </camera>
 </cameras>    
- -->
+ --> 
 
 <cameras>
     <camera>
-        <requestedWidth>640</requestedWidth>
-        <requestedHeight>480</requestedHeight>
+        <requestedWidth>1280</requestedWidth>
+        <requestedHeight>720</requestedHeight>
         <id>0</id>
     </camera>
-</cameras>   
+   <camera>
+        <requestedWidth>1280</requestedWidth>
+        <requestedHeight>720</requestedHeight>
+        <id>2</id>        
+    </camera>
+</cameras>
 
 <OSC>
 	<APPID>0</APPID>

@@ -1,13 +1,13 @@
 #pragma once
 
 #define MAX_QUADS 36
+#define MAX_SHARED_VIDEOS 8
+
 //#define WITH_KINECT
-//#define WITH_MIDI
+#define WITH_MIDI
 #ifdef TARGET_OSX
   //  #define WITH_SYPHON
 #endif
-
-//#define OF_ADDON_USING_OFXXMLSETTINGS
 
 // OSC stuff - listen on port 12345
 #define OSC_DEFAULT_PORT 12345
@@ -50,6 +50,7 @@ public:
     void update();
     void draw();
     void keyPressed(ofKeyEventArgs& args);
+    void keyPressed(int key);
     void keyReleased(int key);
     void mouseMoved(int x, int y );
     void mouseDragged(int x, int y, int button);
@@ -69,21 +70,24 @@ public:
     void resync();
     void startProjection();
     void stopProjection();
+
     void addQuad();
     void deleteQuad();
     void copyQuadSettings(int sourceQuad);
     void activateNextQuad();
     void activatePrevQuad();
-    void openImageFile();
-    void openVideoFile();
-    void loadSlideshow();
-    void openSharedVideoFile(int i);
-    void openSharedVideoFile(string path, int i);
     void quadDimensionsReset(int q);
     void quadPlacementReset(int q);
     void quadBezierSpherize(int q);
     void quadBezierSpherizeStrong(int q);
     void quadBezierReset(int q);
+
+    void openImageFile();
+    void openVideoFile();
+    void loadSlideshow();
+    void openSharedVideoFile(int i);
+    void openSharedVideoFile(string path, int i);
+
     void loadProject();
     void saveProject();
     void raiseLayer();

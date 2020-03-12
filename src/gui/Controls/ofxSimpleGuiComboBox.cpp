@@ -239,7 +239,9 @@ void ofxSimpleGuiComboBox::draw(float x, float y) {
         ofDrawBitmapString(m_title, kSGCBTextPaddingX, kSGCBTextPaddingY);
     }
 
-
+    setFullColor();
+    ofDrawRectangle(0,config->comboBoxHeight/2, width, config->comboBoxHeight/2);
+    setTextColor();
     if (config->bUseFont) {
         config->ttf.drawString(m_choices.size() ? m_choices[*m_selectedChoice] : "N/A", kSGCBTextPaddingX, kSGCBTextPaddingY * 2 + 3);
     } else {

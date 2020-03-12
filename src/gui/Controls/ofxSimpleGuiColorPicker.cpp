@@ -66,7 +66,7 @@ void ofxSimpleGuiColorPicker::updateSlider()
     if (!enabled)
         return;
 
-    int i = (getMouseY() - y) / config->colorSliderHeight;
+    int i = (getMouseY() - y -config->sliderTextHeight) / config->colorSliderHeight;
     if (i < 0 || i >= 4)
         return;
 
@@ -117,7 +117,24 @@ void ofxSimpleGuiColorPicker::draw(float x, float y)
     glPushMatrix();
     glTranslatef(x, y, 0);
 
-    int startY = 0;
+    ofFill();
+
+    setTextBGColor();
+    ofDrawRectangle(0, 0, width, config->sliderTextHeight);
+
+    glColor3f(getValue(0), getValue(1), getValue(2));
+    ofDrawRectangle(150, 0 + 3, width - 150 - 3, config->sliderTextHeight - 8);
+
+    setTextColor();
+    string s = name;
+
+    if (config->bUseFont) {
+        config->ttf.drawString(name, 3, 0 + 14);
+    } else {
+        ofDrawBitmapString(name, 3, 0 + 14);
+    }
+
+    int startY = config->sliderTextHeight;
     for (int i = 0; i < 4; i++) {
 
         barwidth[i] = ofMap(getValue(i), 0, max, 0.0, (float)width);
@@ -149,8 +166,8 @@ void ofxSimpleGuiColorPicker::draw(float x, float y)
 
         // determine whether the mouse is within the element and over what slider
         int overBar = -1;
-        if ((getMouseY() - y) >= 0) {
-            overBar = (getMouseY() - y) / config->colorSliderHeight;
+        if ((getMouseY() -y -config->sliderTextHeight ) >= 0) {
+            overBar = (getMouseY() -y -config->sliderTextHeight) / config->colorSliderHeight;
         }
         const bool withinElement = getMouseX() >= this->x && getMouseX() <= this->x + width;
 
@@ -192,23 +209,6 @@ void ofxSimpleGuiColorPicker::draw(float x, float y)
         }
 
         startY += config->colorSliderHeight;
-    }
-
-    ofFill();
-
-    setTextBGColor();
-    ofDrawRectangle(0, startY, width, config->sliderTextHeight);
-
-    glColor3f(getValue(0), getValue(1), getValue(2));
-    ofDrawRectangle(150, startY + 3, width - 150 - 3, config->sliderTextHeight - 8);
-
-    setTextColor();
-    string s = name;
-
-    if (config->bUseFont) {
-        config->ttf.drawString(name, 3, startY + 14);
-    } else {
-        ofDrawBitmapString(name, 3, startY + 14);
     }
 
     ofDisableAlphaBlending();

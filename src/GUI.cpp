@@ -45,7 +45,7 @@ void GUI::setupPages()
     }
     m_gui.addTitle("General controls").setNewColumn(true);
     m_gui.addToggle("surfaces corner snap", m_app->bSnapOn);
-    m_gui.addTitle("Shared videos");
+    m_gui.addTitle("Shared videos",true);
     m_gui.addButton("load shared video 1", m_app->m_loadSharedVideo0Flag);
     m_gui.addButton("load shared video 2", m_app->m_loadSharedVideo1Flag);
     m_gui.addButton("load shared video 3", m_app->m_loadSharedVideo2Flag);
@@ -103,7 +103,7 @@ void GUI::setupPages()
         m_gui.addTitle("Camera");
         m_gui.addToggle("Camera on/off", m_dummyBool);
         if(m_app->m_cameras.size() > 1)
-        {
+        {     
             m_gui.addComboBox("Select Camera", m_dummyInt, m_app->m_cameras.size(), &(m_app->m_cameraIds[0]));
         }        
     }
@@ -156,12 +156,13 @@ void GUI::setupPages()
     m_gui.addSlider("Height", m_dummyInt, 0, 2400);
     m_gui.addButton("Reset", m_app->m_resetCurrentQuadFlag);
 
-    m_gui.addTitle("Surface Deformation").setNewColumn(true);
-    m_gui.addToggle("Enable Deformation", m_dummyBool);
-    m_gui.addToggle("Use bezier", m_dummyBool);
+    m_gui.addTitle("Grid Deformation").setNewColumn(true);
     m_gui.addToggle("Use grid", m_dummyBool);
     m_gui.addSlider("Grid rows", m_dummyInt, 2, 15);
     m_gui.addSlider("Grid columns", m_dummyInt, 2, 20);
+
+    m_gui.addTitle("Bezier Deformation");
+    m_gui.addToggle("Use bezier", m_dummyBool);
     m_gui.addButton("Spherize light", m_app->m_bezierSpherizeQuadFlag);
     m_gui.addButton("Spherize strong", m_app->m_bezierSpherizeQuadStrongFlag);
     m_gui.addButton("Reset bezier warp", m_app->m_bezierResetQuadFlag);
@@ -268,7 +269,7 @@ void GUI::updatePages(quad& activeQuad)
         dynamic_cast<ofxSimpleGuiToggle*>(firstPage.findControlByName("Camera on/off"))->value = &activeQuad.camBg;
         if(m_app->m_cameras.size() > 1)
         {
-            dynamic_cast<ofxSimpleGuiComboBox*>(firstPage.findControlByName("Select camera"))->m_selectedChoice = &activeQuad.camNumber;
+            dynamic_cast<ofxSimpleGuiComboBox*>(firstPage.findControlByName("Select Camera"))->m_selectedChoice = &activeQuad.camNumber;
         }
     }
 
@@ -311,7 +312,6 @@ void GUI::updatePages(quad& activeQuad)
     dynamic_cast<ofxSimpleGuiSliderInt*>(secondPage.findControlByName("Width"))->value = &activeQuad.quadW;
     dynamic_cast<ofxSimpleGuiSliderInt*>(secondPage.findControlByName("Height"))->value = &activeQuad.quadH;
 
-    dynamic_cast<ofxSimpleGuiToggle*>(secondPage.findControlByName("Enable Deformation"))->value = &activeQuad.bDeform;
     dynamic_cast<ofxSimpleGuiToggle*>(secondPage.findControlByName("Use bezier"))->value = &activeQuad.bBezier;
     dynamic_cast<ofxSimpleGuiToggle*>(secondPage.findControlByName("Use grid"))->value = &activeQuad.bGrid;
     dynamic_cast<ofxSimpleGuiSliderInt*>(secondPage.findControlByName("Grid rows"))->value = &activeQuad.gridRows;
