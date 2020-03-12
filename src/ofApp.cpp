@@ -111,7 +111,7 @@ void ofApp::setup()
 
     ttf.load("type/OpenSans-Regular.ttf", 11);
 
-    isSetup = true; // starts in quads setup mode
+    isEditMode = true; // starts in quads setup mode
     bStarted = true; // starts running
     bSnapOn = true; // snap mode for surfaces corner is on
     m_sourceQuadForCopying = -1; // number of surface to use as source in copy/paste (per default no quad is selected)
@@ -157,7 +157,7 @@ void ofApp::setup()
         loadSettingsFromXMLFile("_lpmt_settings.xml"); //TODO <- ??
         m_gui.updatePages(quads[activeQuad]);
 
-        toggleSetupMode();
+        toggleEditMode();
 
         bFullscreen = true;
         ofSetFullscreen(true);
@@ -299,7 +299,7 @@ void ofApp::prepare()
         }
 
         // sets default window background, grey in setup mode and black in projection mode
-        if (isSetup) {
+        if (isEditMode) {
             ofBackground(20, 20, 20);
         } else {
             ofBackground(0, 0, 0);
@@ -355,7 +355,7 @@ void ofApp::render()
 {
     if (bStarted) {
         // if snapshot is on draws it as window background
-        if (isSetup && m_isSnapshotTextureOn) {
+        if (isEditMode && m_isSnapshotTextureOn) {
             ofEnableAlphaBlending();
             ofSetHexColor(0xFFFFFF);
             m_snapshotBackgroundTexture.draw(0, 0, ofGetWidth(), ofGetHeight());
@@ -398,15 +398,17 @@ void ofApp::draw()
         render();
     }
 
-    if (isSetup) {
+    if (isEditMode) {
         if (bStarted) {
             // if we are rotating surface, draws a feedback rotation sector
+            ofPushStyle();
             ofEnableAlphaBlending();
             ofFill();
             ofSetColor(219, 104, 0, 255); // orange
             m_rotationSector.draw();
             ofNoFill();
             ofDisableAlphaBlending();
+            ofPopStyle();
 
             // Writes the number of the active quad at the bottom of the window
             ofSetHexColor(0xFFFFFF); // white
@@ -520,7 +522,7 @@ void ofApp::keyPressed(ofKeyEventArgs& args)
                 m_snapshotBackgroundTexture.loadData(image.getPixels().getData(), image.getWidth(), image.getHeight(), GL_RGB);
             }
         } else if ((args.key == 'q' || args.key == 'Q') && !bTimeline) {
-            if (isSetup) {
+            if (isEditMode) {
                 quads[activeQuad].corners[0] = ofPoint(0.0, 0.0); // fills window with active quad
                 quads[activeQuad].corners[1] = ofPoint(1.0, 0.0);
                 quads[activeQuad].corners[2] = ofPoint(1.0, 1.0);
@@ -568,9 +570,9 @@ void ofApp::keyPressed(ofKeyEventArgs& args)
             addQuad();
         } else if ((args.hasModifier(OF_KEY_CONTROL) && (args.keycode == 'X')) && !bTimeline) {
             deleteQuad();
-        } else if (args.key == ' ' && !bTimeline) // toggles setup mode
+        } else if (args.key == ' ' && !bTimeline) // toggles edit mode
         {
-            toggleSetupMode();
+            toggleEditMode();
         } else if ((args.key == 'f' || args.key == 'F') && !bTimeline) // toggles fullscreen mode
         {
             bFullscreen = !bFullscreen;
@@ -745,7 +747,7 @@ void ofApp::mouseMoved(int x, int y)
 {
     const ofPoint mousePosition(x, y);
 
-    if (isSetup && !bGui && !maskSetup && !gridSetup && !bTimeline) {
+    if (isEditMode && !bGui && !maskSetup && !gridSetup && !bTimeline) {
         float smallestDist = 1.0;
         m_selectedCorner = -1;
         const ofPoint normalizedMousePosition = Util::normalizePoint(mousePosition);
@@ -874,7 +876,7 @@ void ofApp::mouseDragged(int x, int y, int button)
     const ofPoint normalizedMouseMovement = Util::normalizePoint(mousePosition - m_lastMousePosition);
 
     // quad movement code
-    if (isSetup && !bGui && !maskSetup && !gridSetup && !bTimeline) {
+    if (isEditMode && !bGui && !maskSetup && !gridSetup && !bTimeline) {
         // check if one of the corners is selected
         if (m_selectedCorner >= 0) {
             // move the selected corner
@@ -980,7 +982,7 @@ void ofApp::mousePressed(int x, int y, int button)
         m_isSplashScreenActive = !m_isSplashScreenActive;
     }
 
-    if (isSetup && !bGui && !bTimeline) {
+    if (isEditMode && !bGui && !bTimeline) {
 
         if (maskSetup && !gridSetup) {
             // if we are in mask setup mode and no mask point is selected, add a new mask point
@@ -1005,7 +1007,7 @@ void ofApp::mouseReleased(int x, int y, int button)
 {
     m_totalRotationAngle = 0;
     m_rotationSector.clear();
-    if (bSnapOn && isSetup && !bGui && !bTimeline) {
+    if (bSnapOn && isEditMode && !bGui && !bTimeline) {
         if (m_selectedCorner >= 0) {
             // snap detection for near quads
             float smallestDist = 1.0;
@@ -1217,27 +1219,27 @@ void ofApp::lowerLayer()
 }
 
 //--------------------------------------------------------------
-void ofApp::toggleSetupMode()
+void ofApp::toggleEditMode()
 {
 
-    if (isSetup) {
-        isSetup = false;
+    if (isEditMode) {
+        isEditMode = false;
         m_gui.hide();
         ofHideCursor();
         bGui = false;
         for (int i = 0; i < MAX_QUADS; i++) {
             if (quads[i].initialized) {
-                quads[i].isSetup = false;
+                quads[i].isEditMode = false;
             }
         }
     } else {
-        isSetup = true;
+        isEditMode = true;
         m_gui.show();
         ofShowCursor();
         bGui = true;
         for (int i = 0; i < MAX_QUADS; i++) {
             if (quads[i].initialized) {
-                quads[i].isSetup = true;
+                quads[i].isEditMode = true;
             }
         }
     }

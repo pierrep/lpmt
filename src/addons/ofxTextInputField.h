@@ -71,7 +71,6 @@ class ofxTextInputField {
 	
 	OFX_TEXTFIELD_FONT_RENDERER* fontRef;
 	
-//    bool	isSetup;
     bool 	isEnabled;
 	bool	isEditing;
 	bool	mouseDownInRect;

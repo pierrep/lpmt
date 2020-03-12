@@ -95,7 +95,7 @@ void quad::reset()
     syphonScaleY = 1.0;
 #endif
 
-    edgeBlendBool = false;
+    bEdgeBlend = false;
     edgeBlendExponent = 1.0;
     edgeBlendGamma = 1.8;
     edgeBlendLuminance = 0.0;
@@ -164,7 +164,7 @@ void quad::setup(ofPoint point1, ofPoint point2, ofPoint point3, ofPoint point4,
 {
     reset();
 
-    isSetup = true;
+    isEditMode = true;
     isOn = true;
 
     edgeBlendShader = &_edgeBlendShader;
@@ -388,6 +388,7 @@ void quad::draw(vector<ofVideoPlayer>& sharedVideos)
 
         //mask on mask FBO
         maskFbo.begin();
+        ofPushStyle();
         ofClear(0.0, 0.0, 0.0, 0.0);
         ofEnableAlphaBlending();
         ofFill();
@@ -438,6 +439,7 @@ void quad::draw(vector<ofVideoPlayer>& sharedVideos)
         ofDisableSmoothing();
         ofNoFill();
         ofDisableAlphaBlending();
+        ofPopStyle();
         maskFbo.end();
 
         // save actual GL coordinates
@@ -447,7 +449,7 @@ void quad::draw(vector<ofVideoPlayer>& sharedVideos)
         //finally lets multiply our matrix
         glMultMatrixf(matrix);
 
-        if (edgeBlendBool) {
+        if (bEdgeBlend) {
             if (quadFbo.getWidth() > 0) {
                 ofEnableAlphaBlending();
                 edgeBlendShader->begin();
@@ -553,8 +555,9 @@ void quad::draw(vector<ofVideoPlayer>& sharedVideos)
             ofDisableAlphaBlending();
         }
 
-        // in setup mode draw the border of the quad and if it is active draw the helper grid
-        if (isSetup) {
+        // in Edit mode draw the border of the quad and if it is active draw the helper grid
+        if (isEditMode) {
+            ofPushStyle();
             ofNoFill();
             ofSetLineWidth(1.0);
             ofEnableSmoothing();
@@ -583,6 +586,7 @@ void quad::draw(vector<ofVideoPlayer>& sharedVideos)
                 ofDrawRectangle(0, 0, ofGetWidth(), ofGetHeight());
             }
             ofDisableSmoothing();
+            ofPopStyle();
         }
 
         ofPopMatrix();
@@ -621,7 +625,7 @@ void quad::draw(vector<ofVideoPlayer>& sharedVideos)
             }
         }
 
-        if (isSetup) {
+        if (isEditMode) {
             // transform the normalized coordinates into window pixel coordinates
             const ofPoint centerInPixel = Util::scalePointToPixel(center);
 
@@ -643,6 +647,7 @@ void quad::draw(vector<ofVideoPlayer>& sharedVideos)
 
                 if (bHighlightCenter) {
                     // if the mouse is over the center handle, fill it with a little semi-transparent orange square
+                    ofPushStyle();
                     ofFill();
                     ofEnableAlphaBlending();
                     ofSetColor(219, 104, 0, 120); // semi-transparent orange
@@ -670,10 +675,12 @@ void quad::draw(vector<ofVideoPlayer>& sharedVideos)
                     ofDrawCircle(centerInPixel.x - 25, centerInPixel.y, 12);
                     ofSetCircleResolution(40);
                     ofSetHexColor(0x444444);
+                    ofPopStyle();
                 }
 
                 if (bHighlightRotation) {
                     // if the mouse is over the rotation handle, fill it with semi-transparent orange
+                    ofPushStyle();
                     ofFill();
                     ofEnableAlphaBlending();
                     ofSetColor(219, 104, 0, 120); // semi-transparent orange
@@ -681,6 +688,7 @@ void quad::draw(vector<ofVideoPlayer>& sharedVideos)
                     ofDisableAlphaBlending();
                     ofSetHexColor(0x444444);
                     ofNoFill();
+                    ofPopStyle();
                 }
 
                 ofSetHexColor(0x444444); // grey
@@ -720,8 +728,8 @@ void quad::drawDeformation(ofTexture& tex, bool bAlphaFix)
             glScalef(tex.getWidth() / texData.tex_w, tex.getHeight() / texData.tex_h, 1.0f);
         }
         glMatrixMode(GL_MODELVIEW);
-        glEnable(GL_MAP2_VERTEX_3);
-        glEnable(GL_AUTO_NORMAL);
+        //        glEnable(GL_MAP2_VERTEX_3);
+        //        glEnable(GL_AUTO_NORMAL);
 
         if (bAlphaFix) {
             // this tries to prevent the double alpha problem
@@ -736,8 +744,8 @@ void quad::drawDeformation(ofTexture& tex, bool bAlphaFix)
             glDisable(GL_BLEND);
         }
 
-        glDisable(GL_MAP2_VERTEX_3);
-        glDisable(GL_AUTO_NORMAL);
+        //        glDisable(GL_MAP2_VERTEX_3);
+        //        glDisable(GL_AUTO_NORMAL);
 
         tex.unbind();
         glMatrixMode(GL_TEXTURE);
@@ -770,8 +778,8 @@ void quad::drawSurface(vector<ofVideoPlayer>& sharedVideos)
         float fade = 0.0f;
 
         if (colorBg) {
-            srcWidth = ofGetWidth();
-            srcHeight = ofGetHeight();
+            srcWidth = ofGetScreenWidth();
+            srcHeight = ofGetScreenHeight();
             imageTex = imageTex2 = blank;
         } else if (imgBg && (img.getWidth() > 0)) {
             srcWidth = img.getWidth();
@@ -1244,7 +1252,6 @@ void quad::bezierSurfaceUpdate()
 
 void quad::gridSurfaceSetup()
 {
-
     gridMesh.clearVertices();
     gridMesh.clearIndices();
     gridMesh.clearTexCoords();
@@ -1294,7 +1301,7 @@ void quad::gridSurfaceUpdate(bool bRefresh)
     gridMesh.clearVertices();
     gridMesh.clearIndices();
 
-    if (bRefresh || (gridPoints.size() != (gridRows + 1)) || (gridPoints[0].size() != (gridColumns + 1)) ) {
+    if (bRefresh || (gridPoints.size() != (gridRows + 1)) || (gridPoints[0].size() != (gridColumns + 1))) {
         gridMesh.clearTexCoords();
         gridPoints.clear();
         for (int i = 0; i <= gridRows; i++) {
@@ -1339,6 +1346,7 @@ void quad::gridSurfaceUpdate(bool bRefresh)
 // Bezier markers ----------------------------------------------
 void quad::drawBezierMarkers()
 {
+    ofPushStyle();
     ofSetColor(220, 200, 0, 255);
     ofSetLineWidth(1.5);
     for (unsigned int i = 0; i < 4; i++) {
@@ -1519,11 +1527,13 @@ void quad::drawBezierMarkers()
     pointA = findWarpedPoint(dst, src, pointA);
     pointB = findWarpedPoint(dst, src, pointB);
     ofDrawLine(pointA, pointB);
+    ofPopStyle();
 }
 
 // Bezier markers ----------------------------------------------
 void quad::drawGridMarkers()
 {
+    ofPushStyle();
     ofSetColor(0, 200, 220, 255);
     ofSetLineWidth(1.5);
 
@@ -1541,12 +1551,15 @@ void quad::drawGridMarkers()
             ofNoFill();
         }
     }
+    ofPopStyle();
 }
 
 // Mask markers --------------------------------------
 void quad::drawMaskMarkers()
 {
     if (m_maskPoints.size() > 0) {
+        ofPushStyle();
+
         // draw the contour polygon the markers form
         ofPolyline contour;
         for (size_t i = 0; i < m_maskPoints.size(); i++) {
@@ -1563,6 +1576,7 @@ void quad::drawMaskMarkers()
 
         // draw the marker handles
         for (size_t i = 0; i < m_maskPoints.size(); i++) {
+            ofPushStyle();
             ofSetColor(100, 139, 150, 255); // blueish grey
             ofSetLineWidth(1.0);
 
@@ -1576,7 +1590,10 @@ void quad::drawMaskMarkers()
             ofDrawCircle(warpedPoint, 4);
             ofNoFill();
             ofDrawCircle(warpedPoint, 10);
+            ofPopStyle();
         }
+
+        ofPopStyle();
     }
 }
 

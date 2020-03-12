@@ -297,7 +297,7 @@ void GUI::updatePages(quad& activeQuad)
 
     // Second Page
     ofxSimpleGuiPage& secondPage = m_gui.page("PAGE 2");
-    dynamic_cast<ofxSimpleGuiToggle*>(secondPage.findControlByName("Edge blend on/off"))->value = &activeQuad.edgeBlendBool;
+    dynamic_cast<ofxSimpleGuiToggle*>(secondPage.findControlByName("Edge blend on/off"))->value = &activeQuad.bEdgeBlend;
     dynamic_cast<ofxSimpleGuiSliderFloat*>(secondPage.findControlByName("Power"))->value = &activeQuad.edgeBlendExponent;
     dynamic_cast<ofxSimpleGuiSliderFloat*>(secondPage.findControlByName("Gamma"))->value = &activeQuad.edgeBlendGamma;
     dynamic_cast<ofxSimpleGuiSliderFloat*>(secondPage.findControlByName("Luminosity"))->value = &activeQuad.edgeBlendLuminance;
@@ -410,6 +410,8 @@ std::vector<ofxSimpleGuiPage*>&	GUI::getPages()
 
 void GUI::draw()
 {
+    ofPushStyle();
     m_gui.draw();
+    ofPopStyle();
 }
 

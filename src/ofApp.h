@@ -88,7 +88,7 @@ public:
     void saveProject();
     void raiseLayer();
     void lowerLayer();
-    void toggleSetupMode();
+    void toggleEditMode();
     void saveCurrentSettingsToXMLFile(std::string xmlFilePath);
     void loadSettingsFromXMLFile(std::string xmlFilePath);
     ofImage loadImageFromFile(); // snapshot loading
@@ -112,7 +112,7 @@ public:
     int m_selectedCorner;
 
     bool autoStart;
-    bool isSetup;
+    bool isEditMode;
     bool bWasConfigLoadSuccessful;
     bool bFullscreen;
     bool bGui;

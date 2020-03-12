@@ -122,7 +122,7 @@ public:
 
     bool initialized;
     bool isActive;
-    bool isSetup;
+    bool isEditMode;
     bool isOn;
     bool isMaskSetup;
     bool colorBg;
@@ -161,7 +161,7 @@ public:
     bool imgHFlip;
     bool imgVFlip;
 
-    bool edgeBlendBool;
+    bool bEdgeBlend;
 
     bool bBlendModes;
     int blendMode;

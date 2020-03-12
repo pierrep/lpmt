@@ -88,7 +88,7 @@ void ofApp::saveCurrentSettingsToXMLFile(std::string xmlFilePath)
             xmlSettingsFile.setValue("QUADS:QUAD_" + ofToString(i) + ":GREENSCREEN:COLOR:B", quads[i].colorGreenscreen.b);
             xmlSettingsFile.setValue("QUADS:QUAD_" + ofToString(i) + ":GREENSCREEN:COLOR:A", quads[i].colorGreenscreen.a);
 
-            xmlSettingsFile.setValue("QUADS:QUAD_" + ofToString(i) + ":EDGE_BLENDING:ON", quads[i].edgeBlendBool);
+            xmlSettingsFile.setValue("QUADS:QUAD_" + ofToString(i) + ":EDGE_BLENDING:ON", quads[i].bEdgeBlend);
             xmlSettingsFile.setValue("QUADS:QUAD_" + ofToString(i) + ":EDGE_BLENDING:EXPONENT", quads[i].edgeBlendExponent);
             xmlSettingsFile.setValue("QUADS:QUAD_" + ofToString(i) + ":EDGE_BLENDING:GAMMA", quads[i].edgeBlendGamma);
             xmlSettingsFile.setValue("QUADS:QUAD_" + ofToString(i) + ":EDGE_BLENDING:LUMINANCE", quads[i].edgeBlendLuminance);
@@ -259,7 +259,7 @@ void ofApp::loadSettingsFromXMLFile(std::string xmlFilePath)
             quads[i].colorGreenscreen.b = xmlSettingsFile.getValue("QUADS:QUAD_" + ofToString(i) + ":GREENSCREEN:COLOR:B", 1.0f);
             quads[i].colorGreenscreen.a = xmlSettingsFile.getValue("QUADS:QUAD_" + ofToString(i) + ":GREENSCREEN:COLOR:A", 1.0f);
 
-            quads[i].edgeBlendBool = xmlSettingsFile.getValue("QUADS:QUAD_" + ofToString(i) + ":EDGE_BLENDING:ON", 0);
+            quads[i].bEdgeBlend = xmlSettingsFile.getValue("QUADS:QUAD_" + ofToString(i) + ":EDGE_BLENDING:ON", 0);
             quads[i].edgeBlendExponent = xmlSettingsFile.getValue("QUADS:QUAD_" + ofToString(i) + ":EDGE_BLENDING:EXPONENT", 1.0);
             quads[i].edgeBlendGamma = xmlSettingsFile.getValue("QUADS:QUAD_" + ofToString(i) + ":EDGE_BLENDING:GAMMA", 1.8);
             quads[i].edgeBlendLuminance = xmlSettingsFile.getValue("QUADS:QUAD_" + ofToString(i) + ":EDGE_BLENDING:LUMINANCE", 0.0);
