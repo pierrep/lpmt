@@ -1227,6 +1227,13 @@ void ofApp::toggleEditMode()
         m_gui.hide();
         ofHideCursor();
         bGui = false;
+
+        for (int i = 0; i < MAX_QUADS; i++) {
+            if (quads[i].initialized) {
+                quads[i].isBezierSetup = false;
+            }
+        }
+
         for (int i = 0; i < MAX_QUADS; i++) {
             if (quads[i].initialized) {
                 quads[i].isEditMode = false;
