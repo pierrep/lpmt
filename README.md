@@ -17,6 +17,9 @@ The original LPMT code can be found here: https://github.com/hvfrancesco/lpmt
 * Added the ability for a surface to receive small images via OSC
 * Added the ability to map different parts of a shared video to different quads
 * Fixed some bugs in the layer system, so now you can happily add and delete surfaces without issues
+* Bezier deformation now renders correctly
+* Unified surfaces so that all options works on all surface types, e.g. Greenscreen shader can now be used on any surface
+* Lots of small bug fixes and stability improvements
 
 Bug fixes or reports are welcome!
 
