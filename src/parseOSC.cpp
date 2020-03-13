@@ -882,14 +882,14 @@ void ofApp::parseOsc()
     else if ( m.getAddress() == "/active/greenscreen" )
     {
         // argument is int32
-        int osc_quad_useGreenscreen = m.getArgAsInt32( 0 );
-        if(osc_quad_useGreenscreen == 0)
+        int osc_quad_bUseGreenscreen = m.getArgAsInt32( 0 );
+        if(osc_quad_bUseGreenscreen == 0)
         {
-            quads[activeQuad].useGreenscreen = false;
+            quads[activeQuad].bUseGreenscreen = false;
         }
-        else if(osc_quad_useGreenscreen == 1)
+        else if(osc_quad_bUseGreenscreen == 1)
         {
-            quads[activeQuad].useGreenscreen = true;
+            quads[activeQuad].bUseGreenscreen = true;
         }
     }
 

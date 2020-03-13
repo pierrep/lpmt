@@ -81,7 +81,7 @@ void ofApp::saveCurrentSettingsToXMLFile(std::string xmlFilePath)
             xmlSettingsFile.setValue("QUADS:QUAD_" + ofToString(i) + ":BLENDING:ON", quads[i].bBlendModes);
             xmlSettingsFile.setValue("QUADS:QUAD_" + ofToString(i) + ":BLENDING:MODE", quads[i].blendMode);
 
-            xmlSettingsFile.setValue("QUADS:QUAD_" + ofToString(i) + ":GREENSCREEN:ON", quads[i].useGreenscreen);
+            xmlSettingsFile.setValue("QUADS:QUAD_" + ofToString(i) + ":GREENSCREEN:ON", quads[i].bUseGreenscreen);
             xmlSettingsFile.setValue("QUADS:QUAD_" + ofToString(i) + ":GREENSCREEN:THRESHOLD", quads[i].thresholdGreenscreen);
             xmlSettingsFile.setValue("QUADS:QUAD_" + ofToString(i) + ":GREENSCREEN:COLOR:R", quads[i].colorGreenscreen.r);
             xmlSettingsFile.setValue("QUADS:QUAD_" + ofToString(i) + ":GREENSCREEN:COLOR:G", quads[i].colorGreenscreen.g);
@@ -251,7 +251,7 @@ void ofApp::loadSettingsFromXMLFile(std::string xmlFilePath)
             quads[i].bBlendModes = xmlSettingsFile.getValue("QUADS:QUAD_" + ofToString(i) + ":BLENDING:ON", 0);
             quads[i].blendMode = xmlSettingsFile.getValue("QUADS:QUAD_" + ofToString(i) + ":BLENDING:MODE", 0);
 
-            quads[i].useGreenscreen = xmlSettingsFile.getValue("QUADS:QUAD_" + ofToString(i) + ":GREENSCREEN:ON", 0);
+            quads[i].bUseGreenscreen = xmlSettingsFile.getValue("QUADS:QUAD_" + ofToString(i) + ":GREENSCREEN:ON", 0);
             quads[i].thresholdGreenscreen = xmlSettingsFile.getValue("QUADS:QUAD_" + ofToString(i) + ":GREENSCREEN:THRESHOLD", 0);
             quads[i].colorGreenscreen.r = xmlSettingsFile.getValue("QUADS:QUAD_" + ofToString(i) + ":GREENSCREEN:COLOR:R", 1.0f);
             quads[i].colorGreenscreen.g = xmlSettingsFile.getValue("QUADS:QUAD_" + ofToString(i) + ":GREENSCREEN:COLOR:G", 1.0f);

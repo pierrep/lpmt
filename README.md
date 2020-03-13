@@ -37,7 +37,7 @@ e.g.
 cd addons
 git clone https://github.com/danomatika/ofxMidi.git
 ```
-All the other addons are either core ones, or are custom versions specific to LPMT that have been integrated into the main code base (e.h. ofxTimeline)
+All the other addons are either core ones, or are custom versions specific to LPMT that have been integrated into the main code base (e.g. ofxTimeline)
 
 ### Linux
 Type ```Make``` or use the provided QtCreator project.

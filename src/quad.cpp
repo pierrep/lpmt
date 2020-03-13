@@ -34,7 +34,7 @@ void quad::reset()
     bFadeTransitions = false;
     imageFit = false;
     imageKeepAspect = false;
-    useGreenscreen = false;
+    bUseGreenscreen = false;
 
     hue = 0.0f;
     saturation = 0.0f;
@@ -635,12 +635,15 @@ void quad::draw(vector<ofVideoPlayer>& sharedVideos)
 
                 if (bHighlightCorner && highlightedCorner >= 0) {
                     // if the mouse is over a corner, draw two orange circles around it, to show it is draggable
+                    ofPushStyle();
+                    ofNoFill();
                     ofSetColor(219, 104, 0, 255);
                     ofEnableAlphaBlending();
                     const ofPoint highlightedCornerInPixel = Util::scalePointToPixel(corners[highlightedCorner]);
                     ofDrawCircle(highlightedCornerInPixel, 5);
                     ofDrawCircle(highlightedCornerInPixel, 20);
                     ofDisableAlphaBlending();
+                    ofPopStyle();
                 }
 
                 if (bHighlightCenter) {
@@ -869,7 +872,11 @@ void quad::drawSurface(vector<ofVideoPlayer>& sharedVideos)
                 surfaceShader->setUniform1f("greenscreenR", colorGreenscreen.r);
                 surfaceShader->setUniform1f("greenscreenG", colorGreenscreen.g);
                 surfaceShader->setUniform1f("greenscreenB", colorGreenscreen.b);
-                surfaceShader->setUniform1f("greenscreenT", thresholdGreenscreen / 255.0f);
+                if (bUseGreenscreen) {
+                    surfaceShader->setUniform1f("greenscreenT", thresholdGreenscreen / 255.0f);
+                } else {
+                    surfaceShader->setUniform1f("greenscreenT", 0.0f);
+                }
 
                 drawContent(srcWidth * multX, srcHeight * multY, sharedVideos);
 

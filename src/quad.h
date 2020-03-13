@@ -5,28 +5,27 @@
 //#define WITH_KINECT
 
 #ifdef WITH_KINECT
-#include "ofxOpenCv.h"
 #include "kinectManager.h"
+#include "ofxOpenCv.h"
 #endif
 
 #ifdef WITH_SYPHON
 #include "ofxSyphon.h"
 #endif
 
-class quad
-{
+class quad {
 
 public:
     quad();
     void reset();
-    void setup(ofPoint point1, ofPoint point2, ofPoint point3, ofPoint point4, ofShader &edgeBlendShader, ofShader &quadMaskShader,ofShader &surfaceShader, ofShader &fadeShader, vector<ofVideoGrabber> &cameras,  ofTrueTypeFont &font);
+    void setup(ofPoint point1, ofPoint point2, ofPoint point3, ofPoint point4, ofShader& edgeBlendShader, ofShader& quadMaskShader, ofShader& surfaceShader, ofShader& fadeShader, vector<ofVideoGrabber>& cameras, ofTrueTypeFont& font);
     void update();
-    void draw(vector<ofVideoPlayer> &sharedVideos);
-    void drawSurface(vector<ofVideoPlayer> &sharedVideos);
+    void draw(vector<ofVideoPlayer>& sharedVideos);
+    void drawSurface(vector<ofVideoPlayer>& sharedVideos);
     void drawDeformation(ofTexture& tex, bool alphaFix);
     void applyBlendmode();
 
-    void gaussian_elimination(float *input, int n);
+    void gaussian_elimination(float* input, int n);
     void findHomography(ofPoint src[4], ofPoint dst[4], float homography[16]);
     ofMatrix4x4 findVectorHomography(ofPoint src[4], ofPoint dst[4]);
     ofPoint findWarpedPoint(ofPoint src[4], ofPoint dst[4], ofPoint point);
@@ -45,15 +44,15 @@ public:
     void bezierSurfaceUpdate();
     //int getdir (string dir, vector<string> &files); // a func for reading a dir content to a vector of strings
     bool isValidContent(vector<ofVideoPlayer>& sharedVideos);
-    void drawContent(float w, float h, vector<ofVideoPlayer> &sharedVideos);
+    void drawContent(float w, float h, vector<ofVideoPlayer>& sharedVideos);
 
-    #ifdef WITH_KINECT
+#ifdef WITH_KINECT
     void setKinect(kinectManager* kinect);
-    #endif
+#endif
 
-    #ifdef WITH_SYPHON
-    void setSyphon(ofxSyphonClient &syphon);
-    #endif
+#ifdef WITH_SYPHON
+    void setSyphon(ofxSyphonClient& syphon);
+#endif
 
     ofPoint corners[4];
     ofPoint center;
@@ -75,7 +74,6 @@ public:
     int videoHeight;
 
     ofFloatColor imgColorize;
-    ofFloatColor colorGreenscreen;
     ofFloatColor kinectColorize;
     ofFloatColor timelineColor;
 
@@ -129,14 +127,12 @@ public:
     bool videoBg;
     bool videoSound;
     bool videoLoop;
-    bool useGreenscreen;
 
     //Shared videos
     bool sharedVideoBg;
     bool sharedVideoTiling;
     int sharedVideoNum;
     int sharedVideoId;
-
 
     bool slideshowBg;
     bool bFadeTransitions;
@@ -176,7 +172,12 @@ public:
     bool bHighlightRotation;
 
     float videoVolume;
+
+    // Greenscreen
+    bool bUseGreenscreen;
     float thresholdGreenscreen;
+    ofFloatColor colorGreenscreen;
+
     int bgSlideshow;
     unsigned int currentSlideId;
     int fps;
@@ -202,10 +203,10 @@ public:
     ofFbo::Settings maskFboSettings;
 
     // Shaders
-    ofShader * edgeBlendShader;
-    ofShader * maskShader;
-    ofShader * surfaceShader;
-    ofShader * crossfadeShader;
+    ofShader* edgeBlendShader;
+    ofShader* maskShader;
+    ofShader* surfaceShader;
+    ofShader* crossfadeShader;
 
     float hue;
     float saturation;
@@ -229,28 +230,26 @@ public:
     float bezierCtrlPoints[4][4][3];
 
     bool bGrid;
-    vector<vector<vector<float> > > gridPoints;
+    vector<vector<vector<float>>> gridPoints;
     //vector<GLfloat> gridCtrlPoints;
     int gridRows;
     int gridColumns;
     ofMesh gridMesh;
 
-    #ifdef WITH_KINECT
+#ifdef WITH_KINECT
     kinectManager* quadKinect;
     ofxCvGrayscaleImage kinectThreshImage;
     ofxCvGrayscaleImage kinectContourImage;
     ofxCvContourFinder kinectContourFinder;
     ofPath kinectPath;
-    #endif
+#endif
 
-    #ifdef WITH_SYPHON
-    ofxSyphonClient * syphClientTex;
+#ifdef WITH_SYPHON
+    ofxSyphonClient* syphClientTex;
     bool bSyphon;
     float syphonPosX;
     float syphonPosY;
     float syphonScaleX;
     float syphonScaleY;
-    #endif
-
+#endif
 };
-

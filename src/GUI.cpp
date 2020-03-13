@@ -285,7 +285,7 @@ void GUI::updatePages(quad& activeQuad)
     dynamic_cast<ofxSimpleGuiSliderFloat*>(firstPage.findControlByName("Slide duration"))->value = &activeQuad.slideshowSpeed;
     dynamic_cast<ofxSimpleGuiToggle*>(firstPage.findControlByName("Fade transitions"))->value = &activeQuad.bFadeTransitions;
 
-    dynamic_cast<ofxSimpleGuiToggle*>(firstPage.findControlByName("Greenscreen on/off"))->value = &activeQuad.useGreenscreen;
+    dynamic_cast<ofxSimpleGuiToggle*>(firstPage.findControlByName("Greenscreen on/off"))->value = &activeQuad.bUseGreenscreen;
     dynamic_cast<ofxSimpleGuiSliderFloat*>(firstPage.findControlByName("Greenscreen threshold"))->value = &activeQuad.thresholdGreenscreen;
     dynamic_cast<ofxSimpleGuiColorPicker*>(firstPage.findControlByName("Greenscreen colour"))->value = &activeQuad.colorGreenscreen.r;
 
