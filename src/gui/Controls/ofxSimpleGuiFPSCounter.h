@@ -4,7 +4,7 @@
 
 class ofxSimpleGuiFPSCounter : public ofxSimpleGuiControl {
 public:
-	ofxSimpleGuiFPSCounter();	
+	ofxSimpleGuiFPSCounter(ofxSimpleGuiConfig* config);
 	void setup();
 	void draw(float x, float y);
 };

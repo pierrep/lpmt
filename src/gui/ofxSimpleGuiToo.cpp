@@ -48,7 +48,7 @@ ofxSimpleGuiToo::ofxSimpleGuiToo() {
 }
 
 void ofxSimpleGuiToo::setup() {
-	config			= &defaultSimpleGuiConfig;
+	config			= new ofxSimpleGuiConfig();
 
 	doSave			= false;
 	changePage		= false;
@@ -122,7 +122,7 @@ void ofxSimpleGuiToo::setAutoSave(bool b) {
 void ofxSimpleGuiToo::loadFromXML() {
 	ofLog(OF_LOG_VERBOSE, "ofxSimpleGuiToo::loadFromXML");// + file);
 
-	for(int i=1; i < pages.size(); i++) {
+	for(unsigned int i=1; i < pages.size(); i++) {
 		pages[i]->loadFromXML();
 	}
 
@@ -133,7 +133,7 @@ void ofxSimpleGuiToo::loadFromXML() {
 void ofxSimpleGuiToo::saveToXML() {
 	doSave = false;
 
-	for(int i=1; i < pages.size(); i++) {
+	for(unsigned int i=1; i < pages.size(); i++) {
 		pages[i]->saveToXML();
 	}
 
@@ -214,7 +214,7 @@ void ofxSimpleGuiToo::setPage(int i) {
 	}
 
 	currentPageIndex = i;
-	if(currentPageIndex >= pages.size()) currentPageIndex = 1;
+	if((unsigned int) currentPageIndex >= pages.size()) currentPageIndex = 1;
 	else if(currentPageIndex < 1) currentPageIndex = pages.size()-1;
 
     // turn the new tab on
@@ -261,7 +261,7 @@ vector <ofxSimpleGuiPage*>&	ofxSimpleGuiToo::getPages() {
 ofxSimpleGuiPage &ofxSimpleGuiToo::addPage(string name) {
 	if(!config) setup();
 
-	ofxSimpleGuiPage *newPage = new ofxSimpleGuiPage(name);//ofToString(pages.size(), 0) + ": " + name);
+	ofxSimpleGuiPage *newPage = new ofxSimpleGuiPage(config, name);//ofToString(pages.size(), 0) + ": " + name);
 	pages.push_back(newPage);
     if(name == "") newPage->setName("GENERAL SETTINGS");
 
@@ -271,7 +271,7 @@ ofxSimpleGuiPage &ofxSimpleGuiToo::addPage(string name) {
         // for the first 10 pages create a tab button in the header
         if(lastPageIndex < 10) {
             activePageFlags[lastPageIndex] = false;
-            ofxSimpleGuiButton* button = new ofxSimpleGuiButton(newPage->name, activePageFlags[lastPageIndex],true);
+            ofxSimpleGuiButton* button = new ofxSimpleGuiButton(config,newPage->name, activePageFlags[lastPageIndex],true);
             button->setWidth(config->headerTabWidth);
             button->setHeight(config->headerTabHeight);
             headerPage->addControl(*button);

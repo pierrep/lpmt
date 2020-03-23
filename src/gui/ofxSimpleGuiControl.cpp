@@ -37,9 +37,9 @@
 #include "ofxSimpleGuiControl.h"
 
 
-ofxSimpleGuiControl::ofxSimpleGuiControl(string name) {
+ofxSimpleGuiControl::ofxSimpleGuiControl(ofxSimpleGuiConfig* _config, string name) {
 	controlType = "";
-	this->config = &defaultSimpleGuiConfig;
+	this->config = _config;
 	setName(name);
 	setKey(key);
 	setPosition(0, 0);

@@ -9,8 +9,8 @@
 
 #include "ofxSimpleGuiColorPicker.h"
 
-ofxSimpleGuiColorPicker::ofxSimpleGuiColorPicker(string name, float* value, float max)
-    : ofxSimpleGuiControl(name)
+ofxSimpleGuiColorPicker::ofxSimpleGuiColorPicker(ofxSimpleGuiConfig* config, string name, float* value, float max)
+    : ofxSimpleGuiControl(config, name)
 {
     this->value = value;
     this->min = 0;

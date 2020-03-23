@@ -40,7 +40,7 @@
 
 class ofxSimpleGuiPage : public ofxSimpleGuiControl {
 public:
-	ofxSimpleGuiPage(string name);
+	ofxSimpleGuiPage(ofxSimpleGuiConfig* config, string name);
 	~ofxSimpleGuiPage();
 
 	void						draw(float x, float y, bool alignRight);

@@ -2,7 +2,7 @@
 #include "ofxSimpleGuiSlider2d.h"
 
 
-ofxSimpleGuiSlider2d::ofxSimpleGuiSlider2d(string name, ofPoint& value, float xmin, float xmax, float ymin, float ymax) : ofxSimpleGuiControl(name) {
+ofxSimpleGuiSlider2d::ofxSimpleGuiSlider2d(ofxSimpleGuiConfig* config, string name, ofPoint& value, float xmin, float xmax, float ymin, float ymax) : ofxSimpleGuiControl(config, name) {
 	min.set(xmin, ymin);
 	max.set(xmax, ymax);
 	this->value = &value;

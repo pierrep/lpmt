@@ -36,7 +36,7 @@
 
 #include "ofxSimpleGuiPage.h"
 
-ofxSimpleGuiPage::ofxSimpleGuiPage(string name) : ofxSimpleGuiControl(name) {
+ofxSimpleGuiPage::ofxSimpleGuiPage(ofxSimpleGuiConfig* config, string name) : ofxSimpleGuiControl(config, name) {
 	disableAllEvents();
 	width = 0;
 	height = ofGetHeight();
@@ -169,20 +169,20 @@ ofxSimpleGuiControl &ofxSimpleGuiPage::addControl(ofxSimpleGuiControl& control) 
 }
 
 ofxSimpleGuiButton &ofxSimpleGuiPage::addButton(string name, bool &value) {
-	return (ofxSimpleGuiButton &)addControl(* new ofxSimpleGuiButton(name, value));
+	return (ofxSimpleGuiButton &)addControl(* new ofxSimpleGuiButton(config, name, value));
 }
 
 ofxSimpleGuiContent &ofxSimpleGuiPage::addContent(string name, ofBaseDraws &content, float fixwidth) {
 	if(fixwidth == -1) fixwidth = config->gridSize.x - config->padding.x;
-	return (ofxSimpleGuiContent &)addControl(* new ofxSimpleGuiContent(name, content, fixwidth));
+	return (ofxSimpleGuiContent &)addControl(* new ofxSimpleGuiContent(config, name, content, fixwidth));
 }
 
 ofxSimpleGuiFPSCounter &ofxSimpleGuiPage::addFPSCounter() {
-	return (ofxSimpleGuiFPSCounter &)addControl(* new ofxSimpleGuiFPSCounter());
+	return (ofxSimpleGuiFPSCounter &)addControl(* new ofxSimpleGuiFPSCounter(config));
 }
 
 ofxSimpleGuiQuadWarp &ofxSimpleGuiPage::addQuadWarper(string name, ofBaseDraws &baseDraw, ofPoint *pts) {
-	return (ofxSimpleGuiQuadWarp &)addControl(* new ofxSimpleGuiQuadWarp(name, baseDraw, pts));
+	return (ofxSimpleGuiQuadWarp &)addControl(* new ofxSimpleGuiQuadWarp(config, name, baseDraw, pts));
 }
 //
 //ofxSimpleGuiMovieSlider &ofxSimpleGuiPage::addMovieSlider(string name, ofVideoPlayer& input) {
@@ -190,32 +190,32 @@ ofxSimpleGuiQuadWarp &ofxSimpleGuiPage::addQuadWarper(string name, ofBaseDraws &
 //}
 
 ofxSimpleGuiSliderInt &ofxSimpleGuiPage::addSlider(string name, int &value, int min, int max) {
-	return (ofxSimpleGuiSliderInt &)addControl(* new ofxSimpleGuiSliderInt(name, value, min, max));
+	return (ofxSimpleGuiSliderInt &)addControl(* new ofxSimpleGuiSliderInt(config, name, value, min, max));
 }
 
 ofxSimpleGuiSliderFloat &ofxSimpleGuiPage::addSlider(string name, float &value, float min, float max) {
-	return (ofxSimpleGuiSliderFloat &)addControl(* new ofxSimpleGuiSliderFloat(name, value, min, max));
+	return (ofxSimpleGuiSliderFloat &)addControl(* new ofxSimpleGuiSliderFloat(config, name, value, min, max));
 }
 
 ofxSimpleGuiSlider2d &ofxSimpleGuiPage::addSlider2d(string name, ofPoint& value, float xmin, float xmax, float ymin, float ymax) {
-	return (ofxSimpleGuiSlider2d &)addControl(* new ofxSimpleGuiSlider2d(name, value, xmin, xmax, ymin, ymax));
+	return (ofxSimpleGuiSlider2d &)addControl(* new ofxSimpleGuiSlider2d(config, name, value, xmin, xmax, ymin, ymax));
 }
 
 ofxSimpleGuiTitle &ofxSimpleGuiPage::addTitle(string name, float height) {
-	return (ofxSimpleGuiTitle &)addControl(* new ofxSimpleGuiTitle(name, height));
+	return (ofxSimpleGuiTitle &)addControl(* new ofxSimpleGuiTitle(config, name, height));
 }
 
 ofxSimpleGuiToggle &ofxSimpleGuiPage::addToggle(string name, bool &value) {
-	return (ofxSimpleGuiToggle &)addControl(* new ofxSimpleGuiToggle(name, value));
+	return (ofxSimpleGuiToggle &)addControl(* new ofxSimpleGuiToggle(config, name, value));
 }
 
 ofxSimpleGuiColorPicker &ofxSimpleGuiPage::addColorPicker(string name, float *values) {
-	return (ofxSimpleGuiColorPicker &)addControl(* new ofxSimpleGuiColorPicker(name, values));
+	return (ofxSimpleGuiColorPicker &)addControl(* new ofxSimpleGuiColorPicker(config, name, values));
 }
 
 
 ofxSimpleGuiComboBox &ofxSimpleGuiPage::addComboBox(string name, int &choice_out, int numChoices, string* choiceTitles) {
-	return (ofxSimpleGuiComboBox &)addControl(* new ofxSimpleGuiComboBox(name, choice_out, numChoices, this, choiceTitles));
+	return (ofxSimpleGuiComboBox &)addControl(* new ofxSimpleGuiComboBox(config, name, choice_out, numChoices, this, choiceTitles));
 }
 
 

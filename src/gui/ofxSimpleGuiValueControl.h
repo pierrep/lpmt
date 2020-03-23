@@ -43,7 +43,7 @@ public:
 	T	*value;
 	T	oldValue;
 	
-	ofxSimpleGuiValueControl(string name, T &value) : ofxSimpleGuiControl(name), value(&value) {}
+	ofxSimpleGuiValueControl(ofxSimpleGuiConfig* config, string name, T &value) : ofxSimpleGuiControl(config,name), value(&value) {}
 	
 	virtual bool changed() {
 		if(*value != oldValue) {

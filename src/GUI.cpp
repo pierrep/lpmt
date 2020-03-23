@@ -11,17 +11,19 @@ GUI::GUI(ofApp* app) : m_app(app),
     m_gui.setAutoSave(false); // turn auto save off
 
     // overriding default theme
-    m_config.toggleHeight = 16;
-    m_config.buttonHeight = 18;
-    m_config.sliderTextHeight = 18;
-    m_config.titleHeight = 18;
+	m_gui.getConfig()->toggleHeight = 16;
+	m_gui.getConfig()->buttonHeight = 18;
+	m_gui.getConfig()->sliderTextHeight = 18;
+	m_gui.getConfig()->titleHeight = 18;
 
-    m_config.fullActiveColor = 0x648B96; // bluish-grey
-    m_config.textColor = 0xFFFFFF;       // white
-    m_config.textBGOverColor = 0x777788; // grey
-   // m_config.fullColor
+	m_gui.getConfig()->fullActiveColor = 0x648B96; // bluish-grey
+	m_gui.getConfig()->textColor = 0xFFFFFF;       // white
+	m_gui.getConfig()->textBGOverColor = 0x777788; // grey
 
-    defaultSimpleGuiConfig = m_config;
+	/* set up font */
+	m_gui.getConfig()->bUseFont = true;
+	m_gui.getConfig()->ttf.load("type/Roboto-Regular.ttf", 9);
+
 }
 
 

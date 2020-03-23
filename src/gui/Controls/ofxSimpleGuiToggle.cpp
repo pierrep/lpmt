@@ -2,7 +2,7 @@
 #include "ofxSimpleGuiToggle.h"
 
 
-ofxSimpleGuiToggle::ofxSimpleGuiToggle(string name, bool &value) : ofxSimpleGuiControl(name) {
+ofxSimpleGuiToggle::ofxSimpleGuiToggle(ofxSimpleGuiConfig* config, string name, bool &value) : ofxSimpleGuiControl(config, name) {
 	this->value	= &value;
 	setMomentary(false);
 	controlType = "Toggle";

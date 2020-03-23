@@ -10,7 +10,7 @@ public:
 	bool	momentary;
 	int nMidiControls;
 
-	ofxSimpleGuiToggle(string name, bool &value);
+	ofxSimpleGuiToggle(ofxSimpleGuiConfig* config, string name, bool &value);
 	ofxSimpleGuiToggle& setMomentary(bool m);
 	void setup();
 	void loadFromXML(ofxXmlSettings &XML);

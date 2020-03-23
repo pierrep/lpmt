@@ -9,7 +9,7 @@ public:
 	bool			beToggle;
 	bool			beenPressed;
 
-    ofxSimpleGuiButton(string name, bool &value, bool bSquare = false);
+    ofxSimpleGuiButton(ofxSimpleGuiConfig* config, string name, bool &value, bool bSquare = false);
 	void setup();
 
 	void loadFromXML(ofxXmlSettings &XML);

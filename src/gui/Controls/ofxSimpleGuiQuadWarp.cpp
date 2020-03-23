@@ -4,7 +4,7 @@
 #define MOUSE_DISTANCE		10.0f
 
 //---------------------------------------------------------------------
-ofxSimpleGuiQuadWarp::ofxSimpleGuiQuadWarp(string name, ofBaseDraws &baseDraw, ofPoint *pts) : ofxSimpleGuiControl(name) {
+ofxSimpleGuiQuadWarp::ofxSimpleGuiQuadWarp(ofxSimpleGuiConfig* config, string name, ofBaseDraws &baseDraw, ofPoint *pts) : ofxSimpleGuiControl(config,name) {
 	this->baseDraw = &baseDraw;
 
 	setPosition(0, 0);

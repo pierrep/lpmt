@@ -21,8 +21,8 @@ public:
     bool enterText;
 
     //--------------------------------------------------------------------- construct
-    ofxSimpleGuiSliderBase(string name, Type& value, Type min, Type max)
-        : ofxSimpleGuiControl(name)
+    ofxSimpleGuiSliderBase(ofxSimpleGuiConfig* config, string name, Type& value, Type min, Type max)
+        : ofxSimpleGuiControl(config, name)
     {
         this->value = &value;
         this->min = min;

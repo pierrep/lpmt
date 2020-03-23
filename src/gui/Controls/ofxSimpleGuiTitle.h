@@ -11,7 +11,7 @@ public:
 	bool			beenPressed;
     bool            bForceSquare;
 
-    ofxSimpleGuiTitle(string name, float height,bool bSquare = false);
+    ofxSimpleGuiTitle(ofxSimpleGuiConfig* config, string name, float height,bool bSquare = false);
 	void setup();
 	void loadFromXML(ofxXmlSettings &XML);
 	void saveToXML(ofxXmlSettings &XML);

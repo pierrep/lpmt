@@ -30,7 +30,6 @@ public:
 
 private:
     ofxSimpleGuiToo       m_gui;
-    ofxSimpleGuiConfig    m_config;
     ofApp*                m_app;
     bool                  m_dummyBool;
     float                 m_dummyFloat;

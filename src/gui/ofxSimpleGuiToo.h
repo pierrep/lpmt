@@ -51,7 +51,7 @@ public:
 
 	ofxSimpleGuiToo();
 	void						setup();
-
+	ofxSimpleGuiConfig			*getConfig() { return config; }
 
 	void						loadFromXML();
 	void						saveToXML();

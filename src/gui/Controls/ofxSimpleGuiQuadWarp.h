@@ -14,7 +14,7 @@ public:
 	ofPoint			lastPressPlace;
 	float			lastPressTime;
 	
-	ofxSimpleGuiQuadWarp(string name, ofBaseDraws &baseDraw, ofPoint *pts);
+	ofxSimpleGuiQuadWarp(ofxSimpleGuiConfig* config, string name, ofBaseDraws &baseDraw, ofPoint *pts);
 	void setup();
 	void loadFromXML(ofxXmlSettings &XML);
 	void saveToXML(ofxXmlSettings &XML);

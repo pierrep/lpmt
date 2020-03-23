@@ -1,8 +1,8 @@
 
 #include "ofxSimpleGuiTitle.h"
 
-ofxSimpleGuiTitle::ofxSimpleGuiTitle(string name, float height, bool bSquare)
-    : ofxSimpleGuiControl(name)
+ofxSimpleGuiTitle::ofxSimpleGuiTitle(ofxSimpleGuiConfig* config, string name, float height, bool bSquare)
+    : ofxSimpleGuiControl(config, name)
 {
     beToggle = false;
     beenPressed = false;

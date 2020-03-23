@@ -59,7 +59,7 @@ public:
     ofxOscMessage oscControl;
     vector<ofxMidiMessage> midiSlideControls;
 
-    ofxSimpleGuiControl(string name);
+    ofxSimpleGuiControl(ofxSimpleGuiConfig* config, string name);
     ofxSimpleGuiControl& setName(string newName);
     ofxSimpleGuiControl& setKey(string newKey);
     ofxSimpleGuiControl& setConfig(ofxSimpleGuiConfig* config);

@@ -78,4 +78,4 @@ public:
     ofxSimpleGuiConfig();
 };
 
-extern ofxSimpleGuiConfig defaultSimpleGuiConfig;
+//extern ofxSimpleGuiConfig defaultSimpleGuiConfig;

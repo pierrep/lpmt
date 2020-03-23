@@ -13,8 +13,8 @@
 #define kMaxChoiceStringLen 150
 #define kMaxNameStringLen 100
 
-ofxSimpleGuiComboBox::ofxSimpleGuiComboBox(string name, int &choice_out, int numChoices, ofxSimpleGuiPage *owner, string* choiceTitles ) :
-ofxSimpleGuiControl(name),
+ofxSimpleGuiComboBox::ofxSimpleGuiComboBox(ofxSimpleGuiConfig* config, string name, int &choice_out, int numChoices, ofxSimpleGuiPage *owner, string* choiceTitles) :
+ofxSimpleGuiControl(config, name),
 m_selectedChoice(&choice_out),
 m_page(owner)
 {
@@ -57,7 +57,7 @@ void ofxSimpleGuiComboBox::addChoice(string title, int index) {
 
 
 int ofxSimpleGuiComboBox::getIndexForTitle(string title) {
-	for(int i=0; i<m_choices.size(); i++) {
+	for(unsigned int i=0; i<m_choices.size(); i++) {
 		if(title.compare(m_choices[i]) == 0) return i;
 	}
 	return -1;
@@ -259,7 +259,7 @@ void ofxSimpleGuiComboBox::draw(float x, float y) {
 		setTextColor();
         ofDrawLine(0, config->comboBoxHeight-1, width, config->comboBoxHeight-1);
 
-		for(int i=0; i < m_choices.size(); i++) {
+		for(unsigned int i=0; i < m_choices.size(); i++) {
 			setCBTextColor();
 			//invert for selected choice
 			float curY = height + i * config->comboBoxTextHeight;

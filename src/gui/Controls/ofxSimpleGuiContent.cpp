@@ -2,7 +2,7 @@
 #include "ofxSimpleGuiContent.h"
 
 
-ofxSimpleGuiContent::ofxSimpleGuiContent(string name, ofBaseDraws& content, float fixwidth) : ofxSimpleGuiControl(name) {
+ofxSimpleGuiContent::ofxSimpleGuiContent(ofxSimpleGuiConfig* config,string name, ofBaseDraws& content, float fixwidth) : ofxSimpleGuiControl(config, name) {
 	this->content = &content;
 	this->fixwidth  = fixwidth;
 	controlType = "Content";

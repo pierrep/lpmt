@@ -1,7 +1,7 @@
 
 #include "ofxSimpleGuiFPSCounter.h"
 
-ofxSimpleGuiFPSCounter::ofxSimpleGuiFPSCounter() : ofxSimpleGuiControl("FPS Counter") {
+ofxSimpleGuiFPSCounter::ofxSimpleGuiFPSCounter(ofxSimpleGuiConfig* config) : ofxSimpleGuiControl(config,"FPS Counter") {
 	controlType = "FPSCounter";
 	setup();
 }

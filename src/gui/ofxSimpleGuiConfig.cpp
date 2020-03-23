@@ -35,7 +35,7 @@
 
 #include "ofxSimpleGuiConfig.h"
 
-ofxSimpleGuiConfig defaultSimpleGuiConfig;
+//ofxSimpleGuiConfig defaultSimpleGuiConfig;
 
 ofxSimpleGuiConfig::ofxSimpleGuiConfig()
 {
@@ -81,7 +81,5 @@ ofxSimpleGuiConfig::ofxSimpleGuiConfig()
     rectRadius = 10;
     rounded = false;
 
-    /* set up font */
-    bUseFont = true;
-    ttf.load("data/type/Roboto-Regular.ttf", 9);
+	bUseFont = false;
 }

@@ -2,7 +2,7 @@
 #include "ofxSimpleGuiButton.h"
 
 
-ofxSimpleGuiButton::ofxSimpleGuiButton(string name, bool &value, bool bSquare) : ofxSimpleGuiValueControl<bool>(name, value) {
+ofxSimpleGuiButton::ofxSimpleGuiButton(ofxSimpleGuiConfig* config, string name, bool &value, bool bSquare) : ofxSimpleGuiValueControl<bool>(config, name, value) {
 	beToggle	= false;
 	beenPressed = false;
 	isBGColorFixed = false;
