@@ -11,9 +11,10 @@ KEY COMMANDS:
 '<' - go to previous quad
 '+' - raise active quad position in layers pile
 '-' - lower active quad position in layers pile
-'z' - selects first gui page for active quad settings
-'x' - selects second gui page for active quad settings
-'c' - selects gui page for active quad corner position fine-tuning
+'F1' - selects general settings gui page
+'F2' - selects first gui page for active quad settings
+'F3' - selects second gui page for active quad settings
+'F4' - selects third gui page for active quad settings
 'q' - fills window with active quad
 '1' - shows general settings page of gui
 
@@ -23,7 +24,7 @@ KEY COMMANDS:
 'm' - toggles mask-editing mode
 'b' - toggles surface bezier/grid warping editing mode
 
-'spacebar' - toggles projection/setup modes
+'spacebar' - toggles projection/setup modes (in Timeline interface, space starts/stops the timeline playback
 'r' - resyncs all videos, color transitions and slideshows in all quads to starting point
 'p' - starts projection
 'o' - stops projection
