@@ -12,10 +12,14 @@
 #if defined (TARGET_OF_IPHONE) || defined (TARGET_OSX)
 #include <OpenAL/al.h>
 #include <OpenAL/alc.h>
-#elseif defined (TARGET_LINUX)
+#endif
+
+#ifdef TARGET_LINUX
 #include <AL/al.h>
 #include <AL/alc.h>
-#else
+#endif
+
+#ifdef TARGET_WIN32
 #include <al.h>
 #include <alc.h>
 #endif

@@ -390,7 +390,7 @@ void quad::draw(vector<ofVideoPlayer>& sharedVideos)
         ofClear(0.0, 0.0, 0.0, 0.0);
         ofEnableAlphaBlending();
         ofFill();
-        ofEnableSmoothing();
+        //ofEnableSmoothing();
 
         // crop rectangular mask
         ofSetColor(255, 255, 255);
@@ -434,7 +434,7 @@ void quad::draw(vector<ofVideoPlayer>& sharedVideos)
             }
         }
 #endif
-        ofDisableSmoothing();
+        //ofDisableSmoothing();
         ofNoFill();
         ofDisableAlphaBlending();
         ofPopStyle();
@@ -557,8 +557,7 @@ void quad::draw(vector<ofVideoPlayer>& sharedVideos)
         if (isEditMode) {
             ofPushStyle();
             ofNoFill();
-            ofSetLineWidth(1.0);
-            ofEnableSmoothing();
+            ofSetLineWidth(1.0f);
             if (isActive) {
                 // draws helper grid on active quad
                 ofSetHexColor(0x444444); // dark-grey
@@ -583,7 +582,6 @@ void quad::draw(vector<ofVideoPlayer>& sharedVideos)
                 ofSetHexColor(0x666666); // light-grey
                 ofDrawRectangle(0, 0, ofGetWidth(), ofGetHeight());
             }
-            ofDisableSmoothing();
             ofPopStyle();
         }
 
@@ -615,10 +613,10 @@ void quad::draw(vector<ofVideoPlayer>& sharedVideos)
                 }
                 ofSetHexColor(0x444444); // dark-grey
                 ofSetLineWidth(3);
-                ofEnableSmoothing();
+                //ofEnableSmoothing();
                 contour.close();
                 contour.draw();
-                ofDisableSmoothing();
+                //ofDisableSmoothing();
                 ofPopStyle();
             }
         }
@@ -1574,10 +1572,10 @@ void quad::drawMaskMarkers()
         }
         ofSetHexColor(0x444444); // dark-grey
         ofSetLineWidth(1.6);
-        ofEnableSmoothing();
+        //ofEnableSmoothing();
         contour.close();
         contour.draw();
-        ofDisableSmoothing();
+        //ofDisableSmoothing();
 
         // draw the marker handles
         for (size_t i = 0; i < m_maskPoints.size(); i++) {
