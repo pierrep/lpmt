@@ -7,14 +7,11 @@ KEY COMMANDS:
 'l' - loads project from .xml file
 
 'a' - adds new quad
+'CTRL-x' - delete selected quad
 '>' - go to next quad
 '<' - go to previous quad
 '+' - raise active quad position in layers pile
 '-' - lower active quad position in layers pile
-'F1' - selects general settings gui page
-'F2' - selects first gui page for active quad settings
-'F3' - selects second gui page for active quad settings
-'F4' - selects third gui page for active quad settings
 'q' - fills window with active quad
 '1' - shows general settings page of gui
 
@@ -29,10 +26,12 @@ KEY COMMANDS:
 'p' - starts projection
 'o' - stops projection
 
-'n' - connects to a MostPixelsEver sync server
-
-'F10'    - toggles timeline interface
+'F1' - selects general settings gui page
+'F2' - selects first gui page for active quad settings
+'F3' - selects second gui page for active quad settings
+'F4' - selects third gui page for active quad settings
 'F9'     - toggles timeline BPM reference grid
+'F10'    - toggles timeline interface
 'F11'    - toggles stage visibility under timeline
 'F12'    - play/stop timeline
 'CTRL-q' - Quits the application
