@@ -66,4 +66,6 @@ In order to support audio tracks (not yet supported but may be in the future) yo
  
  The included project points to their default location.
  
+### OSX
+Use the provided XCode project. This project was built and tested on OSX Sierra (10.12)
 
