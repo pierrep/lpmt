@@ -30,17 +30,27 @@ Screenshots of the current version:
 
 ## Installation instructions
 
+Install openFrameworks and follow the setup instructions [here](https://openframeworks.cc/download/)
+
 You'll need to add the following addons to your Addons folder:
 
-- https://github.com/danomatika/ofxMidi.git
+- https://github.com/danomatika/ofxMidi
 
 e.g.
 
 ```
-cd addons
-git clone https://github.com/danomatika/ofxMidi.git
+cd openFrameworks/addons
+git clone https://github.com/danomatika/ofxMidi
 ```
+
 All the other addons are either core ones, or are custom versions specific to LPMT that have been integrated into the main code base (e.g. ofxTimeline)
+
+In the openFrameworks 'myApps' folder, clone this repository:
+
+```
+cd openFrameworks/apps/myApps
+git clone https://github.com/pierrep/lpmt/
+```
 
 ### Linux
 Type ```Make``` or use the provided QtCreator project.
