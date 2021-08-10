@@ -45,7 +45,7 @@ git clone https://github.com/danomatika/ofxMidi
 
 All the other addons are either core ones, or are custom versions specific to LPMT that have been integrated into the main code base (e.g. ofxTimeline)
 
-In the openFrameworks 'myApps' folder, clone this repository:
+In the openFrameworks 'myApps' folder (or any other equivalent folder at the same directory level), clone this repository:
 
 ```
 cd openFrameworks/apps/myApps
