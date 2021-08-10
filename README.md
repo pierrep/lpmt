@@ -4,7 +4,7 @@ Rewrite of the Little Projection Mapping Tool (http://projection-mapping.org/too
 This is a fork of LPMT meant to clean up the original codebase and keep the application alive.
 The application is built using OpenFrameworks and therefore can be built for Linux/Mac/Windows
 
-The current build uses openFrameworks 0.11.0
+The current version has been tested against openFrameworks 0.11.0, so you'll need to install openFrameworks first before you can get this to compile.
 
 The original LPMT code can be found here: https://github.com/hvfrancesco/lpmt
 
