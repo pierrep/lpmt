@@ -506,9 +506,11 @@ void ofApp::keyPressed(ofKeyEventArgs& args)
     } else if (args.key == '-' && !bTimeline && !bGui) {
         lowerLayer(); // moves active layer one position down
     } else if ((args.key == 's' || args.key == 'S') && !bTimeline) {
-        saveProject(); // saves quads settings to an .xml project file in data directory
+        //saveProject(); // saves quads settings to an .xml project file in data directory
+        m_saveProjectFlag = true;
     } else if ((args.key == 'l') && !bTimeline) {
-        loadProject(); // let the user choose an .xml project file with all the quads settings and loads it
+        //loadProject(); // let the user choose an .xml project file with all the quads settings and loads it
+        m_loadProjectFlag = true;
     } else if (args.key == 'w' && !bTimeline) {
         if (m_cameras.size() > 0) // if cameras are connected, take a snapshot of the specified camera and uses it as window background
         {
