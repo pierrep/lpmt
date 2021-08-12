@@ -3,9 +3,6 @@ KEY COMMANDS:
 
 'h' - display this help dialog
 
-'s' - saves project to .xml file
-'l' - loads project from .xml file
-
 'a' - adds new quad
 'CTRL-x' - delete selected quad
 '>' - go to next quad
