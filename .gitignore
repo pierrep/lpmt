@@ -2,6 +2,7 @@ bin/lpmtDebug.app/
 .DS_Store
 bin/lpmt
 bin/lpmt_debug
+bin/lpmt.app/
 build/
 lpmt.qbs.user
 bin/data/timeline/
