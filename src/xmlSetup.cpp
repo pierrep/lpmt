@@ -306,7 +306,12 @@ void ofApp::loadSettingsFromXMLFile(std::string xmlFilePath)
         quads[activeQuad].isActive = true;
         m_gui.updatePages(quads[activeQuad]);
         m_gui.showPage(2);
-        glDisable(GL_DEPTH_TEST);
+
+        if(!bGui) {
+            m_gui.toggleDraw();
+            bGui = !bGui;
+        }
+        glDisable(GL_DEPTH_TEST);        
     } else {
         // load was not succesful, maybe the xml is malformatted
         std::cout << "Error loading the settings file: \"" << xmlFilePath << "\" (make sure it is a properly formatted *.xml file)" << std::endl;

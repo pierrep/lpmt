@@ -239,25 +239,25 @@ void quad::update()
         // video --------------------------------------------------------------------
         // loads video
         if (videoBg) {
-            if (video.isPaused()) {
-                video.setPaused(false);
-            }
-            video.setVolume(videoVolume);
-            // check for looping config parameter of video and sets loopstate - OF_LOOP_NORMAL = cycles / OF_LOOP_NONE = stops at the end
-            if (videoLoop) {
-                video.setLoopState(OF_LOOP_NORMAL);
-            } else {
-                video.setLoopState(OF_LOOP_NONE);
-            }
-
             if (video.isLoaded()) {
-                video.update();
-            }
+                if (video.isPaused()) {
+                    video.setPaused(false);
+                }
+                video.setVolume(videoVolume);
+                // check for looping config parameter of video and sets loopstate - OF_LOOP_NORMAL = cycles / OF_LOOP_NONE = stops at the end
+                if (videoLoop) {
+                    video.setLoopState(OF_LOOP_NORMAL);
+                } else {
+                    video.setLoopState(OF_LOOP_NONE);
+                }
 
-            // changevideo speed
-            if (previousSpeed != videoSpeed) {
-                video.setSpeed(videoSpeed);
-                previousSpeed = videoSpeed;
+                video.update();
+
+                // changevideo speed
+                if (previousSpeed != videoSpeed) {
+                    video.setSpeed(videoSpeed);
+                    previousSpeed = videoSpeed;
+                }
             }
         } else {
             if (video.isLoaded()) {

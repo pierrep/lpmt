@@ -162,6 +162,8 @@ void ofApp::setup()
         bFullscreen = true;
         ofSetFullscreen(true);
     }
+
+    ofSetWindowTitle("LPMT");
 }
 
 //--------------------------------------------------------------
@@ -196,15 +198,16 @@ void ofApp::prepare()
         }
 
         //check if load project button in the GUI was pressed
-        if (m_loadProjectFlag) {
-            m_loadProjectFlag = false;
+        if (m_loadProjectFlag) {            
             loadProject();
+            m_loadProjectFlag = false;
+            ofLogNotice() << "Project loaded!";
         }
 
         //check if save project button in the GUI was pressed
-        if (m_saveProjectFlag) {
-            m_saveProjectFlag = false;
+        if (m_saveProjectFlag) {            
             saveProject();
+            m_saveProjectFlag = false;
         }
 
         // check if image load button in the GUI was pressed
@@ -324,7 +327,7 @@ void ofApp::prepare()
         // loops through initialized quads and runs update, setting the border color as well
         for (int i = 0; i < MAX_QUADS; i++) {
             int idx = layers[i];
-            if (idx >= 0) {
+            if (idx >= 0) {                
                 if (quads[idx].initialized) {
                     quads[idx].update();
                     // frame delay correction for Mpe sync
@@ -391,7 +394,6 @@ void ofApp::update()
 //--------------------------------------------------------------
 void ofApp::draw()
 {
-
     //if (!bMpe)
     {
         render();
@@ -452,8 +454,6 @@ void ofApp::draw()
         ofSetColor(255, 255, 255);
         ofDrawBitmapString(ofToString(ofGetFrameRate()), ofGetWidth() - 100, ofGetHeight() - 30);
     }
-
-    ofSetWindowTitle("LPMT");
 }
 
 //--------------------------------------------------------------
@@ -484,6 +484,8 @@ void ofApp::draw()
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key)
 {
+    if(m_loadProjectFlag || m_saveProjectFlag) return;
+
     if (bMidiHotkeyCoupling) {
         bMidiHotkeyLearning = true;
         midiHotkeyPressed = key;
@@ -499,6 +501,8 @@ void ofApp::keyPressed(int key)
 //--------------------------------------------------------------
 void ofApp::keyPressed(ofKeyEventArgs& args)
 {
+    if(m_loadProjectFlag || m_saveProjectFlag) return;
+
     if (args.hasModifier(OF_KEY_CONTROL) && (args.keycode == 'Q')) {
         ofExit(1);
     } else if (args.key == '+' && !bTimeline && !bGui) {
@@ -506,11 +510,13 @@ void ofApp::keyPressed(ofKeyEventArgs& args)
     } else if (args.key == '-' && !bTimeline && !bGui) {
         lowerLayer(); // moves active layer one position down
     } else if ((args.key == 's' || args.key == 'S') && !bTimeline) {
-        //saveProject(); // saves quads settings to an .xml project file in data directory
-        m_saveProjectFlag = true;
+        // saves quads settings to an .xml project file in data directory
+        //m_saveProjectFlag = true;
+        return;
     } else if ((args.key == 'l') && !bTimeline) {
-        //loadProject(); // let the user choose an .xml project file with all the quads settings and loads it
-        m_loadProjectFlag = true;
+        // let the user choose an .xml project file with all the quads settings and loads it
+        //m_loadProjectFlag = true;
+        return;
     } else if (args.key == 'w' && !bTimeline) {
         if (m_cameras.size() > 0) // if cameras are connected, take a snapshot of the specified camera and uses it as window background
         {
@@ -549,9 +555,7 @@ void ofApp::keyPressed(ofKeyEventArgs& args)
     } else if ((args.hasModifier(OF_KEY_CONTROL) && (args.keycode == 'V')) && !bTimeline) // paste
     {
         copyQuadSettings(m_sourceQuadForCopying); // paste settings from source surface to currently active surface
-    } else
-        // goes to first page of gui for active quad or, in mask edit mode, delete last drawn point
-        if ((args.key == OF_KEY_F2) && !bTimeline) {
+    } else if ((args.key == OF_KEY_F2) && !bTimeline) { // goes to first page of gui for active quad or, in mask edit mode, delete last drawn point
         if (maskSetup && quads[activeQuad].m_maskPoints.size() > 0) {
             quads[activeQuad].m_maskPoints.pop_back();
         } else {
@@ -671,9 +675,7 @@ void ofApp::keyPressed(ofKeyEventArgs& args)
                 }
             }
         }
-    } else
-        // toggle timeline
-        if (args.key == OF_KEY_F10) {
+    } else if (args.key == OF_KEY_F10) { // toggle timeline
         bTimeline = !bTimeline;
         timeline.toggleShow();
         if (bTimeline) {
@@ -748,6 +750,8 @@ void ofApp::keyReleased(int key)
 // the marker get selected.
 void ofApp::mouseMoved(int x, int y)
 {
+    if(m_loadProjectFlag || m_saveProjectFlag) return;
+
     const ofPoint mousePosition(x, y);
 
     if (isEditMode && !bGui && !maskSetup && !gridSetup && !bTimeline) {
@@ -867,7 +871,7 @@ void ofApp::mouseMoved(int x, int y)
             quads[activeQuad].highlightedCtrlPointRow = -1;
             quads[activeQuad].highlightedCtrlPointCol = -1;
         }
-    }
+    }    
 }
 
 // The mouseDragged method moves or rotates the quad according to the currently
@@ -875,6 +879,8 @@ void ofApp::mouseMoved(int x, int y)
 // The markers are selected in the mouseMoved method.
 void ofApp::mouseDragged(int x, int y, int button)
 {
+    if(m_loadProjectFlag || m_saveProjectFlag) return;
+
     const ofPoint mousePosition(x, y);
     const ofPoint normalizedMouseMovement = Util::normalizePoint(mousePosition - m_lastMousePosition);
 
@@ -973,6 +979,8 @@ void ofApp::mouseDragged(int x, int y, int button)
 //--------------------------------------------------------------
 void ofApp::mousePressed(int x, int y, int button)
 {
+    if(m_loadProjectFlag || m_saveProjectFlag) return;
+
     const ofPoint mousePosition(x, y);
 
     m_rotationSector.clear();
@@ -1007,6 +1015,8 @@ void ofApp::mousePressed(int x, int y, int button)
 //--------------------------------------------------------------
 void ofApp::mouseReleased(int x, int y, int button)
 {
+    if(m_loadProjectFlag || m_saveProjectFlag) return;
+
     m_totalRotationAngle = 0;
     m_rotationSector.clear();
     if (bSnapOn && isEditMode && !bGui && !bTimeline) {
