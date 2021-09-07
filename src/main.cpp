@@ -8,6 +8,7 @@ int main( ){
     settings.numSamples = 4;
 	settings.windowMode = OF_WINDOW;
 	settings.setPosition(glm::vec2(100, 100));
+    settings.title = "LPMT";
     ofCreateWindow(settings);
 	
     //ofSetLogLevel(OF_LOG_VERBOSE);

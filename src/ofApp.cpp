@@ -26,7 +26,6 @@ void ofApp::setup()
 {
     //ofDisableAntiAliasing();
     ofSetVerticalSync(true);
-    ofSetWindowTitle("LPMT");
     ofSetEscapeQuitsApp(false);
     autoStart = false;
 
