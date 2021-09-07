@@ -71,7 +71,7 @@ void ofApp::setup()
 
     // initialize the splash screen
     m_isSplashScreenActive = true;
-    m_SplashScreenImage.load("lpmt_splash.png");
+    m_SplashScreenImage.load("assets/lpmt_splash.png");
 
     maskSetup = false;
     gridSetup = false;

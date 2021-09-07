@@ -1,6 +1,8 @@
 #include "ofMain.h"
 #include "ofApp.h"
 
+//#define SET_CUSTOM_LINUX_ICON
+
 //========================================================================
 int main( ){
     ofGLFWWindowSettings settings;
@@ -13,10 +15,14 @@ int main( ){
 	
     //ofSetLogLevel(OF_LOG_VERBOSE);
 
-	// this kicks off the running of my app
-	// can be OF_WINDOW or OF_FULLSCREEN
-	// pass in width and height too:
-	ofRunApp( new ofApp());
+    ofApp *app = new ofApp();
 
+    #ifdef SET_CUSTOM_LINUX_ICON
+    //Need to make setWindowIcon public in libs/openFrameworks/app/ofAppGLFWWindow.h to work
+    ofAppGLFWWindow* win;
+    win = dynamic_cast<ofAppGLFWWindow *> (ofGetWindowPtr());
+    win->setWindowIcon("assets/icon_64x64.png");
+    #endif
 
+    ofRunApp(app);
 }
